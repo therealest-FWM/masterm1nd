@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MASTERM1ND MENU</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('./MMBG.jpg'); /* Adjust with your image path */
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* For absolute positioning of MASTERM1ND text */
+    font-family: 'Arial', sans-serif; /* Optional: add a font-family */
+  }
+
+  .menu {
+    position: relative; /* Relative position for diagonal alignment */
+  }
+
+  .button {
+    background-color: black; /* Adjust background color as needed */
+    color: #39ff14;
+    padding: 35px 60px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    opacity: 0.8;
+    position: absolute;
+    white-space: nowrap;
+    font-size: 1.5em; /* Larger text */
+    font-weight: bold; /* Bold text */
+    font-family: 'Orbitron', sans-serif;
+    border: 2px;
+    border-color: #39ff14;
+    border-style: ridge;
+  }
+
+  .button:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  /* Diagonal positioning */
+  .button:nth-child(1) {
+    top: -100px;
+    left: 150px;
+  }
+  .button:nth-child(2) {
+    top: 50px;
+    left: -20px;
+  }
+  .button:nth-child(3) {
+    top: 220px;
+    left: -250px;
+  }
+
+  /* Neon green text in the top right */
+  .neon-title {
+    position: absolute;
+    top: 80px;
+    right: -600px;
+    font-size: 3em;
+    font-family: 'Orbitron', sans-serif;
+    color: #39ff14; /* Neon green */
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14, 0 0 40px #39ff14; /* Neon glow effect */
+  }
+</style>
+</head>
+<body>
+  <div><div class="neon-title">MASTERM1ND</div></div>
+<div class="menu">
+  <button class="button" onclick="selectL()">Select Level</button>
+  <button class="button" onclick="tuto()">Tutorial</button>
+  <button class="button" onclick="seti()">Settings</button>
+</div>
+<script>
+  function seti(){
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Settings/Settings.html';
+    }, 500)
+  }
+  function tuto(){
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Tutorial/Tutorial.html';
+    }, 500)
+  }
+  function selectL(){
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/openCS/openCS.html';
+    }, 500)
+  }
+</script>
+
+</body>
+</html>
