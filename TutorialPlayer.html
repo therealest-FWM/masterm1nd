@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto-Play Video</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .video-container {
+    position: relative;
+    width: 80%; /* Adjust the width as you prefer */
+    max-width: 900px; /* Maximum width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  video {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .play-button {
+    width: 100px; /* Size of the button */
+    height: 100px; /* Size of the button */
+    border-radius: 50%; /* Makes it circular */
+    background-color: #39FF14; /* Neon green background */
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 60px; /* Size of the icon or text inside */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .play-button:before {
+    content: '▶'; /* Unicode play character */
+  }
+  .play-button.paused:before {
+    content: '❚❚'; /* Unicode pause character */
+  }
+  .play-button:hover {
+    opacity: 0.8;
+  }
+  .skip-button {
+    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
+    padding: 10px 20px;
+    background-color: #39FF14; /* Neon green background */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .skip-button:hover {
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+
+<div class="video-container">
+  <video id="autoplayVideo">
+    <source src="./TutorialVid.mp4" type="video/mp4"> <!-- Replace with your video source -->
+    Your browser does not support the video tag.
+  </video>
+  <button class="play-button" onclick="togglePlayPause()"></button>
+  <button class="skip-button" onclick="skipVideo()">Skip</button>
+</div>
+
+<script>
+  var video = document.getElementById('autoplayVideo');
+  var playButton = document.querySelector('.play-button');
+
+  // Play/pause video when clicked
+  function togglePlayPause() {
+    if (video.paused) {
+      video.play();
+      playButton.classList.add('paused');
+    } else {
+      video.pause();
+      playButton.classList.remove('paused');
+    }
+  }
+
+  // Redirect to another page after the video ends
+  video.onended = function() {
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
+    }, 500)
+  };
+
+  // Function to skip the video
+  function skipVideo() {
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
+    }, 500)
+  }
+</script>
+
+</body>
+</html>
