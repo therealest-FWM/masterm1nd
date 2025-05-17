@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Level</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+ body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('LSBG1.jpg'); /* Replace with your image path */
+    background-size: cover;
+    font-family: 'Orbitron', sans-serif; /* Cyber-tech style font */
+    color: #39FF14; /* Neon green color */
+    display: flex;
+    justify-content: center;
+    align-items: start; /* Align to the start (top) */
+  }
+
+  .level-selection-container {
+    width: 80%;
+    margin-top: 5%; /* Adjust as necessary to fit the header at the top */
+    position: relative;
+    text-align: center;
+  }
+
+  .level-selection-header {
+    font-size: 2rem;
+    background-color: black; /* Small black box */
+    display: inline-block; /* Only as wide as the content */
+    padding: 10px 20px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 2em; /* Space between the header and the images */
+    border: 2px;
+    border-color: #39ff14;
+    border-style: ridge;
+  }
+
+  .level-images {
+    display: flex; /* Use flexbox to align items */
+    justify-content: space-around; /* Distribute items evenly */
+    flex-wrap: wrap; /* Allow wrapping */
+  }
+
+
+  .level-image {
+    width: 90%; /* Adjust as needed */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 5px solid transparent; /* For the hover effect */
+    margin-bottom: 20px; /* Add space between rows */
+  }
+
+  .level-image:hover {
+    transform: scale(1.05);
+    border-color: #39FF14; /* Neon green outline */
+  }
+
+
+  .back-button, .play-button {
+    position: absolute;
+    bottom: -150px;
+    padding: 40px 80px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #222; /* Dark background for buttons */
+    color: #39FF14; /* Neon green text */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    border: 2px;
+    border-color: #39ff14;
+    border-style: ridge;
+  }
+
+  .back-button {
+    left: 10px;
+  }
+
+  .play-button {
+    right: 10px;
+  }
+
+  .back-button:hover, .play-button:hover {
+    background-color: #0b3c20; /* Darker green on hover */
+  }
+
+  .level-number {
+    position: absolute;
+    top: -25px; /* Adjust as necessary */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #39FF14;
+    color: black;
+    border-radius: 50%;
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .level-image-container {
+    display: inline-block; /* Align containers in a row */
+    position: relative; /* Allows absolute positioning of the number */
+    width: 23%; /* Adjust the width as needed */
+    margin-right: 1.33%; /* Adjust the margin to fit 4 items in a row */
+  }
+  #video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Place the video behind everything else */
+  }
+</style>
+</head>
+<body>
+  <video autoplay loop muted playsinline id="video-background">
+    <source src="./LS.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="level-selection-container">
+    <div class="level-selection-header">
+      Select Level
+    </div>
+    
+    <div class="level-images">
+      <!-- Image containers with numbers -->
+      <div class="level-image-container">
+        <div class="level-number">1</div>
+        <img src="Passwords.png" alt="Passwords" class="level-image" id="pass">
+      </div>
+      <div class="level-image-container">
+        <div class="level-number">2</div>
+        <img src="Phishing.png" alt="Phishing" class="level-image" id="phish">
+      </div>
+      <div class="level-image-container">
+        <div class="level-number">3</div>
+        <img src="Networks.png" alt="Unsecured Networks" class="level-image" id="nets">
+      </div>
+      <div class="level-image-container">
+        <div class="level-number">4</div>
+        <img src="UPorts.png" alt="Unsecured Ports" class="level-image" id="chrg">
+      </div>
+    </div>
+  
+    <button class="back-button" onclick="goB()">
+      ← Back
+    </button>
+  
+    <button class="play-button">
+      Play
+    </button>
+  </div>
+</body>
+  <script>
+  function goB(){
+    setTimeout(function() {
+      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
+    }, 500)
+  }
+
+  var image = document.getElementById('pass');
+  var image2 = document.getElementById('phish');
+  var image3 = document.getElementById('chrg');
+  var image4 = document.getElementById("nets");
+  // Add click event listener to the image
+  image.addEventListener('click', function() {
+    // Action to perform when the image is clicked
+  window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/preLCS/PasswordCS/PasswordCS.html';
+  });
+
+  image2.addEventListener('click', function() {
+    // Action to perform when the image is clicked
+    window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/preLCS/PhishingCS/PhishingCS.html';
+  });
+
+  image3.addEventListener('click', function() {
+    // Action to perform when the image is clicked
+  window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/preLCS/PortsCS/PortsCS.html';
+  });
+  image4.addEventListener('click', function() {
+    // Action to perform when the image is clicked
+  window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/preLCS/NetworksCS/NetworksCS.html';
+  });
+</script>
+</body>
+</html>
