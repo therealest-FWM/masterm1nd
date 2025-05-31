@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+ /* Replace with your image path */
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .signup-container {
+    width: 30%; /* Adjust as necessary */
+    background-color: black; /* Semi-transparent black background */
+    padding: 100px;
+    border-radius: 10px;
+    border: 2px;
+    border-color: #39ff14;
+    border-style: ridge;
+    overflow: hidden; /* Hide overflowing content from video */
+    text-align: center;
+  }
+  .signup-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  border-radius: 10px;
+}
+
+  .signup-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px; /* Space between inputs */
+    background-color: #555; /* Darker grey background */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+  }
+
+  .signup-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #39FF14; /* Neon green background */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .signup-button:hover {
+    opacity: 0.9; /* Slight effect on hover */
+  }
+
+  label {
+    color: white;
+    display: block;
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 5px;
+    color: #39FF14;
+  }
+</style>
+</head>
+<body>
+
+<div class="signup-container">
+  <form action="/signup" method="post">
+    <label for="full-name">Full Name</label>
+    <input type="text" id="full-name" name="full_name" class="signup-input" placeholder="Full Name" required>
+
+    <label for="email">E-Mail</label>
+    <input type="email" id="email" name="email" class="signup-input" placeholder="E-Mail" required>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" class="signup-input" placeholder="Username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" class="signup-input" placeholder="Password" required>
+
+    <button type="submit" class="signup-button">Confirm</button>
+  </form>
+  <video autoplay loop muted playsinline>
+    <source src="Acc.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+</body>
+</html>
