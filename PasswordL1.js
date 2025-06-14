@@ -54,7 +54,7 @@ function checkPassword() {
     resultMessage.style.color = "red";
     resultMessage.textContent = "The password is correct";
     setTimeout(function() {
-      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Password/Recap.html';
+      window.location.href = 'Recap.html';
     }, 1500)
   } else {
     resultMessage.style.color = "red";
@@ -67,7 +67,7 @@ function checkPassword() {
     // Check if lives are exhausted
     if (livesRemaining === 0) {
       // Handle game over logic here
-      window.location.href= 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Password/GameOver.html'
+      window.location.href= 'GameOver.html'
       stopTimer();
     }
   }
