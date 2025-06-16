@@ -67,7 +67,7 @@ function checkPassword() {
     // Check if lives are exhausted
     if (livesRemaining === 0) {
       // Handle game over logic here
-      window.location.href= 'GameOver.html'
+      window.location.href= 'GameOverPassL1.html'
       stopTimer();
     }
   }
