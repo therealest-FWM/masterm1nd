@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="./final.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<title>Nwtowrks</title>
+<style>
+
+</style>
+<script src="./PasswordL1.js"></script>
+
+</head>
+<body>
+<div class="top-bar">
+  <div class="logo">MASTERM1ND</div>
+  <div class="progress-container">
+    <div class="progress-step step-1">Networks</div>
+ </div>
+  
+  <div class="loader"></div>
+  <!--<div class="lives-remaining">Lives Remaining: 3</div>-->
+  <div class="control-buttons">
+    <!--<button>TIMER</button>-->
+    <button onclick="Pause()">PAUSE</button>
+    <button onclick="showHint()">HINT</button>
+    <button onclick="heelo()">QUIT</button>
+  </div>
+  <div class="overlay"></div>
+  <div class="center-box">
+    <video autoplay loop muted playsinline>
+      <source src="./Net2.mp4" type="video/mp4">
+    </video>
+    <div class="laptop">
+        <div class="laptop-screen">
+          <!-- Insert the hacking progress interface here -->
+          <div class="hacking-container">
+            <div class="hacking-title">
+              Device Hacked<br>
+              Device Name: Larry's MPhone
+            </div>
+            <div class="hacking-item">
+              <div class="hacking-text">Accessing Photos...</div>
+              <div class="loading-bar">
+                <div class="loading-progress"></div>
+              </div>
+            </div>
+            <div class="hacking-item">
+                <div class="hacking-text">Extracting Data...</div>
+                <div class="loading-bar">
+                <div class="loading-progress"></div>
+                </div>
+                </div>
+                <div class="hacking-item">
+                <div class="hacking-text">Retrieving Messages...</div>
+                <div class="loading-bar">
+                <div class="loading-progress"></div>
+                </div>
+                </div>
+                <div class="hacking-item">
+                <div class="hacking-text">Copying Passwords...</div>
+                <div class="loading-bar">
+                <div class="loading-progress"></div>
+                </div>
+                </div>
+            </div>
+            <!-- Neon green confirm button -->
+            <div>
+              <!-- Use a <button> element -->
+              <button id="redirectButton" class="confirm-button">Extract</button>
+          </div>
+          
+          <!-- JavaScript code -->
+          <script>
+            // Function to handle the click event of the redirect button
+            document.getElementById('redirectButton').addEventListener('click', function() {
+                // Redirect to another HTML file
+                window.location.href = 'data.html';
+            });
+        </script>
+          
+ 
+
+
+</body>
+</html>
