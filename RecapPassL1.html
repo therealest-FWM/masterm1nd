@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="./PasswordL1.js"></script>
+
+
+<title>Level Recap</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000; /* Black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .level-recap-box {
+    width: 850px; /* Same as previous .center-box */
+    height: 500px;
+    padding: 100px; /* Same as previous .center-box */
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: #0F0; /* Green text color */
+    text-align: center;
+    border: 2px solid #0F0; /* Green border */
+    border-radius: 10px;
+    position: relative;
+  }
+  .level-recap-box h1 {
+    color: #0F0; /* Green text color */
+    margin-bottom: 0.5em;
+  }
+ 
+  .level-recap-box p {
+    margin: 20px 0;
+  }
+  .level-recap-box .time,
+  .level-recap-box .score {
+    display: block; /* New lines for time and score */
+  }
+  .level-recap-box .score {
+    color: #FF0; /* Yellow color for score */
+  }
+  .btn {
+  position: relative;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 15px 30px;
+  color: #cfef00;
+  background-color: transparent;
+  border: 2px solid #cfef00;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 0, 0.356);
+  top: 0%;
+  left: -100%;
+  scale: 1;
+  border-radius: inherit;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.btn span {
+  transition: all 0.7s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn span::before {
+  position: absolute;
+  content: 'Hover!';
+  top: 0;
+  left: 0;
+  color: #0f0f0f;
+  width: 0;
+  overflow: hidden;
+}
+
+.btn:hover span::before {
+  width: 100%;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  transition-delay: 0.4s;
+}
+
+.btn:hover::before {
+  scale: 1;
+  top: 0%;
+  left: 0%;
+}
+
+.btn:hover {
+  border-color: transparent;
+}
+
+.btn:active {
+  scale: 0.9;
+}
+#lesson{
+  word-wrap: break-word;
+  text-align: center;
+  padding-left: 0px;
+}
+
+
+</style>
+</head>
+<body>
+  <script src="./Recap.js"></script>
+<div class="level-recap-box">
+  <h1>Account Hacked!</h1>
+  <h2>Level Recap</h2>
+  <button type="button" class="btn btn-outline-success" id="retry" onclick="retry()">Retry</button>
+  <button type="button" class="btn btn-outline-success" id="continue" onclick="cont()">Continue</button>
+  <button type="button" class="btn btn-outline-success">Quit</button>
+
+  
+  <p class="time" id="timeTaken">Time Taken: 1:00</p>
+  <p class="score" id="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
+  <p id="lesson">Congratulations on passing the first sub-level of the password level! This was an easy one to start you off :&#41; Your password should never be in your username. Click continue for the next challenge &#x1F60E;</p>
+</div>
+<script>
+  function retry(){
+  var retryBut = document.getElementById("retry");
+  window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Password/PasswordL1.html';
+}
+
+function cont(){
+  var continueBut = document.getElementById("continue");
+  window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Password2/PasswordL2.html';
+}
+
+window.onload = function() {
+  var y = document.getElementById("timeTaken");
+  var z = document.getElementById("score");
+  var totalTimeInSeconds = localStorage.getItem('totalTimeInSeconds');
+
+  if (y) {
+      y.textContent = "Time taken: " + totalTimeInSeconds;
+  }
+
+  if (z && totalTimeInSeconds > 1 && totalTimeInSeconds < 20) {
+      z.textContent = "Score: ★★★";
+  }
+  if (z && totalTimeInSeconds > 20 && totalTimeInSeconds < 30) {
+    z.textContent = "Score: ★★☆";
+  }
+  if (z && totalTimeInSeconds > 30 && totalTimeInSeconds < 45) {
+    z.textContent = "Score: ★☆☆";
+  }
+};
+</script>
+</body>
+</html>
