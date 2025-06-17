@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="./Recap.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<title>Level Recap</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000; /* Black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .level-recap-box {
+    width: 850px; /* Same as previous .center-box */
+    height: 500px;
+    padding: 100px; /* Same as previous .center-box */
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: #0F0; /* Green text color */
+    text-align: center;
+    border: 2px solid #0F0; /* Green border */
+    border-radius: 10px;
+    position: relative;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .level-recap-box h1 {
+    color: #0F0; /* Green text color */
+    margin-bottom: 0.5em;
+  }
+ 
+  .level-recap-box p {
+    font-family: 'Orbitron', sans-serif;
+    margin: 20px 0;
+  }
+  .level-recap-box .time,
+  .level-recap-box .score {
+    font-family: 'Orbitron', sans-serif;
+    display: block; /* New lines for time and score */
+  }
+  .level-recap-box .score {
+    color: #FF0; /* Yellow color for score */
+    font-family: 'Orbitron', sans-serif;
+  }
+  .btn {
+  position: relative;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 15px 30px;
+  color: #cfef00;
+  background-color: transparent;
+  border: 2px solid #cfef00;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 0, 0.356);
+  top: 0%;
+  left: -100%;
+  scale: 1;
+  border-radius: inherit;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.btn span {
+  transition: all 0.7s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn span::before {
+  position: absolute;
+  content: 'Hover!';
+  top: 0;
+  left: 0;
+  color: #0f0f0f;
+  width: 0;
+  overflow: hidden;
+}
+
+.btn:hover span::before {
+  width: 100%;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  transition-delay: 0.4s;
+}
+
+.btn:hover::before {
+  scale: 1;
+  top: 0%;
+  left: 0%;
+}
+
+.btn:hover {
+  border-color: transparent;
+}
+
+.btn:active {
+  scale: 0.9;
+}
+#lesson{
+  word-wrap: break-word;
+  text-align: center;
+  padding-left: 0px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="level-recap-box">
+  <h1>Key-code authenticated!</h1>
+  <h2>Level Recap</h2>
+  <button type="button" class="btn btn-outline-success" id="retry" onclick="retry()">Retry</button>
+  <button type="button" class="btn btn-outline-success" id="continue" onclick="cont()">Finish</button>
+  <button type="button" class="btn btn-outline-success">Quit</button>
+
+  
+  <p class="time" id="timeTaken2">Time Taken: 1:00</p>
+  <p class="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
+  <p id="lesson">Well done on successfully completing the leve! You should never directly connect your phone into public charging spots as they may be compromised.</p>
+
+</div>
+</body>
+</html>
