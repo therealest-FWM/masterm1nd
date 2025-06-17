@@ -83,7 +83,7 @@ function checkPassword() {
         loc.style.color = "green"; // Change text color to green
         icon.textContent = "🔓"; // Change lock icon to open lock
         setTimeout(function() {
-          window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/ports/Recap.html';
+          window.location.href = 'PortsRecap.html';
         }, 1500)
         
     } else {
@@ -94,7 +94,7 @@ function checkPassword() {
         document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
         if (livesRemaining==0){
           setTimeout(function() {
-            window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/ports/GameOver.html';
+            window.location.href = 'PortsGameOver.html';
           }, 1500)
         }
     }
