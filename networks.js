@@ -53,7 +53,7 @@ function connect(networkId) {
     document.getElementById(networkId).nextElementSibling.textContent = "Connected";
     // Add a delay before redirecting to another HTML file
     setTimeout(function() {
-      window.location.href = "./MMTest.html";
+      window.location.href = "MMTest.html";
     }, 2000); // Adjust the delay time (in milliseconds) as needed
   } else if (networkId === "network3") {
     document.getElementById(networkId).nextElementSibling.textContent = "Connected";
