@@ -57,7 +57,7 @@ function showHint() {
       resultMessage.style.color = "red";
       resultMessage.textContent = "The password is correct";
       setTimeout(function() {
-        window.location.href = 'Recap.html';
+        window.location.href = 'RecapPassL2.html';
       }, 1500)
     } else {
       resultMessage.style.color = "red";
