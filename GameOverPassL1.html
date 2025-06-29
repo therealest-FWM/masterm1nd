@@ -42,7 +42,7 @@
 
 <div class="game-over-box">
   <h1>Game Over</h1>
-  <button type="button" class="btn btn-outline-danger">Quit</button>
+  <button type="button" class="btn btn-outline-danger" id="quit">Quit</button>
   <button type="button" id="try" onclick="tryA()" class="btn btn-outline-danger">Try Again</button>
 
 </div>
@@ -53,6 +53,12 @@
         window.location.href = 'PasswordL1.html';
     }
 }
+  function Quit(){
+    var quit = document.getElementById("quit");
+    if(quit){
+      window.location.href = "LevelSelect.html"
+    }
+  }
 </Script>
 </body>
 </html>
