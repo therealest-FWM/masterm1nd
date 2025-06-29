@@ -72,7 +72,7 @@ function showHint() {
       // Check if lives are exhausted
       if (livesRemaining2 === 0) {
         // Handle game over logic here
-        window.location.href= 'file:///C:/Users/hussa/Desktop/MASTERM1ND/Password2/GameOver.html'
+        window.location.href= 'GameOverPassL2.html'
         stopTimer2();
       }
     }
