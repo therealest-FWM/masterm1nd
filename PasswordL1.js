@@ -99,6 +99,7 @@ function resume(){
  *  QUIT BUTTON
  *****************************/
 function quitToMainMenu() {
-  window.location.href = MAIN_MENU_PAGE;
+  window.location.href =(MainMenu.html);
 }
+
 
