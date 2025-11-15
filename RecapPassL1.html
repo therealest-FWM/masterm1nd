@@ -146,6 +146,8 @@ window.onload = function() {
   var y = document.getElementById("timeTaken");
   var z = document.getElementById("score");
   var totalTimeInSeconds = localStorage.getItem('totalTimeInSeconds');
+  document.getElementById("timeDisplay").textContent = totalTimeInSeconds + " seconds";
+
 
   if (y) {
       y.textContent = "Time taken: " + totalTimeInSeconds;
@@ -164,3 +166,4 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
