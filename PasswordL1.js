@@ -94,3 +94,11 @@ function resume(){
     startTimer();
   }
 }
+
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href = MAIN_MENU_PAGE;
+}
+
