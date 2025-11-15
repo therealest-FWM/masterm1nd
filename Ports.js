@@ -106,3 +106,9 @@ function accessScreen() {
     window.open("https://zozodbz.itch.io/masterm1nd-level-4-unsecured-ports", "_blank");
 }
 
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
