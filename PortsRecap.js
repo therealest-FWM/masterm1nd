@@ -31,4 +31,11 @@ function retry(){
             }
         }
     };
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
     
+
