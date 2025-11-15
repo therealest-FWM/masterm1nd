@@ -8,11 +8,27 @@ function retry(){
     }
     window.onload = function() {
         var y = document.getElementById("timeTaken2");
+        var z = document.getElementById("score");
         var totalTimeInSeconds2 = localStorage.getItem('totalTimeInSeconds2');
         if (totalTimeInSeconds2 !== null) {
-            y.textContent = "Time taken: " + totalTimeInSeconds2;
+            totalTimeInSeconds2 = Number(totalTimeInSeconds2);
+            if (y) {
+                y.textContent = "Time taken: " + totalTimeInSeconds2 + " seconds";
+            }
+
+            if (z && totalTimeInSeconds2 > 1 && totalTimeInSeconds2 < 20) {
+                z.textContent = "Score: ★★★";
+            }
+            if (z && totalTimeInSeconds2 >= 20 && totalTimeInSeconds2 < 30) {
+                z.textContent = "Score: ★★☆";
+            }
+            if (z && totalTimeInSeconds2 >= 30 && totalTimeInSeconds2 < 45) {
+                z.textContent = "Score: ★☆☆";
+            }
         } else {
-            y.textContent = "Time taken: Not available";
+            if (y) {
+                y.textContent = "Time taken: Not available";
+            }
         }
     };
     

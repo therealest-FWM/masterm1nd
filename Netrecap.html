@@ -127,7 +127,7 @@
 
   
   <p class="time" id="time">Time Taken: 1:00</p>
-  <p class="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
+  <p class="score" id="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
   <p id="lesson">Congragulations on finsihing the unsecire networks level! Knew you had it in you :&#41; It is not recommended to use public networks seeing that your data may be visiable to other attakers using the network.</p>
 </div>
 <script>
@@ -141,8 +141,28 @@ window.location.href= 'PortsCS.html'
 }
 window.onload = function() {
     var y = document.getElementById("time");
+    var z = document.getElementById("score");
     var totalTimeInSeconds10 = localStorage.getItem('totalTimeInSeconds10');
-    y.textContent = "Time taken: "+totalTimeInSeconds10;
+    if (totalTimeInSeconds10 !== null) {
+        totalTimeInSeconds10 = Number(totalTimeInSeconds10);
+        if (y) {
+            y.textContent = "Time taken: " + totalTimeInSeconds10 + " seconds";
+        }
+
+        if (z && totalTimeInSeconds10 > 1 && totalTimeInSeconds10 < 60) {
+            z.textContent = "Score: ★★★";
+        }
+        if (z && totalTimeInSeconds10 >= 60 && totalTimeInSeconds10 < 120) {
+            z.textContent = "Score: ★★☆";
+        }
+        if (z && totalTimeInSeconds10 >= 120) {
+            z.textContent = "Score: ★☆☆";
+        }
+    } else {
+        if (y) {
+            y.textContent = "Time taken: Not available";
+        }
+    }
   };
 </script>
 </body>
