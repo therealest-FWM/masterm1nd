@@ -10,7 +10,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    background-image: url('assets/LSBG1.jpg'); /* Replace with your image path */
+    background-image: url('LSBG1.jpg'); /* Replace with your image path */
     background-size: cover;
     font-family: 'Orbitron', sans-serif; /* Cyber-tech style font */
     color: #39FF14; /* Neon green color */
@@ -44,7 +44,6 @@
     flex-wrap: wrap; /* Allow wrapping */
   }
 
-
   .level-image {
     width: 90%; /* Adjust as needed */
     cursor: pointer;
@@ -52,10 +51,17 @@
     border: 5px solid transparent; /* For the hover effect */
     margin-bottom: 20px; /* Add space between rows */
   }
-
+/* Hover effect */
   .level-image:hover {
-    transform: scale(1.05);
-    border-color: #39FF14; /* Neon green outline */
+  transform: scale(1.05);
+  border-color: #39FF14; /* neon green */
+  }
+
+/* Selected level stays glowing */
+  .level-image.selected {
+  transform: scale(1.05);
+  border: 3px solid #39FF14;
+  box-shadow: 0 0 15px #39FF14;
   }
 
 
@@ -136,61 +142,83 @@
       <!-- Image containers with numbers -->
       <div class="level-image-container">
         <div class="level-number">1</div>
-        <img src="assets/Passwords.png" alt="Passwords" class="level-image" id="pass">
+        <img src="Passwords.png" alt="Passwords" class="level-image" id="pass">
       </div>
       <div class="level-image-container">
         <div class="level-number">2</div>
-        <img src="assets/Phishing.png" alt="Phishing" class="level-image" id="phish">
+        <img src="Phishing.png" alt="Phishing" class="level-image" id="phish">
       </div>
       <div class="level-image-container">
         <div class="level-number">3</div>
-        <img src="assets/Networks.png" alt="Unsecured Networks" class="level-image" id="nets">
+        <img src="Networks.png" alt="Unsecured Networks" class="level-image" id="nets">
       </div>
       <div class="level-image-container">
         <div class="level-number">4</div>
-        <img src="assets/UPorts.png" alt="Unsecured Ports" class="level-image" id="chrg">
+        <img src="UPorts.png" alt="Unsecured Ports" class="level-image" id="chrg">
       </div>
     </div>
   
     <button class="back-button" onclick="goB()">
-      ← Back
+      ← BACK
     </button>
   
-    <button class="play-button">
-      Play
-    </button>
+  <button class="play-button">
+    PLAY
+  </button>
+
   </div>
 </body>
-  <script>
-  function goB(){
+<script>
+  let selectedLevel = null;  // Stores selected level path
+
+  function goB() {
     setTimeout(function() {
-      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
-    }, 500)
+      window.location.href = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
+    }, 500);
   }
 
-  var image = document.getElementById('pass');
-  var image2 = document.getElementById('phish');
-  var image3 = document.getElementById('chrg');
-  var image4 = document.getElementById("nets");
-  // Add click event listener to the image
-  image.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'PasswordCS.html';
+  // Get all level images using the shared class
+  const levelImages = document.querySelectorAll(".level-image");
+
+  // Get Play button with class
+  const playBtn = document.querySelector(".play-button");
+
+  // Loop through all level images for selection
+  levelImages.forEach(img => {
+    img.addEventListener("click", () => {
+
+      // Remove selection from all
+      levelImages.forEach(i => i.classList.remove("selected"));
+
+      // Add selection to clicked one
+      img.classList.add("selected");
+
+      // Set the selected level path based on the ID
+      if (img.id === "pass") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PasswordCS/PasswordCS.html';
+      } 
+      else if (img.id === "phish") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PhishingCS/PhishingCS.html';
+      } 
+      else if (img.id === "chrg") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PortsCS/PortsCS.html';
+      } 
+      else if (img.id === "nets") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/NetworksCS/NetworksCS.html';
+      }
+    });
   });
 
-  image2.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-    window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/preLCS/PhishingCS/PhishingCS.html';
-  });
-
-  image3.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'PortsCS.html';
-  });
-  image4.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'NetworksCS.html';
+  // Play button logic
+  playBtn.addEventListener("click", function() {
+    if (selectedLevel) {
+      window.location.href = selectedLevel;
+    } else {
+      alert("Please select a level first!");
+    }
   });
 </script>
+
+
 </body>
 </html>
