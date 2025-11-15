@@ -57,7 +57,8 @@ function connect(networkId) {
     }, 2000); // Adjust the delay time (in milliseconds) as needed
   } else if (networkId === "network3") {
     document.getElementById(networkId).nextElementSibling.textContent = "Connected";
-    stopTimer10();
+    // Save current timer state to localStorage (don't stop it - it continues on next page)
+    localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
     // Add a delay before redirecting to another HTML file
     setTimeout(function() {
 

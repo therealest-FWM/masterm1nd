@@ -24,7 +24,7 @@
   <div class="loader"></div>
   <!--<div class="lives-remaining">Lives Remaining: 3</div>-->
   <div class="control-buttons">
-    <!--<button>TIMER</button>-->
+    <button class="timer">TIMER</button>
     <button onclick="Pause()">PAUSE</button>
     <button onclick="showHint()">HINT</button>
     <button onclick="heelo()">QUIT</button>
@@ -75,9 +75,61 @@
           
           <!-- JavaScript code -->
           <script>
+            // Timer continuation - resume from localStorage and keep counting
+            var timer10;
+            var totalMilliseconds10 = 0;
+
+            // Load saved timer state from localStorage
+            var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
+            if (savedMilliseconds !== null) {
+                totalMilliseconds10 = Number(savedMilliseconds);
+            }
+
+            function formatTime10(milliseconds) {
+                var minutes = Math.floor(milliseconds / (60 * 1000));
+                var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
+                var remainingMilliseconds = milliseconds % 1000;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+                return minutes + ":" + seconds + ":" + remainingMilliseconds;
+            }
+
+            function startTimer10() {
+                if (timer10) clearInterval(timer10);
+                timer10 = setInterval(function () {
+                    totalMilliseconds10 += 100;
+                    // Save timer state to localStorage every 100ms
+                    localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+                    // Update timer display on page
+                    var timerDisplay10 = document.querySelector(".top-bar .timer");
+                    if (timerDisplay10) {
+                        timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+                    }
+                }, 100);
+            }
+
+            function stopTimer10() {
+                if (timer10) {
+                    clearInterval(timer10);
+                    localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+                }
+            }
+
+            // Start timer when page loads
+            window.onload = function() {
+                // Display initial timer value
+                var timerDisplay10 = document.querySelector(".top-bar .timer");
+                if (timerDisplay10) {
+                    timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+                }
+                startTimer10();
+            };
+
             // Function to handle the click event of the redirect button
             document.getElementById('redirectButton').addEventListener('click', function() {
-                // Redirect to another HTML file
+                // Save timer before redirecting
+                localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
                 window.location.href = 'data.html';
             });
         </script>

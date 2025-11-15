@@ -140,11 +140,27 @@ var continueBut = document.getElementById("continue");
 window.location.href= 'PortsCS.html'
 }
 window.onload = function() {
+    // Stop the timer and convert milliseconds to seconds
+    var totalMilliseconds10 = localStorage.getItem('totalMilliseconds10');
+    var totalTimeInSeconds10 = null;
+    
+    if (totalMilliseconds10 !== null) {
+        totalMilliseconds10 = Number(totalMilliseconds10);
+        totalTimeInSeconds10 = totalMilliseconds10 / 1000;
+        // Save the final time in seconds to localStorage
+        localStorage.setItem('totalTimeInSeconds10', totalTimeInSeconds10);
+    } else {
+        // Fallback: try to get from seconds if milliseconds not available
+        totalTimeInSeconds10 = localStorage.getItem('totalTimeInSeconds10');
+        if (totalTimeInSeconds10 !== null) {
+            totalTimeInSeconds10 = Number(totalTimeInSeconds10);
+        }
+    }
+    
     var y = document.getElementById("time");
     var z = document.getElementById("score");
-    var totalTimeInSeconds10 = localStorage.getItem('totalTimeInSeconds10');
+    
     if (totalTimeInSeconds10 !== null) {
-        totalTimeInSeconds10 = Number(totalTimeInSeconds10);
         if (y) {
             y.textContent = "Time taken: " + totalTimeInSeconds10 + " seconds";
         }

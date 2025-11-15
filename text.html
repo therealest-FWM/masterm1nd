@@ -17,7 +17,7 @@
   <div class="loader"></div>
   <!--<div class="lives-remaining">Lives Remaining: 3</div>-->
   <div class="control-buttons">
-    <!--<button class="timer">TIMER</button>-->
+    <button class="timer">TIMER</button>
     <button onclick="pause()">PAUSE</button>
     <button onclick="showHint()">HINT</button>
     <button onclick="heelo()">QUIT</button>
@@ -62,6 +62,57 @@
   The data your boss is asking for is called data or data.docx
 </div>
 <script>
+// Timer continuation - resume from localStorage and keep counting
+var timer10;
+var totalMilliseconds10 = 0;
+
+// Load saved timer state from localStorage
+var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
+if (savedMilliseconds !== null) {
+    totalMilliseconds10 = Number(savedMilliseconds);
+}
+
+function formatTime10(milliseconds) {
+    var minutes = Math.floor(milliseconds / (60 * 1000));
+    var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
+    var remainingMilliseconds = milliseconds % 1000;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+    return minutes + ":" + seconds + ":" + remainingMilliseconds;
+}
+
+function startTimer10() {
+    if (timer10) clearInterval(timer10);
+    timer10 = setInterval(function () {
+        totalMilliseconds10 += 100;
+        // Save timer state to localStorage every 100ms
+        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+        // Update timer display on page
+        var timerDisplay10 = document.querySelector(".top-bar .timer");
+        if (timerDisplay10) {
+            timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+        }
+    }, 100);
+}
+
+function stopTimer10() {
+    if (timer10) {
+        clearInterval(timer10);
+        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+    }
+}
+
+// Start timer when page loads
+window.addEventListener("load", function() {
+    // Display initial timer value
+    var timerDisplay10 = document.querySelector(".top-bar .timer");
+    if (timerDisplay10) {
+        timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+    }
+    startTimer10();
+    updateScreen("Were you followed?", "received");
+});
 
 setTimeout(function() {
       showHint();
@@ -122,7 +173,9 @@ function sendMessage() {
 
 // Function to redirect to another HTML file
 function redirectToAnotherPage() {
-  window.location.href = "laptop.html"; // Replace "another_page.html" with the filename of the HTML file you want to link to
+    // Save timer before redirecting
+    localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+    window.location.href = "laptop.html";
 }
 
 // Listen for keypress events on the text input field
@@ -132,10 +185,7 @@ document.getElementById("textInput").addEventListener("keypress", function(event
   }
 });
 
-// Trigger the boss's first message
-window.addEventListener("load", function() {
-  updateScreen("Were you followed?", "received");
-});
+// First message is now handled in the window.addEventListener("load") above
 function showHint() {
     var hintBox = document.getElementById('hintBox');
     hintBox.style.right = '10px';
@@ -150,11 +200,11 @@ function showHint() {
     var pauseMenu = document.getElementById("pasue-menu");
 
     if (pauseMenu.style.display === "none") {
-      stopTimer11();
+      stopTimer10();
       pauseMenu.style.display = "block";
     } else {
       pauseMenu.style.display = "none";
-      startTimer11();
+      startTimer10();
     }
   }
   
@@ -163,10 +213,10 @@ function showHint() {
     var z=document.getElementById("pasue-menu");
     if (y.style.display==="none"){
       z.style.display="block";
-      startTimer11();
+      startTimer10();
     } else {
       z.style.display = "none";
-      startTimer11();
+      startTimer10();
     }
   }
 </script>
