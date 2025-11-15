@@ -134,7 +134,7 @@
 
   
   <p class="time" id="timeTaken2">Time Taken: 1:00</p>
-  <p class="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
+  <p class="score" id="score">Score: ★★☆</p><!-- Replace with star icons as needed -->
   <p id="lesson">2 for 2 spectacular! looks like you are getting the hang of it &#129393; You should never put your birthday in your username. Click continue for the final challenge &#128373;</p>
 
 </div>
@@ -147,13 +147,25 @@
     window.location.href= 'PasswordL3.html'
     }
     window.onload = function () {
-        var timeTakenElement = document.getElementById("timeTaken2");
+        var y = document.getElementById("timeTaken2");
+        var z = document.getElementById("score");
         var totalTimeInSeconds2 = localStorage.getItem('totalTimeInSeconds2');
         if (totalTimeInSeconds2 !== null) {
-            timeTakenElement.textContent = "Time taken: " + totalTimeInSeconds2 + " seconds";
-        } else {
-            timeTakenElement.textContent = "Time taken: Not available";
-        }
+            totalTimeInSeconds2 = Number(totalTimeInSeconds2);
+            if (y) {
+                y.textContent = "Time taken: " + totalTimeInSeconds2 + " seconds";
+            }
+
+            if (z && totalTimeInSeconds2 > 1 && totalTimeInSeconds2 < 20) {
+                z.textContent = "Score: ★★★";
+            }
+            if (z && totalTimeInSeconds2 >= 20 && totalTimeInSeconds2 < 30) {
+              z.textContent = "Score: ★★☆";
+            }
+            if (z && totalTimeInSeconds2 >= 30 && totalTimeInSeconds2 < 45) {
+              z.textContent = "Score: ★☆☆";
+            }
+          }
     };
     </script>
 </body>
