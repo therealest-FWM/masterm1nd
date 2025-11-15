@@ -123,7 +123,7 @@
   <h2>Level Recap</h2>
   <button type="button" class="btn btn-outline-success" id="retry" onclick="retry()">Retry</button>
   <button type="button" class="btn btn-outline-success" id="continue" onclick="cont()">Continue</button>
-  <button type="button" class="btn btn-outline-success">Quit</button>
+  <button type="button" class="btn btn-outline-danger"onclick="quitToMainMenu()">Quit</button>
 
   
   <p class="time" id="time">Time Taken: 1:00</p>
@@ -164,6 +164,13 @@ window.onload = function() {
         }
     }
   };
+  /*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
 </script>
 </body>
 </html>
+
