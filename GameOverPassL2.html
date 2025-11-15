@@ -42,7 +42,7 @@
 
 <div class="game-over-box">
   <h1>Game Over</h1>
-  <button type="button" class="btn btn-outline-danger">Quit</button>
+  <button type="button" class="btn btn-outline-danger"onclick="quitToMainMenu()">Quit</button>
   <button type="button" id="try" onclick="tryA()" class="btn btn-outline-danger">Try Again</button>
 
 </div>
@@ -53,6 +53,13 @@
         window.location.href = 'PasswordL2.html';
     }
 }
+  /*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
 </script>
 </body>
+
 </html>
