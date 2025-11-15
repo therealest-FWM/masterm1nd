@@ -4,3 +4,10 @@ function tryA(){
         window.location.href = 'Ports.html';
     }
 }
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
+
