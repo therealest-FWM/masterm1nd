@@ -71,7 +71,7 @@ function confirm(){
   if (z.checked){
     stopTimer4();
     setTimeout(function() {
-      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/SPhishing/Recap.html';
+      window.location.href = 'RecapSPhishing.html';
     }, 1000)
   }
   else {
@@ -85,8 +85,9 @@ function confirm(){
   if (livesRemaining==0){
     stopTimer4();
     setTimeout(function() {
-      window.location.href = 'file:///C:/Users/hussa/Desktop/MASTERM1ND/SPhishing/GameOver.html';
+      window.location.href = 'GameOverSPhishing.html';
     }, 1000)
   }
   }
+
 }
