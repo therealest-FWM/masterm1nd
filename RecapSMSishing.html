@@ -131,4 +131,18 @@
   <p id="lesson">Congratulations on completing the initial SMS phishing level! SMSishing, conducted through text messages, targets you personally with tailored attacks, often containing personal information. Remember, regardless of the phishing method, never click on links from unknown sources.</p>
 </div>
 </body>
+<script>
+  function retry(){
+    var retryBut = document.getElementById("retry");
+    window.location.href= 'SMSishing.html'
+    }
+    function cont(){
+    window.location.href= 'Vishing.html'
+    }
+    window.onload = function() {
+        var y = document.getElementById("time");
+        var totalTimeInSeconds5 = localStorage.getItem('totalTimeInSeconds5');
+        y.textContent = "Time taken: "+totalTimeInSeconds5;
+      };
+</script>
 </html>
