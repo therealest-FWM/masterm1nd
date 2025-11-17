@@ -131,4 +131,18 @@
   <p id="lesson">Spear phishing is a type of phishing attack where the attacker is targeting you personally rather than targeting multiple people at once, it usually contains personal information. Outstanding achievement in completing the first phishing level though&#129395;! No matter the type of phishing attack you should never follow links if you don't know where they came from.&#129488;</p>
 </div>
 </body>
+<script>
+  function retry(){
+    var retryBut = document.getElementById("retry");
+    window.location.href= 'SPhishing.html'
+    }
+    function cont(){
+        window.location.href= 'SMSishing.html'
+    }
+    window.onload = function() {
+        var y = document.getElementById("time");
+        var totalTimeInSeconds4 = localStorage.getItem('totalTimeInSeconds4');
+        y.textContent = "Time taken: "+totalTimeInSeconds4;
+      };
+</script>
 </html>
