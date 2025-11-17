@@ -58,6 +58,11 @@
     border-color: #39FF14; /* Neon green outline */
   }
 
+ .level-image.selected {
+  transform: scale(1.05);
+  border: 3px solid #39FF14;
+  box-shadow: 0 0 15px #39FF14;
+}
 
   .back-button, .play-button {
     position: absolute;
@@ -161,36 +166,56 @@
     </button>
   </div>
 </body>
-  <script>
-  function goB(){
+<script>
+  let selectedLevel = null;  // Stores selected level path
+
+  function goB() {
     setTimeout(function() {
-      window.location.href = 'MainMenu.html';
-    }, 500)
+      window.location.href = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/MainMenu/MainMenu.html';
+    }, 500);
   }
 
-  var image = document.getElementById('pass');
-  var image2 = document.getElementById('phish');
-  var image3 = document.getElementById('chrg');
-  var image4 = document.getElementById("nets");
-  // Add click event listener to the image
-  image.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'PasswordCS.html';
+  // Get all level images using the shared class
+  const levelImages = document.querySelectorAll(".level-image");
+
+  // Get Play button with class
+  const playBtn = document.querySelector(".play-button");
+
+  // Loop through all level images for selection
+  levelImages.forEach(img => {
+    img.addEventListener("click", () => {
+
+      // Remove selection from all
+      levelImages.forEach(i => i.classList.remove("selected"));
+
+      // Add selection to clicked one
+      img.classList.add("selected");
+
+      // Set the selected level path based on the ID
+      if (img.id === "pass") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PasswordCS/PasswordCS.html';
+      } 
+      else if (img.id === "phish") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PhishingCS/PhishingCS.html';
+      } 
+      else if (img.id === "chrg") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/PortsCS/PortsCS.html';
+      } 
+      else if (img.id === "nets") {
+        selectedLevel = 'file:///C:/Users/DELL/Desktop/MASTERM1ND/preLCS/NetworksCS/NetworksCS.html';
+      }
+    });
   });
 
-  image2.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-    window.location.href = 'PhishingCS.html';
-  });
-
-  image3.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'PortsCS.html';
-  });
-  image4.addEventListener('click', function() {
-    // Action to perform when the image is clicked
-  window.location.href = 'NetworksCS.html';
+  // Play button logic
+  playBtn.addEventListener("click", function() {
+    if (selectedLevel) {
+      window.location.href = selectedLevel;
+    } else {
+      alert("Please select a level first!");
+    }
   });
 </script>
 </body>
 </html>
+
