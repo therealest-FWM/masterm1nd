@@ -7,86 +7,94 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-image: url('assets/MMBG.jpg');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Orbitron', sans-serif;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Orbitron', sans-serif;
+  }
 
-/* Title */
-.neon-title {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  font-size: 3vw; /* Scales with screen width */
-  color: #39ff14;
-  text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14;
-}
+  /* Fixed aspect ratio play area */
+  .game-area {
+    position: relative;
+    width: 100vw;
+    max-width: 1360px;             /* design width */
+    aspect-ratio: 16 / 9;          /* keep same proportions everywhere */
+    background-image: url('assets/MMBG.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
 
-/* Menu container */
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 30px; /* Spacing between buttons */
-  position: relative;
-}
+  /* Title in top right of the game area */
+  .neon-title {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    font-size: clamp(24px, 3vw, 48px);
+    color: #39ff14;
+    text-shadow:
+      0 0 10px #39ff14,
+      0 0 20px #39ff14,
+      0 0 30px #39ff14,
+      0 0 40px #39ff14;
+  }
 
-/* Buttons */
-.button {
-  background-color: black;
-  color: #39ff14;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  opacity: 0.85;
-  transition: transform 0.3s ease;
-  font-size: 1.8vw;
-  border: 2px ridge #39ff14;
-  white-space: nowrap;
-}
+  /* Menu on the right side, vertically stacked */
+  .menu {
+    position: absolute;
+    right: 10%;       /* same offset on all screens */
+    top: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+  }
 
-/* Hover effect */
-.button:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
+  .button {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #39ff14;
+    padding: 1.2rem 3rem;
+    border: 2px ridge #39ff14;
+    font-size: clamp(18px, 2vw, 32px);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
 
-/* Diagonal layout using transform */
-.button:nth-child(1) {
-  transform: translate(8vw, -3vh);
-}
-
-.button:nth-child(2) {
-  transform: translate(-2vw, 2vh);
-}
-
+  .button:hover {
+    transform: scale(1.05);
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
-  <div><div class="neon-title">MASTERM1ND</div></div>
-<div class="menu">
-  <button class="button" onclick="selectL()">Select Level</button>
-  <button class="button" onclick="tuto()">Tutorial</button>
-</div>
+
+  <div class="game-area">
+    <div class="neon-title">MASTERM1ND</div>
+
+    <div class="menu">
+      <button class="button" onclick="selectL()">Select Level</button>
+      <button class="button" onclick="tuto()">Tutorial</button>
+    </div>
+  </div>
+
 <script>
-  function tuto(){
-    setTimeout(function() {
+  function tuto() {
+    setTimeout(function () {
       window.location.href = 'Tutorial.html';
-    }, 500)
+    }, 500);
   }
-  function selectL(){
-    setTimeout(function() {
+
+  function selectL() {
+    setTimeout(function () {
       window.location.href = 'openCS.html';
-    }, 500)
+    }, 500);
   }
 </script>
 
 </body>
 </html>
-
