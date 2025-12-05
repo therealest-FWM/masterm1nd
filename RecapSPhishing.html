@@ -123,7 +123,7 @@
   <h2>Level Recap</h2>
   <button type="button" class="btn btn-outline-success" id="retry" onclick="retry()">Retry</button>
   <button type="button" class="btn btn-outline-success" id="continue" onclick="cont()">Continue</button>
-  <button type="button" class="btn btn-outline-success">Quit</button>
+  <button type="button" class="btn btn-outline-success"onclick="quitToMainMenu()">Quit</button>
 
   
   <p class="time" id="time">Time Taken: 1:00</p>
@@ -144,5 +144,13 @@
         var totalTimeInSeconds4 = localStorage.getItem('totalTimeInSeconds4');
         y.textContent = "Time taken: "+totalTimeInSeconds4;
       };
+  /*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+
+}
 </script>
 </html>
+
