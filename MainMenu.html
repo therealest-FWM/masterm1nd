@@ -7,258 +7,106 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-/* CSS Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Root variables */
-:root {
-  --spacing-small: 1rem;
-  --spacing-medium: 1.5rem;
-  --spacing-large: 2rem;
-  --neon-green: #39ff14;
-}
-
-body, html {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-image: url('assets/MMBG.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Orbitron', sans-serif;
-  overflow: hidden;
-}
-
-/* Title */
-.neon-title {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  font-size: clamp(1.5rem, 4vw, 3.5rem);
-  color: var(--neon-green);
-  text-shadow: 
-    0 0 10px var(--neon-green), 
-    0 0 20px var(--neon-green), 
-    0 0 30px var(--neon-green);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  z-index: 100;
-}
-
-/* Menu container */
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(1.5rem, 3vh, 2.5rem);
-  position: relative;
-  z-index: 10;
-  width: 90%;
-  max-width: 500px;
-  align-items: center;
-}
-
-/* Buttons */
-.button {
-  background-color: rgba(0, 0, 0, 0.85);
-  color: var(--neon-green);
-  padding: clamp(0.8rem, 2vh, 1.2rem) clamp(2rem, 5vw, 3rem);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  border: 2px solid var(--neon-green);
-  white-space: nowrap;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 
-    0 0 10px rgba(57, 255, 20, 0.3),
-    inset 0 0 10px rgba(57, 255, 20, 0.1);
-  width: auto;
-  min-width: 250px;
-  max-width: 100%;
-}
-
-/* Hover effect */
-.button:hover {
-  transform: scale(1.05);
-  background-color: rgba(0, 0, 0, 0.95);
-  box-shadow: 
-    0 0 20px var(--neon-green),
-    0 0 30px var(--neon-green),
-    inset 0 0 20px rgba(57, 255, 20, 0.2);
-  text-shadow: 0 0 10px var(--neon-green);
-}
-
-/* Active/Click effect */
-.button:active {
-  transform: scale(1.02);
-}
-
-/* Diagonal offset for desktop */
-.button:nth-child(1) {
-  transform: translateX(60px);
-}
-
-.button:nth-child(2) {
-  transform: translateX(-60px);
-}
-
-.button:nth-child(1):hover {
-  transform: translateX(60px) scale(1.05);
-}
-
-.button:nth-child(2):hover {
-  transform: translateX(-60px) scale(1.05);
-}
-
-/* Tablet adjustments */
-@media (max-width: 1024px) {
-  .button:nth-child(1) {
-    transform: translateX(40px);
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
   }
 
-  .button:nth-child(2) {
-    transform: translateX(-40px);
+  /* Fixed game area with full artwork visible */
+  .game-wrapper {
+    width: 100%;
+    height: 100%;
+    max-width: 1920px; /* EDIT THESE if your BG image has different resolution */
+    max-height: 1080px;
+    aspect-ratio: 16/9;
+    background-image: url('assets/MMBG.jpg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
   }
 
-  .button:nth-child(1):hover {
-    transform: translateX(40px) scale(1.05);
-  }
-
-  .button:nth-child(2):hover {
-    transform: translateX(-40px) scale(1.05);
-  }
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
+  /* Game Title */
   .neon-title {
-    top: 3%;
-    right: 3%;
-    font-size: clamp(1.2rem, 5vw, 2rem);
+    position: absolute;
+    left: 65%;
+    top: 18%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(18px, 3vw, 50px);
+    color: #39ff14;
+    text-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
+    white-space: nowrap;
   }
-  
-  .menu {
-    width: 85%;
-    gap: clamp(1.2rem, 2.5vh, 2rem);
-  }
-  
+
+  /* Buttons with perfect screen scaling */
   .button {
-    min-width: 200px;
-    font-size: clamp(0.9rem, 3vw, 1.2rem);
-    padding: clamp(0.7rem, 1.8vh, 1rem) clamp(1.5rem, 4vw, 2.5rem);
-  }
-  
-  .button:nth-child(1) {
-    transform: translateX(20px);
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    border: 0.35vw ridge #39ff14; /* Scales with screen */
+    color: #39ff14;
+
+    padding: 0.8vw 2vw; /* Scales height & width */
+    font-size: clamp(14px, 1.6vw, 36px); /* Responsive text */
+
+    cursor: pointer;
+    transition: 0.25s;
+    opacity: 0.9;
+    white-space: nowrap;
   }
 
-  .button:nth-child(2) {
-    transform: translateX(-20px);
+  .button:hover {
+    transform: scale(1.08);
+    opacity: 1;
   }
 
-  .button:nth-child(1):hover {
-    transform: translateX(20px) scale(1.05);
+  /* Button positions based on background art */
+  #btn-level {
+    left: 70%;
+    top: 45%;
+    transform: translate(-50%, -50%);
   }
 
-  .button:nth-child(2):hover {
-    transform: translateX(-20px) scale(1.05);
-  }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-  .neon-title {
-    top: 2%;
-    right: 50%;
-    transform: translateX(50%);
-    font-size: clamp(1rem, 6vw, 1.5rem);
-    text-align: center;
-  }
-  
-  .menu {
-    width: 90%;
-    gap: 1.5rem;
-  }
-  
-  .button {
-    min-width: 180px;
-    font-size: clamp(0.85rem, 4vw, 1.1rem);
-    padding: 0.7rem 1.5rem;
-  }
-  
-  /* Center buttons on very small screens */
-  .button:nth-child(1),
-  .button:nth-child(2) {
-    transform: translateX(0);
+  #btn-tutorial {
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
   }
 
-  .button:nth-child(1):hover,
-  .button:nth-child(2):hover {
-    transform: translateX(0) scale(1.05);
-  }
-}
-
-/* Landscape mobile devices */
-@media (max-height: 500px) and (orientation: landscape) {
-  .neon-title {
-    font-size: clamp(0.9rem, 4vh, 1.5rem);
-    top: 2%;
-    right: 3%;
-  }
-  
-  .menu {
-    gap: 1rem;
-    max-width: 400px;
-  }
-  
-  .button {
-    padding: 0.5rem 1.5rem;
-    font-size: clamp(0.8rem, 2.5vh, 1rem);
-    min-width: 160px;
-  }
-}
-
-/* Very small screens (like old phones) */
-@media (max-width: 360px) {
-  .button {
-    min-width: 150px;
-    font-size: 0.85rem;
-    padding: 0.6rem 1.2rem;
-  }
-}
 </style>
 </head>
+
 <body>
-  <div class="neon-title">MASTERM1ND</div>
-  
-  <div class="menu">
-    <button class="button" onclick="selectL()">Select Level</button>
-    <button class="button" onclick="tuto()">Tutorial</button>
+  <div class="game-wrapper">
+    <div class="neon-title">MASTERM1ND</div>
+
+    <button class="button" id="btn-level" onclick="selectL()">
+      Select Level
+    </button>
+
+    <button class="button" id="btn-tutorial" onclick="tuto()">
+      Tutorial
+    </button>
   </div>
 
-  <script>
-    function tuto() {
-      setTimeout(function() {
-        window.location.href = 'Tutorial.html';
-      }, 500);
-    }
-    
-    function selectL() {
-      setTimeout(function() {
-        window.location.href = 'openCS.html';
-      }, 500);
-    }
-  </script>
+<script>
+  function tuto() {
+    setTimeout(() => {
+      window.location.href = 'Tutorial.html';
+    }, 400);
+  }
+
+  function selectL() {
+    setTimeout(() => {
+      window.location.href = 'openCS.html';
+    }, 400);
+  }
+</script>
+
 </body>
 </html>
