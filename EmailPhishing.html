@@ -702,7 +702,7 @@
     <button class="timer">TIMER</button>
     <button onclick="pause()">PAUSE</button>
     <button onclick="showHint()">HINT</button>
-    <button onclick="heelo()">QUIT</button>
+    <button onclick="quitToMainMenu()">QUIT</button>
   </div>
 </div>
   <div class="overlay"></div>
@@ -973,8 +973,14 @@ function resume(){
     startTimer3();
   }
 }
-
+      /*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
 </script>
 </body>
 
 </html>
+
