@@ -26,7 +26,7 @@
     <button class="timer">TIMER</button>
     <button onclick="pause()">PAUSE</button>
     <button onclick="showHint()">HINT</button>
-    <button onclick="heelo()">QUIT</button>
+    <button onclick="quitToMainMenu()">QUIT</button>
   </div>
   <div class="overlay"></div>
 </div>
@@ -203,7 +203,14 @@ function confirm(){
       window.location.href = 'RecapSMSishing.html';
     }, 1000)
   }
+  /*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  window.location.href ="MainMenu.html";
+}
 
 }
   </script>
+
   </html>
