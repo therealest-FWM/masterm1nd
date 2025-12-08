@@ -7,104 +7,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-  html, body {
+  body, html {
+    height: 100%;
     margin: 0;
-    height: 100%;
-    background: black;
+    padding: 0;
+    background-image: url('assets/MMBG.jpg'); /* Adjust with your image path */
+    background-size: cover;
     display: flex;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
-    font-family: 'Orbitron', sans-serif;
+    justify-content: center;
+    position: relative; /* For absolute positioning of MASTERM1ND text */
+    font-family: 'Arial', sans-serif; /* Optional: add a font-family */
   }
 
-  /* Fixed game area with full artwork visible */
-  .game-wrapper {
-    width: 100%;
-    height: 100%;
-    max-width: 1920px; /* EDIT THESE if your BG image has different resolution */
-    max-height: 1080px;
-    aspect-ratio: 16/9;
-    background-image: url('assets/MMBG.jpg');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
+  .menu {
+    position: relative; /* Relative position for diagonal alignment */
   }
 
-  /* Game Title */
-  .neon-title {
-    position: absolute;
-    left: 65%;
-    top: 18%;
-    transform: translate(-50%, -50%);
-    font-size: clamp(18px, 3vw, 50px);
-    color: #39ff14;
-    text-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
-    white-space: nowrap;
-  }
-
-  /* Buttons with perfect screen scaling */
   .button {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.85);
-    border: 0.35vw ridge #39ff14; /* Scales with screen */
+    background-color: black; /* Adjust background color as needed */
     color: #39ff14;
-
-    padding: 0.8vw 2vw; /* Scales height & width */
-    font-size: clamp(14px, 1.6vw, 36px); /* Responsive text */
-
+    padding: 50px 100px;
+    margin: 10px;
     cursor: pointer;
-    transition: 0.25s;
-    opacity: 0.9;
+    transition: transform 0.3s ease;
+    opacity: 0.8;
+    position: absolute;
     white-space: nowrap;
+    font-size: 3em; /* Larger text */
+    font-weight: bold; /* Bold text */
+    font-family: 'Orbitron', sans-serif;
+    border: 2px;
+    border-color: #39ff14;
+    border-style: ridge;
   }
 
   .button:hover {
-    transform: scale(1.08);
+    transform: scale(1.1);
     opacity: 1;
   }
 
-  /* Button positions based on background art */
-  #btn-level {
-    left: 70%;
-    top: 45%;
-    transform: translate(-50%, -50%);
+  /* Diagonal positioning */
+  .button:nth-child(1) {
+    top: -100px;
+    left: 150px;
+  }
+  .button:nth-child(2) {
+    top: 200px;
+    left: -120px;
   }
 
-  #btn-tutorial {
-    left: 50%;
-    top: 70%;
-    transform: translate(-50%, -50%);
+  /* Neon green text in the top right */
+  .neon-title {
+    position: absolute;
+    top: 80px;
+    right: -600px;
+    font-size: 3em;
+    font-family: 'Orbitron', sans-serif;
+    color: #39ff14; /* Neon green */
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14, 0 0 40px #39ff14; /* Neon glow effect */
   }
-
 </style>
 </head>
-
 <body>
-  <div class="game-wrapper">
-    <div class="neon-title">MASTERM1ND</div>
-
-    <button class="button" id="btn-level" onclick="selectL()">
-      Select Level
-    </button>
-
-    <button class="button" id="btn-tutorial" onclick="tuto()">
-      Tutorial
-    </button>
-  </div>
-
+  <div><div class="neon-title">MASTERM1ND</div></div>
+<div class="menu">
+  <button class="button" onclick="selectL()">Select Level</button>
+  <button class="button" onclick="tuto()">Tutorial</button>
+</div>
 <script>
-  function tuto() {
-    setTimeout(() => {
+  function tuto(){
+    setTimeout(function() {
       window.location.href = 'Tutorial.html';
-    }, 400);
+    }, 500)
   }
-
-  function selectL() {
-    setTimeout(() => {
+  function selectL(){
+    setTimeout(function() {
       window.location.href = 'openCS.html';
-    }, 400);
+    }, 500)
   }
 </script>
 
