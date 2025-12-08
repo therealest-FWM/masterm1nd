@@ -18,18 +18,25 @@
     font-family: 'Orbitron', sans-serif;
   }
 
-  /* Fixed game area with full artwork visible */
+  /* Main game area */
   .game-wrapper {
     width: 100%;
     height: 100%;
-    max-width: 1920px; /* EDIT THESE if your BG image has different resolution */
+    max-width: 1920px;
     max-height: 1080px;
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
     background-image: url('assets/MMBG.jpg');
-    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+  }
+
+  /* Adaptive background behavior */
+  @media (min-aspect-ratio: 16/9) {
+    .game-wrapper { background-size: contain; }
+  }
+  @media (max-aspect-ratio: 16/9) {
+    .game-wrapper { background-size: cover; }
   }
 
   /* Game Title */
@@ -38,34 +45,33 @@
     left: 65%;
     top: 18%;
     transform: translate(-50%, -50%);
-    font-size: clamp(18px, 3vw, 50px);
+    font-size: clamp(18px, 3vw, 48px);
     color: #39ff14;
-    text-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
+    text-shadow: 0 0 10px #39ff14, 0 0 25px #39ff14, 0 0 45px #39ff14;
     white-space: nowrap;
   }
 
-  /* Buttons with perfect screen scaling */
+  /* Buttons */
   .button {
     position: absolute;
-    background: rgba(0, 0, 0, 0.85);
-    border: 0.35vw ridge #39ff14; /* Scales with screen */
+    background: rgba(0, 0, 0, 0.75);
+    padding: clamp(12px, 1vw, 22px) clamp(30px, 3vw, 50px);
+    font-size: clamp(16px, 1.6vw, 32px);
+    border: 3px ridge #39ff14;
     color: #39ff14;
-
-    padding: 0.8vw 2vw; /* Scales height & width */
-    font-size: clamp(14px, 1.6vw, 36px); /* Responsive text */
-
+    text-shadow: 0 0 8px #39ff14, 0 0 16px #39ff14;
     cursor: pointer;
-    transition: 0.25s;
-    opacity: 0.9;
+    opacity: 0.95;
     white-space: nowrap;
+    transition: 0.3s ease;
   }
 
   .button:hover {
-    transform: scale(1.08);
+    transform: scale(1.12);
     opacity: 1;
   }
 
-  /* Button positions based on background art */
+  /* Button positioning */
   #btn-level {
     left: 70%;
     top: 45%;
@@ -95,17 +101,17 @@
   </div>
 
 <script>
-  function tuto() {
-    setTimeout(() => {
-      window.location.href = 'Tutorial.html';
-    }, 400);
-  }
+function tuto() {
+  setTimeout(() => {
+    window.location.href = 'Tutorial.html';
+  }, 300);
+}
 
-  function selectL() {
-    setTimeout(() => {
-      window.location.href = 'openCS.html';
-    }, 400);
-  }
+function selectL() {
+  setTimeout(() => {
+    window.location.href = 'openCS.html';
+  }, 300);
+}
 </script>
 
 </body>
