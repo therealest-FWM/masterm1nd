@@ -37,14 +37,14 @@ function stopTimer() {
 }
 
 function showHint() {
+  document.getElementById('hintBox').style.right = '10px';
   var hintbox = document.getElementById("hintBox");
-  
-  // Toggle between "none" and "block"
-  if (hintbox.style.display === "none" || hintbox.style.display === "") {
+  hintbox.style.display === "none"
+  if (hintbox.style.display === "none") {
     hintbox.style.display = "block";
   } else {
     hintbox.style.display = "none";
-  }
+  }    
 }
 
 function checkPassword() {
@@ -114,3 +114,4 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
