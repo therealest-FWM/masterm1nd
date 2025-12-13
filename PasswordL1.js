@@ -38,7 +38,9 @@ function stopTimer() {
 
 function showHint() {
   var hintbox = document.getElementById("hintBox");
-  if (hintbox.style.display === "none") {
+  
+  // Toggle between "none" and "block"
+  if (hintbox.style.display === "none" || hintbox.style.display === "") {
     hintbox.style.display = "block";
   } else {
     hintbox.style.display = "none";
@@ -110,4 +112,5 @@ document.addEventListener("DOMContentLoaded", function () {
       checkPassword();
     }
   });
+
 });
