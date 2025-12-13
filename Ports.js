@@ -112,3 +112,16 @@ function accessScreen() {
 function quitToMainMenu() {
   window.location.href ="MainMenu.html";
 }
+
+// ✅ NEW: Trigger confirm on ENTER key
+document.addEventListener("DOMContentLoaded", function () {
+  var passwordInput = document.getElementById("passwordInput");
+
+  passwordInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkPassword();
+    }
+  });
+
+});
