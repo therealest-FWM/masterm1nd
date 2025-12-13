@@ -23,6 +23,10 @@ body, html {
     font-size: 150%;
     font-family: 'Orbitron', sans-serif;
   }
+   .choose-legitimate-message {
+    margin-top: 20px; /* This line adds margin-top to create space between the center box and the text */
+    text-align: center; /* This line centers the "Choose the legitimate message" text */
+  }
   .top-bar .lives-remaining {
     flex-grow: 1; /* Makes it take up the available space */
     text-align: center;
@@ -533,4 +537,5 @@ body, html {
   
   
   
+
   
