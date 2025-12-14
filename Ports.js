@@ -110,7 +110,7 @@ function accessScreen() {
  *  QUIT BUTTON
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="MainMenu.html";
+  window.location.href ="LevelSelect.html";
 }
 
 // ✅ NEW: Trigger confirm on ENTER key
@@ -125,3 +125,4 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
