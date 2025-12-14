@@ -105,6 +105,7 @@ function showHint() {
  *  QUIT BUTTON
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="MainMenu.html";
+  window.location.href ="LevelSelect.html";
 }
+
 
