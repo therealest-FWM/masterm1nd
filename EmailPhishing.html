@@ -840,6 +840,9 @@
 <div class="hint-box" id="hintBox">
 Pay attention to the emails and who is sending them.
 </div>
+<div class="hint-box" id="correctPopup" style="display: none; right: auto; left: 10px;">
+  You got one correct
+</div>
 
 <script>
     var livesRemaining = 3;
@@ -878,7 +881,7 @@ function stopTimer3() {
   // Store the total time in localStorage
   localStorage.setItem('totalTimeInSeconds3', totalTimeInSeconds3);
 }
-  function submit() {
+function submit() {
   var ec1 = document.getElementById("ec1");
   var ec2 = document.getElementById("ec2");
   var ec3 = document.getElementById("ec3");
@@ -902,22 +905,24 @@ function stopTimer3() {
     return;
   }
 
-  // ✅ Case 2: ec1 or ec5 is selected with others (wrong combo)
+  // ✅ Case 2: ec1 or ec5 is selected with others → hide the correct + lose 1 life + show popup
   if (selected.ec1 && (selected.ec2 || selected.ec3 || selected.ec4)) {
-    ec1.parentNode.style.display = "none"; // Disable ec1
+    ec1.parentNode.style.display = "none";
+    showCorrectPopup(); // 👈
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 
   if (selected.ec5 && (selected.ec2 || selected.ec3 || selected.ec4)) {
-    ec5.parentNode.style.display = "none"; // Disable ec5
+    ec5.parentNode.style.display = "none";
+    showCorrectPopup(); // 👈
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 
-  // ✅ Case 3: Any wrong selection alone (ec2, ec3, ec4 or any mix of them)
+  // ✅ Case 3: Any wrong selection alone (ec2, ec3, ec4 or any mix)
   if (selected.ec2 || selected.ec3 || selected.ec4) {
     livesRemaining--;
     updateLivesDisplay();
@@ -973,10 +978,19 @@ function resume(){
 function quitToMainMenu() {
   window.location.href ="LevelSelect.html";
 }
+function showCorrectPopup() {
+  const box = document.getElementById("correctPopup");
+  box.style.display = "block";
+
+  setTimeout(() => {
+    box.style.display = "none";
+  }, 5000); // 5 seconds
+}
 </script>
 </body>
 
 </html>
+
 
 
 
