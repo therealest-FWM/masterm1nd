@@ -878,55 +878,49 @@ function stopTimer3() {
   // Store the total time in localStorage
   localStorage.setItem('totalTimeInSeconds3', totalTimeInSeconds3);
 }
-function submit() {
+  function submit() {
   var ec1 = document.getElementById("ec1");
   var ec2 = document.getElementById("ec2");
   var ec3 = document.getElementById("ec3");
   var ec4 = document.getElementById("ec4");
   var ec5 = document.getElementById("ec5");
 
-  // Check if both ec1 and ec5 are clicked
-  if (ec1.checked && ec5.checked) {
+  const selected = {
+    ec1: ec1.checked,
+    ec2: ec2.checked,
+    ec3: ec3.checked,
+    ec4: ec4.checked,
+    ec5: ec5.checked,
+  };
+
+  // ✅ Case 1: Only ec1 and ec5 selected → Go to recap
+  if (selected.ec1 && selected.ec5 && !selected.ec2 && !selected.ec3 && !selected.ec4) {
     stopTimer3();
-    setTimeout(function() {
+    setTimeout(() => {
       window.location.href = 'RecapEmail.html';
-    }, 500)
+    }, 500);
     return;
   }
 
-  // Check if ec1 is clicked alone or with ec2, ec3, or ec4
-  if (ec1.checked && (ec2.checked || ec3.checked || ec4.checked)) {
-    ec1.parentNode.style.display = "none";
-    livesRemaining--;
-    updateLivesDisplay();
-    return;
-  }
-  if (ec5.checked && (ec2.checked || ec3.checked || ec4.checked)) {
-    ec5.parentNode.style.display = "none";
+  // ✅ Case 2: ec1 or ec5 is selected with others (wrong combo)
+  if (selected.ec1 && (selected.ec2 || selected.ec3 || selected.ec4)) {
+    ec1.parentNode.style.display = "none"; // Disable ec1
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 
-  // Check if ec5 is clicked alone
-  if (ec5.checked) {
-    ec5.parentNode.style.display = "none";
+  if (selected.ec5 && (selected.ec2 || selected.ec3 || selected.ec4)) {
+    ec5.parentNode.style.display = "none"; // Disable ec5
+    livesRemaining--;
+    updateLivesDisplay();
     return;
   }
 
-  if (ec1.checked) {
-    ec1.parentNode.style.display = "none";
-    return;
-  }
-  // Check if ec2, ec3, or ec4 is clicked alone or in pairs
-  var checkedBoxes = [ec2, ec3, ec4];
-  var checkedCount = checkedBoxes.filter(function(checkbox) { return checkbox.checked; }).length;
-  if (checkedCount > 0) {
-    // If all or more than one of ec2, ec3, ec4 are checked
-    if (checkedCount > 1 || checkedBoxes.some(function(checkbox) { return checkbox.checked; })) {
-      livesRemaining--;
-      updateLivesDisplay();
-    }
+  // ✅ Case 3: Any wrong selection alone (ec2, ec3, ec4 or any mix of them)
+  if (selected.ec2 || selected.ec3 || selected.ec4) {
+    livesRemaining--;
+    updateLivesDisplay();
     return;
   }
 }
@@ -983,5 +977,6 @@ function quitToMainMenu() {
 </body>
 
 </html>
+
 
 
