@@ -417,7 +417,10 @@
     border-radius: 5px;
     font-family: 'Orbitron', sans-serif;
   }
-  
+  #autoHintBox {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
   /* pause menu button animation */
   
   .cta {
@@ -609,6 +612,9 @@
   <div class="hint-box" id="hintBox" style="display: none;">
     be wary of unexpected requests, especially those asking for sensitive information or to follow links outside established secure channels. Genuine communications will follow known protocols and not request sensitive information
     </div>
+  <div class="hint-box" id="autoHintBox" style="left: 20px; right: auto; display: none;">
+  Pick the suspicious message
+</div>
     <div class="pause-menu" id="pasue-menu" style="display: none;">
       <h1>Game Paused</h1>
       <br>
@@ -667,7 +673,10 @@ function startTimer5() {
   }, 100); // Update the timer every 100 milliseconds
 }
 
-window.onload = startTimer5;
+window.onload = function () {
+  showLeftHint();
+  startTimer5(); // if you have other startup code like timers
+};
 
 function stopTimer5() {
   clearInterval(timer5);
@@ -759,9 +768,28 @@ function confirm(){
 function quitToMainMenu() {
   window.location.href ="LevelSelect.html";
 }
+function showLeftHint() {
+  const autoHint = document.getElementById("autoHintBox");
+
+  autoHint.style.display = "block";
+
+  // Animate fade-in
+  setTimeout(() => {
+    autoHint.style.opacity = 1;
+  }, 100);
+
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    autoHint.style.opacity = 0;
+    setTimeout(() => {
+      autoHint.style.display = "none";
+    }, 500); // after fade-out
+  }, 5100);
+}
   </script>
 
   </html>
+
 
 
 
