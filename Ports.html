@@ -561,7 +561,7 @@
   </div>
   <div class="overlay"></div>
   <div class="center-box">
-    <div class="choose-legitimate-message"><img src="assets/usergide.png" alt=""></div> 
+   <!-- <div class="choose-legitimate-message"><img src="assets/usergide.png" alt=""></div> -->
 
     <div class="profile">
   </div>
@@ -637,7 +637,11 @@ function startTimer() {
   }, 100); // Update the timer every 100 milliseconds
 }
   
-window.onload = startTimer;
+window.onload = function () {
+  startTimer();
+  showHint(); // Show the left popup automatically for 10 seconds
+};
+
 function stopTimer() {
   clearInterval(timer);
   totalTimeInSeconds = totalMilliseconds / 1000;
@@ -742,6 +746,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 </body>
 </html>
+
 
 
 
