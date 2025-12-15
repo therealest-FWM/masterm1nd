@@ -547,7 +547,9 @@
 </style>
 </head>
 <body>
-
+  <div class="hint-box" id="leftHintBox" style="left: -400px; right: auto;">
+  Try to choose the legitmiate message.
+  </div>
 <div class="top-bar">
   <div class="logo">MASTERM1ND</div>
   <div class="progress-container">
@@ -656,7 +658,10 @@ function startTimer4() {
   }, 100); // Update the timer every 100 milliseconds
 }
 
-window.onload = startTimer4;
+window.onload = function () {
+  startTimer4();
+  showLeftHint(); // Show the left popup automatically for 10 seconds
+};
 
 function stopTimer4() {
   clearInterval(timer4);
@@ -706,11 +711,6 @@ function confirm(){
     }, 1000)
   }
   else {
-    disappearingText.style.display = "block";
-    disappearingText.style.color="red";
-    setTimeout(function() {
-      disappearingText.style.display = "none";
-  }, 1000);
   livesRemaining--;
   document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
   if (livesRemaining==0){
@@ -728,10 +728,23 @@ function confirm(){
 function quitToMainMenu() {
   window.location.href ="LevelSelect.html";
 }
+function showLeftHint() {
+  const leftHint = document.getElementById("leftHintBox");
+  leftHint.style.display = "block";
+  leftHint.style.left = "10px";
+
+  setTimeout(() => {
+    leftHint.style.left = "-400px";
+    setTimeout(() => {
+      leftHint.style.display = "none";
+    }, 500); // Wait for animation to finish before hiding
+  }, 10000); // Show for 10 seconds
+}
 </script>
   </body>
 
   </html>
+
 
 
 
