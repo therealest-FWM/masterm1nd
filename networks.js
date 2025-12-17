@@ -61,7 +61,7 @@ function connect(networkId) {
   if (!password.includes("@")) {
     var input = document.getElementById(networkId);
 
-    input.value = 'Enter a valid E-Mail with an "@" to connect';
+    input.value = 'An E-Mail should have an "@" to connect';
     input.style.color = "red";
 
     // Clear message when user focuses the field again
@@ -127,6 +127,7 @@ function showHint() {
 function quitToMainMenu() {
   window.location.href ="LevelSelect.html";
 }
+
 
 
 
