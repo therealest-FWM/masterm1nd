@@ -55,16 +55,36 @@ function connect(networkId) {
     setTimeout(function() {
       window.location.href = "MMTest.html";
     }, 2000); // Adjust the delay time (in milliseconds) as needed
-  } else if (networkId === "network3") {
-    document.getElementById(networkId).nextElementSibling.textContent = "Connected";
-    // Save current timer state to localStorage (don't stop it - it continues on next page)
-    localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
-    // Add a delay before redirecting to another HTML file
-    setTimeout(function() {
+  }else if (networkId === "network3") {
 
-      window.location.href = "text.html";
-    }, 2000); // Adjust the delay time (in milliseconds) as needed
-  } else {
+  // EMAIL VALIDATION: must contain "@"
+  if (!password.includes("@")) {
+    var input = document.getElementById(networkId);
+
+    input.value = 'Enter a valid E-Mail with an "@" to connect';
+    input.style.color = "red";
+
+    // Clear message when user focuses the field again
+    input.onfocus = function () {
+      if (this.value.includes("Enter a valid E-Mail")) {
+        this.value = "";
+        this.style.color = "";
+      }
+    };
+
+    return; // stop connection
+  }
+
+  // If valid email
+  document.getElementById(networkId).nextElementSibling.textContent = "Connected";
+
+  localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+
+  setTimeout(function () {
+    window.location.href = "text.html";
+  }, 2000);
+}
+ else {
     document.getElementById(networkId).nextElementSibling.textContent = "Wrong Password";
   }
 }
@@ -107,5 +127,6 @@ function showHint() {
 function quitToMainMenu() {
   window.location.href ="LevelSelect.html";
 }
+
 
 
