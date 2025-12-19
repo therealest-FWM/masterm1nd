@@ -586,6 +586,23 @@ body, html {
     z-index: -1;
     transform: translateX(50%);
   }
+  .victim-box {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  width: 180px;
+  height: 180px;
+  background-color: black;
+  color: #0F0;
+  border: 2px solid #0F0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  z-index: 99;
+}
   .button-bar {
       width: 100%;
       height: 80px;
@@ -669,9 +686,11 @@ body, html {
     </span> 
   </button>
 </div>
-
 <div class="hint-box" id="hintBox">
   The data your boss is asking for is called data or data.docx
+</div>
+<div class="victim-box" id="victimBox">
+  VICTIM's screen
 </div>
 <script>
 // Timer continuation - resume from localStorage and keep counting
@@ -787,6 +806,7 @@ function sendMessage() {
 function redirectToAnotherPage() {
     // Save timer before redirecting
     localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+    document.getElementById('victimBox').style.display = 'none'; // Hide victim box
     window.location.href = "laptop.html";
 }
 
@@ -834,4 +854,5 @@ function showHint() {
 </script>
 </body>
 </html>
+
 
