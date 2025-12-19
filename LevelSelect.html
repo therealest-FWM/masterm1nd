@@ -167,48 +167,51 @@
   </div>
 </body>
 <script>
-  let selectedLevel = null;  // Stores selected level path
+  let selectedLevel = null;
 
   function goB() {
-    setTimeout(function() {
-      window.location.href = 'MainMenu.html';
-    }, 500);
+    setTimeout(() => window.location.href = 'MainMenu.html', 500);
   }
 
-  // Get all level images using the shared class
   const levelImages = document.querySelectorAll(".level-image");
-
-  // Get Play button with class
   const playBtn = document.querySelector(".play-button");
 
-  // Loop through all level images for selection
-  levelImages.forEach(img => {
-    img.addEventListener("click", () => {
+  // Level elements
+  const levels = [
+    { id: "pass", img: "assets/Passwords.png", level: 1, file: "PasswordCS.html" },
+    { id: "phish", img: "assets/Phishing.png", lockedImg: "assets/PhishingL.png", level: 2, file: "PhishingCS.html" },
+    { id: "nets", img: "assets/Networks.png", lockedImg: "assets/NetworksL.png", level: 3, file: "NetworksCS.html" },
+    { id: "chrg", img: "assets/UPorts.png", lockedImg: "assets/UPortsL.png", level: 4, file: "PortsCS.html" }
+  ];
 
-      // Remove selection from all
-      levelImages.forEach(i => i.classList.remove("selected"));
+  // Get unlock progress from sessionStorage
+  const unlockedLevel = parseInt(sessionStorage.getItem('levelUnlocked')) || 1;
 
-      // Add selection to clicked one
-      img.classList.add("selected");
-
-      // Set the selected level path based on the ID
-      if (img.id === "pass") {
-        selectedLevel = 'PasswordCS.html';
-      } 
-      else if (img.id === "phish") {
-        selectedLevel = 'PhishingCS.html';
-      } 
-      else if (img.id === "chrg") {
-        selectedLevel = 'PortsCS.html';
-      } 
-      else if (img.id === "nets") {
-        selectedLevel = 'NetworksCS.html';
-      }
-    });
+  levels.forEach(({ id, img, lockedImg, level, file }) => {
+    const el = document.getElementById(id);
+    
+    if (level <= unlockedLevel) {
+      // Level is unlocked
+      el.src = img;
+      el.addEventListener("click", () => {
+        levelImages.forEach(i => i.classList.remove("selected"));
+        el.classList.add("selected");
+        selectedLevel = file;
+      });
+      el.style.cursor = "pointer";
+    } else {
+      // Level is locked
+      el.src = lockedImg;
+      el.style.filter = "grayscale(100%)";
+      el.style.cursor = "not-allowed";
+      el.addEventListener("mouseenter", () => {
+        el.title = "Level Locked";
+      });
+    }
   });
 
-  // Play button logic
-  playBtn.addEventListener("click", function() {
+  // Play button action
+  playBtn.addEventListener("click", () => {
     if (selectedLevel) {
       window.location.href = selectedLevel;
     } else {
@@ -218,6 +221,7 @@
 </script>
 </body>
 </html>
+
 
 
 
