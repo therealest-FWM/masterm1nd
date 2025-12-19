@@ -645,150 +645,188 @@
     </button>
     </div>
   </body>
-  <script>
-    var livesRemaining = 2;
-var timer5; // Variable to store the timer interval
-var totalMilliseconds5 = 0; // Variable to store the total elapsed milliseconds
+ <script>
+/*****************************
+ *  SOUND EFFECTS (SFX)
+ *****************************/
+const SFX = {
+  pause: new Audio("assets/pause-89443.mp3"),
+  unpause: new Audio("assets/unpause-106278.mp3"),
+  gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
+  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+  correct: new Audio("assets/success-48018-(right).mp3"),
+};
+
+Object.values(SFX).forEach(s => {
+  s.volume = 0.6;
+  s.preload = "auto";
+});
+
+function playSFX(sound) {
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+/*****************************
+ *  GAME STATE
+ *****************************/
+var livesRemaining = 2;
+var timer5;
+var totalMilliseconds5 = 0;
 var totalTimeInSeconds5;
-// Add this function to format milliseconds into "MM:SS:SSS" format
+
+/*****************************
+ *  TIMER
+ *****************************/
 function formatTime5(milliseconds) {
   var minutes = Math.floor(milliseconds / (60 * 1000));
   var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
   var remainingMilliseconds = milliseconds % 1000;
 
-  // Add leading zeros if necessary
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+  remainingMilliseconds =
+    remainingMilliseconds < 100
+      ? remainingMilliseconds < 10
+        ? "00" + remainingMilliseconds
+        : "0" + remainingMilliseconds
+      : remainingMilliseconds;
 
   return minutes + ":" + seconds + ":" + remainingMilliseconds;
 }
 
 function startTimer5() {
   timer5 = setInterval(function () {
-    totalMilliseconds5 += 100; // Update every 100 milliseconds (slower)
-
-    var timerDisplay5 = document.querySelector(".top-bar .timer");
-    timerDisplay5.textContent = formatTime5(totalMilliseconds5);
-  }, 100); // Update the timer every 100 milliseconds
+    totalMilliseconds5 += 100;
+    document.querySelector(".top-bar .timer").textContent =
+      formatTime5(totalMilliseconds5);
+  }, 100);
 }
 
 window.onload = function () {
   showLeftHint();
-  startTimer5(); // if you have other startup code like timers
+  startTimer5();
 };
 
 function stopTimer5() {
   clearInterval(timer5);
   totalTimeInSeconds5 = totalMilliseconds5 / 1000;
-
-  // Store the total time in localStorage
-  localStorage.setItem('totalTimeInSeconds5', totalTimeInSeconds5);
+  localStorage.setItem("totalTimeInSeconds5", totalTimeInSeconds5);
 }
-function showHint() {
-    document.getElementById('hintBox').style.right = '10px';
-    var y = document.getElementById("hintBox");
-    if (y.style.display === "none") {
-      y.style.display = "block";
-    } else {
-      y.style.display = "none";
-    }    
-  }
-  function pause() {
-    var pauseMenu = document.getElementById("pasue-menu");
-    if (pauseMenu.style.display === "none") {
-      stopTimer5();
-      pauseMenu.style.display = "block";
-    } else {
-      pauseMenu.style.display = "none";
-      startTimer5();
-    }
-  }
-function resume(){
-  var x = document.getElementById("Resume");
-  var y= document.getElementById("pasue-menu");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-    startTimer5();
-  } else {
-    y.style.display = "none";
-    startTimer5();
-  } 
-}
-function confirm(){
-  var z= document.getElementById("real");
-  var y= document.getElementById("real2");
-  var x= document.getElementById("fake");
-  var disappearingText=document.getElementById("disText");
-  var resultMessage = document.querySelector(".center-box h3");
-  if (z.checked){
-    livesRemaining--;
-    document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-    disappearingText.style.display = "block";
-    disappearingText.style.color="red";
-    disappearingText.style.fontWeight="BOLD";
-    setTimeout(function() {
-      disappearingText.style.display = "none";
-  }, 1000);
-    if (livesRemaining==0){
-      setTimeout(function() {
-        stopTimer5();
-        window.location.href = 'GameOverSMSishing.html';
-      }, 1000)
-    }
-  }
-  if (y.checked){
-    livesRemaining--;
-    document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-    disappearingText.style.display = "block";
-    disappearingText.style.color="red";
-    disappearingText.style.fontWeight="BOLD";
-    setTimeout(function() {
-      disappearingText.style.display = "none";
-  }, 1000);
-    if (livesRemaining==0){
-      setTimeout(function() {
-        stopTimer5();
-        window.location.href = 'GameOverSMSishing.html';
-      }, 1000)
-    }
-  } 
-  if (x.checked){
-    stopTimer5();
-    setTimeout(function() {
-      window.location.href = 'RecapSMSishing.html';
-    }, 1000)
-  }
 
-
-}
-      /*****************************
- *  QUIT BUTTON
+/*****************************
+ *  HINTS
  *****************************/
-function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
-}
-function showLeftHint() {
-  const autoHint = document.getElementById("autoHintBox");
+function showHint() {
+  playSFX(SFX.popup);
 
+  var hintBox = document.getElementById("hintBox");
+  hintBox.style.right = "10px";
+
+  if (hintBox.style.display === "none") {
+    hintBox.style.display = "block";
+  } else {
+    hintBox.style.display = "none";
+  }
+}
+
+function showLeftHint() {
+  playSFX(SFX.popup);
+
+  const autoHint = document.getElementById("autoHintBox");
   autoHint.style.display = "block";
 
-  // Animate fade-in
   setTimeout(() => {
     autoHint.style.opacity = 1;
   }, 100);
 
-  // Auto-hide after 5 seconds
   setTimeout(() => {
     autoHint.style.opacity = 0;
     setTimeout(() => {
       autoHint.style.display = "none";
-    }, 500); // after fade-out
+    }, 500);
   }, 5100);
 }
-  </script>
+
+/*****************************
+ *  PAUSE / RESUME
+ *****************************/
+function pause() {
+  var pauseMenu = document.getElementById("pasue-menu");
+
+  if (pauseMenu.style.display === "none") {
+    playSFX(SFX.pause);
+    stopTimer5();
+    pauseMenu.style.display = "block";
+  } else {
+    playSFX(SFX.unpause);
+    pauseMenu.style.display = "none";
+    startTimer5();
+  }
+}
+
+function resume() {
+  playSFX(SFX.unpause);
+  document.getElementById("pasue-menu").style.display = "none";
+  startTimer5();
+}
+
+/*****************************
+ *  CONFIRM LOGIC
+ *****************************/
+function confirm() {
+  var real1 = document.getElementById("real");
+  var real2 = document.getElementById("real2");
+  var fake = document.getElementById("fake");
+  var disappearingText = document.getElementById("disText");
+
+  if (real1.checked || real2.checked) {
+    playSFX(SFX.wrong);
+    livesRemaining--;
+
+    document.querySelector(".top-bar .lives-remaining").textContent =
+      "Lives Remaining: " + livesRemaining;
+
+    disappearingText.style.display = "block";
+    disappearingText.style.color = "red";
+    disappearingText.style.fontWeight = "BOLD";
+
+    setTimeout(() => {
+      disappearingText.style.display = "none";
+    }, 1000);
+
+    if (livesRemaining === 0) {
+      playSFX(SFX.gameOver);
+      setTimeout(function () {
+        stopTimer5();
+        window.location.href = "GameOverSMSishing.html";
+      }, 1000);
+    }
+  }
+
+  if (fake.checked) {
+    playSFX(SFX.correct);
+    stopTimer5();
+
+    setTimeout(function () {
+      window.location.href = "RecapSMSishing.html";
+    }, 1000);
+  }
+}
+
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  playSFX(SFX.popup);
+  window.location.href = "LevelSelect.html";
+}
+</script>
+
 
   </html>
+
 
 
 
