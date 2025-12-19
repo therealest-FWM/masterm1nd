@@ -618,106 +618,95 @@
   <div class="hint-box" id="hintBox" style="display: none;">
     be wary of unexpected requests, especially those asking for sensitive information or to follow links outside established secure channels. Genuine communications will follow known protocols and not request sensitive information
     </div>
-
 <script>
-  var livesRemaining = 1;
-var timer4; // Variable to store the timer interval
-var totalMilliseconds4 = 0; // Variable to store the total elapsed milliseconds
+/*****************************
+ *  SOUND EFFECTS (SFX)
+ *****************************/
+const SFX = {
+  pause: new Audio("assets/pause-89443.mp3"),
+  unpause: new Audio("assets/unpause-106278.mp3"),
+  gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
+  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+  correct: new Audio("assets/success-48018-(right).mp3"),
+};
+
+Object.values(SFX).forEach(s => {
+  s.volume = 0.6;
+  s.preload = "auto";
+});
+
+function playSFX(sound) {
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+/*****************************
+ *  GAME STATE
+ *****************************/
+var livesRemaining = 1;
+var timer4;
+var totalMilliseconds4 = 0;
 var totalTimeInSeconds4;
-// Add this function to format milliseconds into "MM:SS:SSS" format
+
+/*****************************
+ *  TIMER
+ *****************************/
 function formatTime4(milliseconds) {
   var minutes = Math.floor(milliseconds / (60 * 1000));
   var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
   var remainingMilliseconds = milliseconds % 1000;
 
-  // Add leading zeros if necessary
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+  remainingMilliseconds =
+    remainingMilliseconds < 100
+      ? remainingMilliseconds < 10
+        ? "00" + remainingMilliseconds
+        : "0" + remainingMilliseconds
+      : remainingMilliseconds;
 
   return minutes + ":" + seconds + ":" + remainingMilliseconds;
 }
 
 function startTimer4() {
   timer4 = setInterval(function () {
-    totalMilliseconds4 += 100; // Update every 100 milliseconds (slower)
-
-    var timerDisplay4 = document.querySelector(".top-bar .timer");
-    timerDisplay4.textContent = formatTime4(totalMilliseconds4);
-  }, 100); // Update the timer every 100 milliseconds
+    totalMilliseconds4 += 100;
+    document.querySelector(".top-bar .timer").textContent =
+      formatTime4(totalMilliseconds4);
+  }, 100);
 }
 
 window.onload = function () {
   startTimer4();
-  showLeftHint(); // Show the left popup automatically for 10 seconds
+  showLeftHint();
 };
 
 function stopTimer4() {
   clearInterval(timer4);
   totalTimeInSeconds4 = totalMilliseconds4 / 1000;
+  localStorage.setItem("totalTimeInSeconds4", totalTimeInSeconds4);
+}
 
-  // Store the total time in localStorage
-  localStorage.setItem('totalTimeInSeconds4', totalTimeInSeconds4);
-}
-function showHint() {
-    document.getElementById('hintBox').style.right = '10px';
-    var y = document.getElementById("hintBox");
-    if (y.style.display === "none") {
-      y.style.display = "block";
-    } else {
-      y.style.display = "none";
-    }    
-  }
-  function Pause(){
-    var x = document.getElementById("pasue-menu");
-    if (x.style.display === "none") {
-      x.style.display = "block";
-      stopTimer4();
-    } else {
-      x.style.display = "none";
-      startTimer4();
-    }
-}
-function resume(){
-  var x = document.getElementById("Resume");
-  var y= document.getElementById("pasue-menu");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "none";
-    startTimer4();
-  } 
-}
-function confirm(){
-  var z= document.getElementById("real");
-  var x= document.getElementById("fake");
-  var disappearingText=document.getElementById("disText");
-  var resultMessage = document.querySelector(".center-box h3");
-  if (z.checked){
-    stopTimer4();
-    setTimeout(function() {
-      window.location.href = 'RecapSPhishing.html';
-    }, 1000)
-  }
-  else {
-  livesRemaining--;
-  document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-  if (livesRemaining==0){
-    stopTimer4();
-    setTimeout(function() {
-      window.location.href = 'GameOverSPhishing.html';
-    }, 1000)
-  }
-  }
-
-}
-  /*****************************
- *  QUIT BUTTON
+/*****************************
+ *  HINTS
  *****************************/
-function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
+function showHint() {
+  playSFX(SFX.popup);
+
+  var hintBox = document.getElementById("hintBox");
+  hintBox.style.right = "10px";
+
+  if (hintBox.style.display === "none") {
+    hintBox.style.display = "block";
+  } else {
+    hintBox.style.display = "none";
+  }
 }
+
 function showLeftHint() {
+  playSFX(SFX.popup);
+
   const leftHint = document.getElementById("leftHintBox");
   leftHint.style.display = "block";
   leftHint.style.left = "10px";
@@ -726,13 +715,78 @@ function showLeftHint() {
     leftHint.style.left = "-400px";
     setTimeout(() => {
       leftHint.style.display = "none";
-    }, 500); // Wait for animation to finish before hiding
-  }, 10000); // Show for 10 seconds
+    }, 500);
+  }, 10000);
+}
+
+/*****************************
+ *  PAUSE / RESUME
+ *****************************/
+function Pause() {
+  var pauseMenu = document.getElementById("pasue-menu");
+
+  if (pauseMenu.style.display === "none") {
+    playSFX(SFX.pause);
+    pauseMenu.style.display = "block";
+    stopTimer4();
+  } else {
+    playSFX(SFX.unpause);
+    pauseMenu.style.display = "none";
+    startTimer4();
+  }
+}
+
+function resume() {
+  playSFX(SFX.unpause);
+  document.getElementById("pasue-menu").style.display = "none";
+  startTimer4();
+}
+
+/*****************************
+ *  CONFIRM PHISHING CHOICE
+ *****************************/
+function confirm() {
+  var realOption = document.getElementById("real");
+  var fakeOption = document.getElementById("fake");
+
+  if (realOption.checked) {
+    playSFX(SFX.correct);
+    stopTimer4();
+
+    setTimeout(function () {
+      window.location.href = "RecapSPhishing.html";
+    }, 1000);
+  } else {
+    playSFX(SFX.wrong);
+    livesRemaining--;
+
+    document.querySelector(".top-bar .lives-remaining").textContent =
+      "Lives Remaining: " + livesRemaining;
+
+    if (livesRemaining === 0) {
+      playSFX(SFX.gameOver);
+      stopTimer4();
+
+      setTimeout(function () {
+        window.location.href = "GameOverSPhishing.html";
+      }, 1000);
+    }
+  }
+}
+
+/*****************************
+ *  QUIT BUTTON
+ *****************************/
+function quitToMainMenu() {
+  playSFX(SFX.popup);
+  window.location.href = "LevelSelect.html";
 }
 </script>
+
   </body>
 
   </html>
+
 
 
 
