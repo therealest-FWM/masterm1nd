@@ -677,154 +677,191 @@
   Try to connect to the network
 </div>
 <script>
-  var timer10; // Variable to store the timer interval
-var totalMilliseconds10 = 0; // Variable to store the total elapsed milliseconds
+/*****************************
+ *  SOUND EFFECTS (SFX)
+ *****************************/
+const SFX = {
+  pause: new Audio("assets/pause-89443.mp3"),
+  unpause: new Audio("assets/unpause-106278.mp3"),
+  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+  correct: new Audio("assets/success-48018-(right).mp3"),
+};
+
+Object.values(SFX).forEach(s => {
+  s.volume = 0.6;
+  s.preload = "auto";
+});
+
+function playSFX(sound) {
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+/*****************************
+ *  TIMER
+ *****************************/
+var timer10;
+var totalMilliseconds10 = 0;
 var totalTimeInSeconds10;
-// Add this function to format milliseconds into "MM:SS:SSS" format
+
 function formatTime10(milliseconds) {
   var minutes = Math.floor(milliseconds / (60 * 1000));
   var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
   var remainingMilliseconds = milliseconds % 1000;
 
-  // Add leading zeros if necessary
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+  remainingMilliseconds =
+    remainingMilliseconds < 100
+      ? remainingMilliseconds < 10
+        ? "00" + remainingMilliseconds
+        : "0" + remainingMilliseconds
+      : remainingMilliseconds;
 
   return minutes + ":" + seconds + ":" + remainingMilliseconds;
 }
 
 function startTimer10() {
   timer10 = setInterval(function () {
-    totalMilliseconds10 += 100; // Update every 100 milliseconds (slower)
-
-    var timerDisplay10 = document.querySelector(".top-bar .timer");
-    timerDisplay10.textContent = formatTime10(totalMilliseconds10);
-  }, 100); // Update the timer every 100 milliseconds
+    totalMilliseconds10 += 100;
+    document.querySelector(".top-bar .timer").textContent =
+      formatTime10(totalMilliseconds10);
+  }, 100);
 }
 
 window.onload = function () {
   startTimer10();
   showLeftHintBox();
 };
+
 function stopTimer10() {
   clearInterval(timer10);
   totalTimeInSeconds10 = totalMilliseconds10 / 1000;
-
-  // Store the total time in localStorage
-  localStorage.setItem('totalTimeInSeconds10', totalTimeInSeconds10);
+  localStorage.setItem("totalTimeInSeconds10", totalTimeInSeconds10);
 }
 
+/*****************************
+ *  NETWORK TOGGLE
+ *****************************/
 function toggleNetwork(networkId) {
-    var inputField = document.getElementById(networkId);  
-    if (inputField.style.display === "none") {
-      inputField.style.display = "block";
-    } else {
-      inputField.style.display = "none";
-    }
-  }
+  playSFX(SFX.popup);
+  var inputField = document.getElementById(networkId);
+  inputField.style.display =
+    inputField.style.display === "none" ? "block" : "none";
+}
 
-// JavaScript function to connect to the network
+/*****************************
+ *  CONNECT LOGIC
+ *****************************/
 function connect(networkId) {
-  // Get the value of the password input field
   var password = document.getElementById(networkId).value;
 
-  // Check the network ID and validate the password accordingly
+  // Correct long password
   if ((networkId === "network1" || networkId === "network2") && password.length === 88) {
+    playSFX(SFX.correct);
     document.getElementById(networkId).nextElementSibling.textContent = "Connected";
-    // Add a delay before redirecting to another HTML file
-    setTimeout(function() {
+
+    setTimeout(function () {
       window.location.href = "MMTest.html";
-    }, 2000); // Adjust the delay time (in milliseconds) as needed
-  }else if (networkId === "network3") {
-
-  // EMAIL VALIDATION: must contain "@"
-  if (!password.includes("@")) {
-    var input = document.getElementById(networkId);
-
-    input.value = 'An E-Mail should have an "@" to connect';
-    input.style.color = "red";
-
-    // Clear message when user focuses the field again
-    input.onfocus = function () {
-      if (this.value.includes("Enter a valid E-Mail")) {
-        this.value = "";
-        this.style.color = "";
-      }
-    };
-
-    return; // stop connection
+    }, 2000);
   }
 
-  // If valid email
-  document.getElementById(networkId).nextElementSibling.textContent = "Connected";
+  // Email network
+  else if (networkId === "network3") {
+    if (!password.includes("@")) {
+      playSFX(SFX.wrong);
 
-  localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+      var input = document.getElementById(networkId);
+      input.value = 'An E-Mail should have an "@" to connect';
+      input.style.color = "red";
 
-  setTimeout(function () {
-    window.location.href = "text.html";
-  }, 2000);
-}
- else {
+      input.onfocus = function () {
+        this.value = "";
+        this.style.color = "";
+      };
+
+      return;
+    }
+
+    playSFX(SFX.correct);
+    document.getElementById(networkId).nextElementSibling.textContent = "Connected";
+    localStorage.setItem("totalMilliseconds10", totalMilliseconds10);
+
+    setTimeout(function () {
+      window.location.href = "text.html";
+    }, 2000);
+  }
+
+  // Wrong password
+  else {
+    playSFX(SFX.wrong);
     document.getElementById(networkId).nextElementSibling.textContent = "Wrong Password";
   }
 }
-function showHint() {
-    var hintBox = document.getElementById('hintBox');
-    hintBox.style.right = '10px';
-    hintBox.style.display="none";
-    if (hintBox.style.display === "none") {
-      hintBox.style.display = "block";
-    } else {
-      hintBox.style.display = "none";
-    }    
-  }
-  function pause() {
-    var pauseMenu = document.getElementById("pasue-menu");
-    if (pauseMenu.style.display === "none") {
-      stopTimer10();
-      pauseMenu.style.display = "block";
-    } else {
-      pauseMenu.style.display = "none";
-      startTimer10();
-    }
-  }
-  
-  function resume(){
-    var y=document.getElementById("Resume");
-    var z=document.getElementById("pasue-menu");
-    if (y.style.display==="none"){
-      z.style.display="block";
-      startTimer10();
-    } else {
-      z.style.display = "none";
-      startTimer10();
-    }
-  }
-  
+
 /*****************************
- *  QUIT BUTTON
+ *  HINT
+ *****************************/
+function showHint() {
+  playSFX(SFX.popup);
+  var hintBox = document.getElementById("hintBox");
+  hintBox.style.right = "10px";
+  hintBox.style.display =
+    hintBox.style.display === "none" ? "block" : "none";
+}
+
+/*****************************
+ *  PAUSE / RESUME
+ *****************************/
+function pause() {
+  var pauseMenu = document.getElementById("pasue-menu");
+  if (pauseMenu.style.display === "none") {
+    playSFX(SFX.pause);
+    stopTimer10();
+    pauseMenu.style.display = "block";
+  } else {
+    playSFX(SFX.unpause);
+    pauseMenu.style.display = "none";
+    startTimer10();
+  }
+}
+
+function resume() {
+  playSFX(SFX.unpause);
+  document.getElementById("pasue-menu").style.display = "none";
+  startTimer10();
+}
+
+/*****************************
+ *  QUIT
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
+  playSFX(SFX.popup);
+  window.location.href = "LevelSelect.html";
 }
-  function showLeftHintBox() {
+
+/*****************************
+ *  LEFT AUTO HINT
+ *****************************/
+function showLeftHintBox() {
+  playSFX(SFX.popup);
   const leftHint = document.getElementById("leftHintBox");
   leftHint.style.display = "block";
 
-  // Trigger slide-in
   setTimeout(() => {
     leftHint.style.left = "10px";
   }, 50);
 
-  // Hide after 5 seconds
   setTimeout(() => {
     leftHint.style.left = "-400px";
   }, 5000);
 }
 </script>
+
 </body>
 </html>
+
 
 
 
