@@ -832,31 +832,62 @@ Pay attention to the emails and who is sending them.
 </div>
 
 <script>
-    var livesRemaining = 3;
-var timer3; // Variable to store the timer interval
-var totalMilliseconds3 = 0; // Variable to store the total elapsed milliseconds
+/*****************************
+ *  SOUND EFFECTS (SFX)
+ *****************************/
+const SFX = {
+  pause: new Audio("assets/pause-89443.mp3"),
+  unpause: new Audio("assets/unpause-106278.mp3"),
+  gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
+  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+  correct: new Audio("assets/success-48018-(right).mp3"),
+};
+
+Object.values(SFX).forEach(s => {
+  s.volume = 0.6;
+  s.preload = "auto";
+});
+
+function playSFX(sound) {
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+/*****************************
+ *  GAME STATE
+ *****************************/
+var livesRemaining = 3;
+var timer3;
+var totalMilliseconds3 = 0;
 var totalTimeInSeconds3;
-// Add this function to format milliseconds into "MM:SS:SSS" format
+
+/*****************************
+ *  TIMER
+ *****************************/
 function formatTime3(milliseconds) {
   var minutes = Math.floor(milliseconds / (60 * 1000));
   var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
   var remainingMilliseconds = milliseconds % 1000;
 
-  // Add leading zeros if necessary
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+  remainingMilliseconds =
+    remainingMilliseconds < 100
+      ? remainingMilliseconds < 10
+        ? "00" + remainingMilliseconds
+        : "0" + remainingMilliseconds
+      : remainingMilliseconds;
 
   return minutes + ":" + seconds + ":" + remainingMilliseconds;
 }
 
 function startTimer3() {
   timer3 = setInterval(function () {
-    totalMilliseconds3 += 100; // Update every 100 milliseconds (slower)
-
-    var timerDisplay3 = document.querySelector(".top-bar .timer");
-    timerDisplay3.textContent = formatTime3(totalMilliseconds3);
-  }, 100); // Update the timer every 100 milliseconds
+    totalMilliseconds3 += 100;
+    document.querySelector(".top-bar .timer").textContent =
+      formatTime3(totalMilliseconds3);
+  }, 100);
 }
 
 window.onload = startTimer3;
@@ -864,10 +895,12 @@ window.onload = startTimer3;
 function stopTimer3() {
   clearInterval(timer3);
   totalTimeInSeconds3 = totalMilliseconds3 / 1000;
-
-  // Store the total time in localStorage
-  localStorage.setItem('totalTimeInSeconds3', totalTimeInSeconds3);
+  localStorage.setItem("totalTimeInSeconds3", totalTimeInSeconds3);
 }
+
+/*****************************
+ *  SUBMIT LOGIC (MULTI-SELECT)
+ *****************************/
 function submit() {
   var ec1 = document.getElementById("ec1");
   var ec2 = document.getElementById("ec2");
@@ -883,100 +916,117 @@ function submit() {
     ec5: ec5.checked,
   };
 
-  // ✅ Case 1: Only ec1 and ec5 selected → Go to recap
+  // ✅ ONLY correct answers
   if (selected.ec1 && selected.ec5 && !selected.ec2 && !selected.ec3 && !selected.ec4) {
+    playSFX(SFX.correct);
     stopTimer3();
     setTimeout(() => {
-      window.location.href = 'RecapEmail.html';
+      window.location.href = "RecapEmail.html";
     }, 500);
     return;
   }
 
-  // ✅ Case 2: ec1 or ec5 is selected with others → hide the correct + lose 1 life + show popup
+  // ⚠️ Correct + Wrong together
   if (selected.ec1 && (selected.ec2 || selected.ec3 || selected.ec4)) {
+    playSFX(SFX.popup);
     ec1.parentNode.style.display = "none";
-    showCorrectPopup(); // 👈
+    showCorrectPopup();
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 
   if (selected.ec5 && (selected.ec2 || selected.ec3 || selected.ec4)) {
+    playSFX(SFX.popup);
     ec5.parentNode.style.display = "none";
-    showCorrectPopup(); // 👈
+    showCorrectPopup();
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 
-  // ✅ Case 3: Any wrong selection alone (ec2, ec3, ec4 or any mix)
+  // ❌ Wrong only
   if (selected.ec2 || selected.ec3 || selected.ec4) {
+    playSFX(SFX.wrong);
     livesRemaining--;
     updateLivesDisplay();
     return;
   }
 }
 
+/*****************************
+ *  LIVES
+ *****************************/
 function updateLivesDisplay() {
-  document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-  if (livesRemaining==0){
-    setTimeout(function() {
-      window.location.href = 'GameOverEmail.html';
-    }, 500)
+  document.querySelector(".top-bar .lives-remaining").textContent =
+    "Lives Remaining: " + livesRemaining;
+
+  if (livesRemaining === 0) {
+    playSFX(SFX.gameOver);
+    setTimeout(function () {
+      window.location.href = "GameOverEmail.html";
+    }, 500);
   }
 }
 
+/*****************************
+ *  HINT
+ *****************************/
 function showHint() {
-  var hintBox = document.getElementById('hintBox');
-  hintBox.style.right = '10px';
-  hintBox.style.display="none";
-  if (hintBox.style.display === "none") {
-    hintBox.style.display = "block";
-  } else {
-    hintBox.style.display = "none";
-  }    
+  playSFX(SFX.popup);
+  var hintBox = document.getElementById("hintBox");
+  hintBox.style.right = "10px";
+  hintBox.style.display =
+    hintBox.style.display === "none" ? "block" : "none";
 }
 
+/*****************************
+ *  PAUSE / RESUME
+ *****************************/
 function pause() {
   var pauseMenu = document.getElementById("pasue-menu");
   if (pauseMenu.style.display === "none") {
+    playSFX(SFX.pause);
     stopTimer3();
     pauseMenu.style.display = "block";
   } else {
+    playSFX(SFX.unpause);
     pauseMenu.style.display = "none";
     startTimer3();
   }
 }
 
-function resume(){
-  var y=document.getElementById("Resume");
-  var z=document.getElementById("pasue-menu");
-  if (y.style.display==="none"){
-    z.style.display="block";
-    startTimer3();
-  } else {
-    z.style.display = "none";
-    startTimer3();
-  }
+function resume() {
+  playSFX(SFX.unpause);
+  document.getElementById("pasue-menu").style.display = "none";
+  startTimer3();
 }
-      /*****************************
- *  QUIT BUTTON
+
+/*****************************
+ *  QUIT
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
+  playSFX(SFX.popup);
+  window.location.href = "LevelSelect.html";
 }
+
+/*****************************
+ *  CORRECT POPUP
+ *****************************/
 function showCorrectPopup() {
   const box = document.getElementById("correctPopup");
   box.style.display = "block";
 
   setTimeout(() => {
     box.style.display = "none";
-  }, 5000); // 5 seconds
+  }, 5000);
 }
 </script>
+
 </body>
 
 </html>
+
 
 
 
