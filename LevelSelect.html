@@ -401,21 +401,28 @@
 }, 2000); // Wait 2 seconds before preloading
 
 const unlockSound = new Audio("assets/silence.mp3"); // tiny silent file
+  unlockSound.preload = "auto";
 
-document.getElementById("play-btn").addEventListener("click", () => {
-  unlockSound.play().then(() => {
-    localStorage.setItem("audioUnlocked", "true");
+  document.getElementById("play-btn").addEventListener("click", () => {
+    unlockSound.play().then(() => {
+      localStorage.setItem("audioUnlocked", "true");
 
-    setTimeout(() => {
-      window.location.href = "PasswordL1.html";
-    }, 200);
+      if (selectedLevelFile) {
+        window.location.href = selectedLevelFile;
+      } else {
+        alert("Please select an unlocked level.");
+      }
+    }).catch(() => {
+      // fallback if blocked
+      localStorage.setItem("audioUnlocked", "true");
+    });
   });
-});
   </script>
 </body>
 
 
 </html>
+
 
 
 
