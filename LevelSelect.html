@@ -400,26 +400,22 @@
       document.body.appendChild(preloadVideo);
 }, 2000); // Wait 2 seconds before preloading
 
-   const bgMusic = new Audio("assets/NEON.mp3");
-bgMusic.loop = true;
-bgMusic.volume = 0.5;
+const unlockSound = new Audio("assets/silence.mp3"); // tiny silent file
 
 document.getElementById("play-btn").addEventListener("click", () => {
-  bgMusic.play();
+  unlockSound.play().then(() => {
+    localStorage.setItem("audioUnlocked", "true");
 
-  // Save music state
-  localStorage.setItem("musicEnabled", "true");
-  localStorage.setItem("musicTime", "0");
-
-  // Navigate after user gesture
-  setTimeout(() => {
-    window.location.href = "PasswordL1.html";
-  }, 300);
+    setTimeout(() => {
+      window.location.href = "PasswordL1.html";
+    }, 200);
+  });
 });
   </script>
 </body>
 
 
 </html>
+
 
 
