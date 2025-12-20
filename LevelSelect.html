@@ -267,7 +267,7 @@
 
     <div class="action-bar">
       <button class="cyber-btn" onclick="goBack()">Back</button>
-      <button class="cyber-btn" id="play-btn" onclick="enableMusic()">Play</button>
+      <button class="cyber-btn" id="play-btn">Play</button>
     </div>
   </div>
 
@@ -400,18 +400,26 @@
       document.body.appendChild(preloadVideo);
 }, 2000); // Wait 2 seconds before preloading
 
-    const bgMusic = new Audio("assets/menu-music.mp3");
+   const bgMusic = new Audio("assets/NEON.mp3");
 bgMusic.loop = true;
-bgMusic.volume = 0.4;
+bgMusic.volume = 0.5;
 
-function enableMusic() {
+document.getElementById("play-btn").addEventListener("click", () => {
   bgMusic.play();
+
+  // Save music state
   localStorage.setItem("musicEnabled", "true");
-  window.location.href = "LevelSelect.html";
-}
+  localStorage.setItem("musicTime", "0");
+
+  // Navigate after user gesture
+  setTimeout(() => {
+    window.location.href = "PasswordL1.html";
+  }, 300);
+});
   </script>
 </body>
 
 
 </html>
+
 
