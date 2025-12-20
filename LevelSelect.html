@@ -390,8 +390,18 @@
 
     // Init
     renderLevels();
+    setTimeout(() => {
+      const preloadVideo = document.createElement('video');
+      preloadVideo.src = "assets/BackgroundP1LoopWatermark.mp4";
+      preloadVideo.preload = "auto";
+      preloadVideo.muted = true;
+      preloadVideo.playsInline = true;
+      preloadVideo.style.display = "none";
+      document.body.appendChild(preloadVideo);
+}, 2000); // Wait 2 seconds before preloading
 
   </script>
 </body>
+
 
 </html>
