@@ -611,126 +611,171 @@
   Access the live feed to find the keycode
 </div>
 <script>
-  var livesRemaining=2;
-var timer; // Variable to store the timer interval
-var totalMilliseconds = 0; // Variable to store the total elapsed milliseconds
+/*****************************
+ *  SOUND EFFECTS (SFX)
+ *****************************/
+const SFX = {
+  pause: new Audio("assets/pause-89443.mp3"),
+  unpause: new Audio("assets/unpause-106278.mp3"),
+  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+  correct: new Audio("assets/success-48018-(right).mp3"),
+};
+
+Object.values(SFX).forEach(s => {
+  s.volume = 0.6;
+  s.preload = "auto";
+});
+
+function playSFX(sound) {
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+/*****************************
+ *  GAME STATE
+ *****************************/
+var livesRemaining = 2;
+var timer;
+var totalMilliseconds = 0;
 var totalTimeInSeconds;
-// Add this function to format milliseconds into "MM:SS:SSS" format
+
+/*****************************
+ *  TIMER
+ *****************************/
 function formatTime(milliseconds) {
   var minutes = Math.floor(milliseconds / (60 * 1000));
   var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
   var remainingMilliseconds = milliseconds % 1000;
 
-  // Add leading zeros if necessary
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
+  remainingMilliseconds =
+    remainingMilliseconds < 100
+      ? remainingMilliseconds < 10
+        ? "00" + remainingMilliseconds
+        : "0" + remainingMilliseconds
+      : remainingMilliseconds;
 
   return minutes + ":" + seconds + ":" + remainingMilliseconds;
 }
+
 function startTimer() {
   timer = setInterval(function () {
-    totalMilliseconds += 100; // Update every 100 milliseconds (slower)
-
-    var timerDisplay = document.querySelector(".top-bar .timer");
-    timerDisplay.textContent = formatTime(totalMilliseconds);
-  }, 100); // Update the timer every 100 milliseconds
+    totalMilliseconds += 100;
+    document.querySelector(".top-bar .timer").textContent =
+      formatTime(totalMilliseconds);
+  }, 100);
 }
-  
+
 window.onload = function () {
   startTimer();
-  showHint(); // Show the left popup automatically for 10 seconds
+  showHint();
 };
 
 function stopTimer() {
   clearInterval(timer);
   totalTimeInSeconds = totalMilliseconds / 1000;
-  
-  // Store the total time in localStorage
-  localStorage.setItem('totalTimeInSeconds', totalTimeInSeconds);
-
+  localStorage.setItem("totalTimeInSeconds", totalTimeInSeconds);
 }
+
+/*****************************
+ *  HINT
+ *****************************/
 function showHint() {
-    document.getElementById('hintBox').style.right = '10px';
-    var hintbox = document.getElementById("hintBox");
-    hintbox.style.display === "none"
-    if (hintbox.style.display === "none") {
-      hintbox.style.display = "block";
-    } else {
-      hintbox.style.display = "none";
-    }    
+  playSFX(SFX.popup);
+  var hintBox = document.getElementById("hintBox");
+  hintBox.style.right = "10px";
+  hintBox.style.display =
+    hintBox.style.display === "none" ? "block" : "none";
+}
+
+/*****************************
+ *  PAUSE / RESUME
+ *****************************/
+function Pause() {
+  var pauseMenu = document.getElementById("pasue-menu");
+  if (pauseMenu.style.display === "none") {
+    playSFX(SFX.pause);
+    pauseMenu.style.display = "block";
+    stopTimer();
+  } else {
+    playSFX(SFX.unpause);
+    pauseMenu.style.display = "none";
+    startTimer();
   }
-  function Pause(){
-    var pause = document.getElementById("pasue-menu");
-    pause.style.display === "none"
-    if (pause.style.display === "none") {
-      pause.style.display = "block";
-      stopTimer();
-    } else {
-      pause.style.display = "none";
-      startTimer();
-    }
-}
-function resume(){
-var y=document.getElementById("Resume");
-var z=document.getElementById("pasue-menu");
-if (y.style.display==="none"){
-  z.style.display="block";
-  startTimer();
-} else {
-  z.style.display = "none";
-  startTimer();
-}
 }
 
+function resume() {
+  playSFX(SFX.unpause);
+  document.getElementById("pasue-menu").style.display = "none";
+  startTimer();
+}
+
+/*****************************
+ *  PASSWORD CHECK
+ *****************************/
 function checkPassword() {
-    var passwordInput = document.getElementById("passwordInput").value;
-    var correctPassword = "duckl1ng";
-    var resultText = document.getElementById("passwordResult");
-    var status = document.getElementById("status");
-    var loc = document.getElementById("loc");
-    var icon = document.getElementById("icon");
+  var passwordInput = document.getElementById("passwordInput").value;
+  var correctPassword = "duckl1ng";
+  var resultText = document.getElementById("passwordResult");
+  var status = document.getElementById("status");
+  var loc = document.getElementById("loc");
+  var icon = document.getElementById("icon");
 
-    if (passwordInput === correctPassword) {
-        // Password is correct
-        resultText.textContent = "Key-Code Valid. Access granted!";
-        resultText.style.color = "green";
-        status.textContent = "FILE STATUS:";
-        loc.textContent = "UNLOCKED";
-        loc.style.color = "green"; // Change text color to green
-        icon.textContent = "🔓"; // Change lock icon to open lock
-        setTimeout(function() {
-          window.location.href = 'PortsRecap.html';
-        }, 1500)
-        
-    } else {
-        // Password is incorrect
-        resultText.textContent = "Key-Code Invalid. Access denied!";
-        resultText.style.color = "red";
-        livesRemaining--;
-        document.querySelector(".top-bar .lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-        if (livesRemaining==0){
-          setTimeout(function() {
-            window.location.href = 'PortsGameOver.html';
-          }, 1500)
-        }
+  if (passwordInput === correctPassword) {
+    playSFX(SFX.correct);
+
+    resultText.textContent = "Key-Code Valid. Access granted!";
+    resultText.style.color = "green";
+    status.textContent = "FILE STATUS:";
+    loc.textContent = "UNLOCKED";
+    loc.style.color = "green";
+    icon.textContent = "🔓";
+
+    setTimeout(function () {
+      window.location.href = "PortsRecap.html";
+    }, 1500);
+  } else {
+    playSFX(SFX.wrong);
+
+    resultText.textContent = "Key-Code Invalid. Access denied!";
+    resultText.style.color = "red";
+    livesRemaining--;
+
+    document.querySelector(".top-bar .lives-remaining").textContent =
+      "Lives Remaining: " + livesRemaining;
+
+    if (livesRemaining === 0) {
+      setTimeout(function () {
+        window.location.href = "PortsGameOver.html";
+      }, 1500);
     }
+  }
 }
 
-
-
+/*****************************
+ *  EXTERNAL ACCESS
+ *****************************/
 function accessScreen() {
-    window.open("https://zozodbz.itch.io/masterm1nd-level-4-unsecured-ports", "_blank");
+  playSFX(SFX.popup);
+  window.open(
+    "https://zozodbz.itch.io/masterm1nd-level-4-unsecured-ports",
+    "_blank"
+  );
 }
 
 /*****************************
  *  QUIT BUTTON
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
+  playSFX(SFX.popup);
+  window.location.href = "LevelSelect.html";
 }
 
-// ✅ NEW: Trigger confirm on ENTER key
+/*****************************
+ *  ENTER KEY CONFIRM
+ *****************************/
 document.addEventListener("DOMContentLoaded", function () {
   var passwordInput = document.getElementById("passwordInput");
 
@@ -740,12 +785,12 @@ document.addEventListener("DOMContentLoaded", function () {
       checkPassword();
     }
   });
-
 });
-
 </script>
+
 </body>
 </html>
+
 
 
 
