@@ -18,7 +18,8 @@
       padding: 0;
       box-sizing: border-box;
     }
-
+<div class="split-layout">
+   <div class="left-panel">
     body,
     html {
       width: 100%;
@@ -140,6 +141,46 @@
       color: var(--primary-neon);
       font-weight: 700;
     }
+    .split-layout {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+  }
+
+  .left-panel {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid rgba(57, 255, 20, 0.3);
+  }
+
+  .right-panel {
+    width: 50%;
+    height: 100%;
+    background: #000;
+  }
+
+  .right-panel iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #000;
+  }
+
+  /* Optional: neon divider glow */
+  .left-panel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #39ff14;
+    box-shadow: 0 0 20px #39ff14;
+    opacity: 0.4;
+  }
   </style>
 </head>
 
@@ -160,7 +201,18 @@
     <button class="skip-button" onclick="skipVideo()">Skip</button>
     <div class="skip-hint">Or <span>SPACE</span> to skip</div>
   </div>
+  </div>
+    <div class="right-panel">
+    <!-- 🎮 Embedded itch.io game -->
+    <iframe
+      src="https://zozodbz.itch.io/masterm1nd-level-4-unsecured-ports"
+      allowfullscreen
+      allow="fullscreen; autoplay"
+      loading="lazy">
+    </iframe>
+  </div>
 
+</div>
   <script>
     const video = document.getElementById('autoplayVideo');
     const controls = document.getElementById('controls');
@@ -222,5 +274,6 @@
   </script>
 
 </body>
+
 
 </html>
