@@ -2,6 +2,84 @@
 <html lang="en">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto-Play Video</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .video-container {
+    position: relative;
+    width: 80%; /* Adjust the width as you prefer */
+    max-width: 900px; /* Maximum width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  video {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .play-button {
+    width: 100px; /* Size of the button */
+    height: 100px; /* Size of the button */
+    border-radius: 50%; /* Makes it circular */
+    background-color: #39FF14; /* Neon green background */
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 60px; /* Size of the icon or text inside */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .play-button:before {
+    content: '▶'; /* Unicode play character */
+  }
+  .play-button.paused:before {
+    content: '❚❚'; /* Unicode pause character */
+  }
+  .play-button:hover {
+    opacity: 0.8;
+  }
+  .skip-button {
+    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
+    padding: 10px 20px;
+    background-color: #39FF14; /* Neon green background */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .skip-button:hover {
+    opacity: 0.8;
+  }
+  .skip-hint {
+  margin-top: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  color: #39FF14;
+  opacity: 0.85;
+  text-shadow: 0 0 6px #39FF14;
+}
+
+.skip-hint span {
+  font-weight: bold;
+}
+</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ports Cutscene</title>
@@ -18,8 +96,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-<div class="split-layout">
-   <div class="left-panel">
+
     body,
     html {
       width: 100%;
@@ -141,51 +218,42 @@
       color: var(--primary-neon);
       font-weight: 700;
     }
-    .split-layout {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-  }
-
-  .left-panel {
-    width: 50%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    border-right: 1px solid rgba(57, 255, 20, 0.3);
-  }
-
-  .right-panel {
-    width: 50%;
-    height: 100%;
-    background: #000;
-  }
-
-  .right-panel iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: #000;
-  }
-
-  /* Optional: neon divider glow */
-  .left-panel::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 2px;
-    height: 100%;
-    background: #39ff14;
-    box-shadow: 0 0 20px #39ff14;
-    opacity: 0.4;
-  }
   </style>
 </head>
 
 <body>
 
+<div class="video-container">
+  <video id="autoplayVideo">
+    <source src="assets/PortsCS.mp4" type="video/mp4"> <!-- Replace with your video source -->
+    Your browser does not support the video tag.
+  </video>
+  <button class="play-button" onclick="togglePlayPause()"></button>
+  <button class="skip-button" onclick="skipVideo()">Skip</button>
+  <div class="skip-hint">or Press <span>SPACE</span> to skip</div>
+</div>
+
+<script>
+  var video = document.getElementById('autoplayVideo');
+  var playButton = document.querySelector('.play-button');
+
+  // Play/pause video when clicked
+  function togglePlayPause() {
+    if (video.paused) {
+      video.play();
+      playButton.classList.add('paused');
+    } else {
+      video.pause();
+      playButton.classList.remove('paused');
+    }
+  }
+
+  // Redirect to another page after the video ends
+  video.onended = function() {
+    setTimeout(function() {
+      window.location.href = 'Ports.html';
+    }, 500)
+  };
   <div class="video-container" onclick="togglePlayPause()">
     <video id="autoplayVideo" autoplay playsinline>
       <source src="assets/PortsCS.mp4" type="video/mp4">
@@ -201,18 +269,10 @@
     <button class="skip-button" onclick="skipVideo()">Skip</button>
     <div class="skip-hint">Or <span>SPACE</span> to skip</div>
   </div>
-  </div>
-    <div class="right-panel">
-    <!-- 🎮 Embedded itch.io game -->
-    <iframe
-      src="https://zozodbz.itch.io/masterm1nd-level-4-unsecured-ports"
-      allowfullscreen
-      allow="fullscreen; autoplay"
-      loading="lazy">
-    </iframe>
-  </div>
 
-</div>
+  // Function to skip the video
+  function skipVideo() {
+    setTimeout(function() {
   <script>
     const video = document.getElementById('autoplayVideo');
     const controls = document.getElementById('controls');
@@ -253,6 +313,12 @@
     video.onended = function () {
       setTimeout(() => {
         window.location.href = 'Ports.html';
+    }, 500)
+  }
+    document.addEventListener('keydown', function (e) {
+    if (e.code === 'Space') {
+      e.preventDefault(); // prevents page scrolling
+      skipVideo();        // uses EXISTING logic
       }, 500);
     };
 
@@ -260,6 +326,8 @@
     function skipVideo() {
       window.location.href = 'Ports.html';
     }
+  });
+</script>
 
     // Space to skip
     document.addEventListener('keydown', function (e) {
@@ -274,6 +342,6 @@
   </script>
 
 </body>
-
+</html>
 
 </html>
