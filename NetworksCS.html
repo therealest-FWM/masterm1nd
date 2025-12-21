@@ -1,133 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auto-Play Video</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networks Cutscene</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-  .video-container {
-    position: relative;
-    width: 80%; /* Adjust the width as you prefer */
-    max-width: 900px; /* Maximum width */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  video {
-    width: 100%;
-    border-radius: 10px;
-  }
-  .play-button {
-    width: 100px; /* Size of the button */
-    height: 100px; /* Size of the button */
-    border-radius: 50%; /* Makes it circular */
-    background-color: #39FF14; /* Neon green background */
-    color: black;
-    border: none;
-    cursor: pointer;
-    font-size: 60px; /* Size of the icon or text inside */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .play-button:before {
-    content: '▶'; /* Unicode play character */
-  }
-  .play-button.paused:before {
-    content: '❚❚'; /* Unicode pause character */
-  }
-  .play-button:hover {
-    opacity: 0.8;
-  }
-  .skip-button {
-    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-    padding: 10px 20px;
-    background-color: #39FF14; /* Neon green background */
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-  .skip-button:hover {
-    opacity: 0.8;
-  }
-  .skip-hint {
-  margin-top: 6px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.9rem;
-  color: #39FF14;
-  opacity: 0.85;
-  text-shadow: 0 0 6px #39FF14;
-}
+  <style>
+    :root {
+      --primary-neon: #39ff14;
+      --dark-bg: #000;
+    }
 
-.skip-hint span {
-  font-weight: bold;
-}
-</style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      background: var(--dark-bg);
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      cursor: none;
+    }
+
+    body.controls-visible {
+      cursor: default;
+    }
+
+    /* Fullscreen Video container */
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    /* Cinematic Vignette Overlay */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.8) 100%);
+      z-index: 5;
+    }
+
+    /* Subtle Pause Indicator */
+    .pause-indicator {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-size: 80px;
+      color: var(--primary-neon);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 15;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-shadow: 0 0 20px var(--primary-neon);
+    }
+
+    .pause-indicator.visible {
+      opacity: 0.7;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Minimal Corner Controls */
+    .corner-controls {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .corner-controls.visible {
+      opacity: 1;
+    }
+
+    /* Minimal Skip Button */
+    .skip-button {
+      font-family: 'Orbitron', sans-serif;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--primary-neon);
+      border: 1px solid rgba(57, 255, 20, 0.5);
+      border-radius: 2px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .skip-button:hover {
+      background: var(--primary-neon);
+      color: var(--dark-bg);
+      border-color: var(--primary-neon);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    }
+
+    /* Minimal Hint text */
+    .skip-hint {
+      font-size: 10px;
+      color: rgba(57, 255, 20, 0.5);
+      letter-spacing: 1px;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+
+    .skip-hint span {
+      color: var(--primary-neon);
+      font-weight: 700;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="video-container">
-  <video id="autoplayVideo">
-    <source src="assets/NetworksCS.mp4" type="video/mp4"> <!-- Replace with your video source -->
-    Your browser does not support the video tag.
-  </video>
-  <button class="play-button" onclick="togglePlayPause()"></button>
-  <button class="skip-button" onclick="skipVideo()">Skip</button>
-  <div class="skip-hint">or Press <span>SPACE</span> to skip</div>
-</div>
+  <div class="video-container" onclick="togglePlayPause()">
+    <video id="autoplayVideo" autoplay playsinline>
+      <source src="assets/NetworkCutScene.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
-<script>
-  var video = document.getElementById('autoplayVideo');
-  var playButton = document.querySelector('.play-button');
+  <div class="vignette"></div>
 
-  // Play/pause video when clicked
-  function togglePlayPause() {
-    if (video.paused) {
-      video.play();
-      playButton.classList.add('paused');
-    } else {
-      video.pause();
-      playButton.classList.remove('paused');
+  <div class="pause-indicator" id="pauseId">❚❚</div>
+
+  <div class="corner-controls" id="controls">
+    <button class="skip-button" onclick="skipVideo()">Skip</button>
+    <div class="skip-hint">Or <span>SPACE</span> to skip</div>
+  </div>
+
+  <script>
+    const video = document.getElementById('autoplayVideo');
+    const controls = document.getElementById('controls');
+    const pauseId = document.getElementById('pauseId');
+    let hideTimer;
+
+    // Show/Hide controls
+    function showControls() {
+      document.body.classList.add('controls-visible');
+      controls.classList.add('visible');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!video.paused) {
+          controls.classList.remove('visible');
+          document.body.classList.remove('controls-visible');
+        }
+      }, 3000);
     }
-  }
 
-  // Redirect to another page after the video ends
-  video.onended = function() {
-    setTimeout(function() {
-      window.location.href = 'networks.html';
-    }, 500)
-  };
+    document.addEventListener('mousemove', showControls);
+    document.addEventListener('touchstart', showControls);
 
-  // Function to skip the video
-  function skipVideo() {
-    setTimeout(function() {
+    // Play/Pause on click
+    function togglePlayPause() {
+      if (video.paused) {
+        video.play();
+        pauseId.classList.remove('visible');
+        showControls();
+      } else {
+        video.pause();
+        pauseId.classList.add('visible');
+        controls.classList.add('visible');
+        document.body.classList.add('controls-visible');
+      }
+    }
+
+    // Video Ended
+    video.onended = function () {
+      setTimeout(() => {
+        window.location.href = 'networks.html';
+      }, 500);
+    };
+
+    // Skip functionality
+    function skipVideo() {
       window.location.href = 'networks.html';
-    }, 500)
-  }
+    }
+
+    // Space to skip
     document.addEventListener('keydown', function (e) {
-    if (e.code === 'Space') {
-      e.preventDefault(); // prevents page scrolling
-      skipVideo();        // uses EXISTING logic
-    }
-  });
-</script>
+      if (e.code === 'Space') {
+        e.preventDefault();
+        skipVideo();
+      }
+    });
+
+    // Initial check
+    showControls();
+  </script>
 
 </body>
-</html>
 
+</html>
