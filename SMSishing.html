@@ -1,823 +1,829 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<title>SMSISHING</title>
-<!--<link rel="stylesheet" href="./SMSishing.css">
-<script src="./SMSishing.js"></script>-->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="./6103bdc6-21c7-4e39-ac94-7d3d92aa0edb.jpeg">
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Courier New', Courier, monospace;
-    color: #0F0; /* Green text */
-    background: #000; /* Black background */
-  }
-  .bg {
-    /* The image used */
-    background-image: url(./Background1.jpg);
-    opacity: 0.5;
-    /* Full height */
-    height: 100%;
-  
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-  }
-  
-  
-  .top-bar .logo {
-    font-weight: bold;
-    font-size: 150%;
-    font-family: 'Orbitron', sans-serif;
-  }
-  .top-bar .lives-remaining {
-    flex-grow: 1; /* Makes it take up the available space */
-    text-align: center;
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  /* top bar buttons animation */
-  .top-bar .control-buttons button {
-    --color: #00A97F;
-    --color2: rgb(10, 25, 30);
-    padding: 0.8em 1.75em;
-    background-color: transparent;
-    border-radius: 6px;
-    border: .3px solid var(--color);
-    transition: .5s;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    z-index: 1;
-    font-weight: 300;
-    font-size: 17px;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    color: var(--color);
-    background: none;
-    border: none;
-    color: #0F0; /* Green text */
-    margin: 0 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 16px;
-   }
-   
-   .top-bar .control-buttons button::after, .top-bar .control-buttons button::before {
-    content: '';
-    display: block;
-    height: 100%;
-    width: 100%;
-    transform: skew(90deg) translate(-50%, -50%);
-    position: absolute;
-    inset: 50%;
-    left: 25%;
-    z-index: -1;
-    transition: .5s ease-out;
-    background-color: var(--color);
-   }
-   
-   .top-bar .control-buttons button::before {
-    top: -50%;
-    left: -25%;
-    transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
-   }
-   
-   .top-bar .control-buttons button:hover::before {
-    transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-   }
-   
-   .top-bar .control-buttons button:hover::after {
-    transform: skew(45deg) translate(-50%, -50%);
-   }
-   
-   .top-bar .control-buttons button:hover {
-    color: var(--color2);
-   }
-   
-   .top-bar .control-buttons button:active {
-    filter: brightness(.7);
-    transform: scale(.98);
-   }
-  
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    background-color: #272727; /* Black background */
-    color: #0F0; /* Green text */
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  /* Additional CSS for phishing-container and images */
-  .phishing-container {
-    display: flex; /* This will align the children (phishing-item) in a row */
-    justify-content: center; /* This will center the items horizontally */
-    align-items: center; /* This will center the items vertically */
-    height: 100%; /* Use the full height of the parent */
-    gap: 20px; /* Optional: adds some space between the two images */
-  }
-  
-  /* Adding styles for the phishing-item */
-  .phishing-item {
-    flex: 1; /* This allows the items to grow and fill up the container */
-    max-width: 40%; /* Maximum width of each item, adjust as needed */
-  }
-  
-  /* Styles for the images to ensure they are contained within their labels */
-  .phishing-item img {
-    max-width: 100%; /* This ensures the image is fully contained within its label */
-    max-height: 100%; /* This ensures the image doesn't exceed the height of its container */
-    height: auto; /* Maintain aspect ratio */
-  }
-  /* Hide the radio buttons */
-  .phishing-radio {
-    display: none;
-  }
-  
-  /* Style the labels/images normally */
-  .phishing-label {
-    cursor: pointer;
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  
-  /* Style the labels/images when their radio button is selected */
-  .phishing-radio:checked + .phishing-label {
-    box-shadow: 0 0 10px 10px #2e6027; /* Neon green outline */
-  }
-  #disText{
-    display: none;
-  }
-  
-  /* Modify button styles */
-  .confirm-button {
-    font-size: 1.2rem; /* Increase font size */
-    padding: 15px 30px; /* Increase padding to make buttons bigger */
-    background-color: #BB17A9; /* Neon green background */
-    border: 2px solid #BB17A9; /* Neon green border */
-    box-shadow: 0 0 10px #BB17A9; /* Glow effect */
-    color: #000; /* Text color */
-    margin: 10px; /* Space around buttons */
-    cursor: pointer;
-    transition: transform 0.1s; /* Smooth effect when pressed */
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  .button-container {
-    position: fixed; /* Fixed positioning relative to the viewport */
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center; /* This will help center the confirm button */
-    padding: 20px; /* Add some padding around the buttons */
-  }
-  
-  
-  
-  .confirm-button:hover {
-    transform: scale(1.05); /* Slightly larger on hover */
-  }
-  
-  .confirm-button:active {
-    transform: scale(0.95); /* Slightly smaller when pressed */
-  }
-  
-  
-  
-  /* top loading animation */
-  .loader {
-    width: 28px;
-    aspect-ratio: 1.154;
-    position: relative;
-    background: conic-gradient(from 120deg at 50% 64%,#0000, #25b043 1deg 120deg,#0000 121deg);
-    animation: l27-0 1.5s infinite cubic-bezier(0.3,1,0,1);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMSISHING</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* TOP BAR COLORS (NEON GREEN - STANDARD HUD) */
+      --hud-primary: #39ff14;
+      --hud-secondary: #2adb11;
+      --hud-glow: rgba(57, 255, 20, 0.4);
+
+      /* GAME LEVEL COLORS (NEON PINK THEME) */
+      --level-primary: #d946ef;
+      /* Pink text */
+      --level-secondary: #c026d3;
+      /* Darker Pink borders/accents */
+      --level-highlight: #f0abfc;
+      /* Light Pink for selection */
+      --level-glow: rgba(217, 70, 239, 0.5);
+
+      --box-bg: #000;
+
+      --error-red: #ff4444;
+      --dark-bg: #0a0a0a;
     }
-    .loader:before,
-    .loader:after {
-    content:'';
-    position: absolute;
-    inset:0;
-    background:inherit;
-    transform-origin: 50% 66%;
-    animation: l27-1 1.5s infinite;
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
     }
-    
-    .loader:after {
-    --s:-1;
-    }
-    @keyframes l27-0 {
-     0%,30%      {transform: rotate(0)}
-     70%         {transform: rotate(120deg)}
-     70.01%,100% {transform: rotate(360deg)}
-    }
-    @keyframes l27-1 {
-     0%      {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
-     30%,70% {transform: rotate(calc(var(--s,1)*120deg)) translate(calc(var(--s,1)*-5px),10px)}
-     100%    {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
-    }
-  
-    .gradient {
-      position: absolute;
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
-      left: 0;
+      background: var(--dark-bg);
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ============ TOP BAR (Standard Green) ============ */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 20px;
+      background: linear-gradient(180deg, rgba(10, 20, 10, 0.95) 0%, rgba(5, 10, 5, 0.9) 100%);
+      flex-wrap: nowrap;
+      gap: 15px;
+      z-index: 100;
+      position: relative;
+      color: var(--hud-primary);
+      border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.1);
+    }
+
+    .top-bar .logo {
+      font-weight: 900;
+      font-size: clamp(16px, 2vw, 24px);
+      text-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    .top-bar .lives-remaining {
+      flex-grow: 1;
+      text-align: center;
+      font-size: clamp(12px, 1.5vw, 18px);
+      text-shadow: 0 0 5px var(--hud-primary);
+    }
+
+    .top-bar .control-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .top-bar .control-buttons button {
+      background: transparent;
+      border: 1px solid var(--hud-secondary);
+      color: var(--hud-primary);
+      padding: 6px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(10px, 1.2vw, 14px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .top-bar .control-buttons button:hover {
+      background: var(--hud-primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      width: clamp(200px, 30vw, 400px);
+      margin: 0 15px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--hud-secondary);
+    }
+
+    .progress-step {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(9px, 1vw, 12px);
+      padding: 2px 0;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #888;
+      background: #111;
+    }
+
+    .step-2 {
+      /* Neon Pink for Smishing level */
+      background: linear-gradient(to right, #c026d3, #d946ef);
+      color: #fff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .loader {
+      width: 24px;
+      aspect-ratio: 1.154;
+      position: relative;
+      background: conic-gradient(from 120deg at 50% 64%, #0000, #39ff14 1deg 120deg, #0000 121deg);
+      animation: loader-main 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+    }
+
+    .loader::before,
+    .loader::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      transform-origin: 50% 66%;
+      animation: loader-piece 1.5s infinite;
+    }
+
+    .loader::after {
+      --s: -1;
+    }
+
+    @keyframes loader-main {
+
+      0%,
+      30% {
+        transform: rotate(0);
+      }
+
+      70% {
+        transform: rotate(120deg);
+      }
+
+      70.01%,
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes loader-piece {
+      0% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
+      }
+
+      30%,
+      70% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(calc(var(--s, 1) * -5px), 10px);
+      }
+
+      100% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
+      }
+    }
+
+    /* ============ MAIN GAME AREA (PINK THEME) ============ */
+    .game-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 40px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Pink tint */
+      background: radial-gradient(circle at center, #2e022b 0%, #000000 100%);
+    }
+
+    .game-container video {
+      position: absolute;
       top: 0;
-      border-radius: 0.6em;
-      margin-top: -0.25em;
-      background-image: linear-gradient(
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0.3)
-      );
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      /* REMOVED FILTERS per request to show original colors */
+      z-index: 0;
     }
-    
-    .label {
+
+    .center-box {
       position: relative;
-      top: -1px;
+      z-index: 10;
+      text-align: center;
+      width: 100%;
+      max-width: 1400px;
+      padding: 0 40px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
     }
-    
-    .transition {
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-      transition-duration: 500ms;
-      background-color: rgba(16, 185, 129, 0.6);
-      border-radius: 9999px;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+
+    /* Instruction Text - PINK */
+    .instruction-text {
+      font-size: clamp(24px, 2.5vw, 36px);
+      color: var(--level-primary);
+      /* Pink */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 25px;
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--level-primary);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 20px;
+      border: 1px solid var(--level-primary);
+      /* Pink Border */
+      display: inline-block;
+      align-self: center;
+      border-radius: 4px;
     }
-    
-    button:hover .transition {
-      width: 14em;
-      height: 14em;
+
+    .phishing-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      width: 100%;
+      align-items: stretch;
+      /* Better responsiveness */
+      flex-wrap: wrap;
+      min-height: 480px;
+      max-height: 70vh;
     }
-    
-    button:active {
-      transform: scale(0.97);
-    }
-    
-    
-    .label {
+
+    .phishing-item {
+      flex: 1;
+      max-width: 400px;
+      min-width: 300px;
+      /* Ensure they don't get too squished */
       position: relative;
-      top: -1px;
+      display: flex;
+      flex-direction: column;
     }
-    
-    .transition {
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-      transition-duration: 500ms;
-      background-color: rgba(16, 185, 129, 0.6);
-      border-radius: 9999px;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+
+    .phishing-radio {
+      display: none;
     }
-    
-    button:hover .transition {
-      width: 10em;
-      height: 10em;
+
+    .phishing-label {
+      cursor: pointer;
+      display: block;
+      height: 100%;
+      transition: transform 0.2s ease;
+      flex-grow: 1;
     }
-    
-    button:active {
-      transform: scale(0.97);
+
+    .phishing-radio:checked+.phishing-label {
+      transform: scale(1.02);
     }
-  
-  .center-box h2 {
-    color: green; 
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  .hint-box {
-    position: absolute;
-    top: 80px; /* Below the top bar */
-    right: -400px; /* Start off screen */
-    width: 350px; /* Width of the hint box */
-    background: #000; /* Black background */
-    color: #0F0; /* Green text */
-    padding: 20px;
-    border: 2px solid #0F0; /* Green border */
-    border-radius: 5px;
-    transition: right 0.5s; /* Smooth transition for the slide-in effect */
-    z-index: 100; /* Ensure it's above other elements */
-    display: none;
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  
-  
-  .center-box {
-    position: absolute;
-    top: 53%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: 30%;
-    padding: 13%;
-    border: 2px solid rgb(44, 30, 126);
-    box-sizing: content-box;
-    background: rgba(0, 0, 0, 0.7);
-    color: rgb(252, 253, 252);
-    text-align: center;
-    border-radius: 10px;
-    overflow: hidden; /* Hide overflowing content from video */
-    font-family: 'Orbitron', sans-serif;
-  }
-  .center-box video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    border-radius: 10px;
-  }
-  #confirmbutton {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 17px;
-    padding: 0.75em 1.5em; /* Reduced padding */
-    font-weight: 500;
-    background: #BB17A9;
-    color: white;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0.6em;
-    cursor: pointer;
-    width: 8em; /* Added width */
-    height: 2.75em; /* Adjusted height to maintain aspect ratio */
-  }
-  .confirm-button {
-    font-size: 1.2rem; /* Increase font size */
-    padding: 15px 30px; /* Increase padding to make buttons bigger */
-    background-color: #33ff33; /* Neon green background */
-    border: 2px solid #33ff33; /* Neon green border */
-    box-shadow: 0 0 10px #33ff33; /* Glow effect */
-    color: #000; /* Text color */
-    margin: 10px; /* Space around buttons */
-    cursor: pointer;
-    transition: transform 0.1s; /* Smooth effect when pressed */
-    font-family: 'Orbitron', sans-serif;
-  }
-  .center-box::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: -1;
-    border-radius: 10px;
-  }
-  
-  
-  .pause-menu {
-    position: fixed;
-    left: 38%;
-    right: 50px;
-    top: 200px;
-    padding: 70px 60px;
-    background: #000; /* Black background */
-    border: 2px solid #0F0; /* Green border*/ 
-    color: #0F0; /* Green text */
-    width: 380px; /* Adjust width as needed */
-    display: none;
-    font-family: 'Orbitron', sans-serif;
-  }
-  .pause-menu h1 {
-    position: fixed;
-    bottom: 67%;
-    left: 42%;
-    margin-bottom: 3%; /* Space between title and buttons*/ 
-    font-family: 'Orbitron', sans-serif;
-  }
-  .pause-menu button {
-    background-color: #0F0; /* Green background*/ 
-    color: #000; /* Black text */
-    border: none;
-    padding: 20px 20px;
-    margin: 40px 0; /* Space between buttons */
-    display: block; /* Each button on a new line */
-    width: 100%; /* Full width of the parent */
-    box-sizing: border-box; /* Padding included in width */
-    cursor: pointer;
-    border-radius: 5px;
-    font-family: 'Orbitron', sans-serif;
-  }
-  #autoHintBox {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-  /* pause menu button animation */
-  
-  .cta {
-    display: flex;
-    padding: 11px 33px;
-    text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-    font-size: 130%;
-    color: white;
-    background: #6225E6;
-    transition: 1s;
-    box-shadow: 6px 6px 0 black;
-    transform: skewX(-15deg);
-    border: none;
-  }
-  
-  .cta:focus {
-    outline: none;
-  }
-  
-  .cta:hover {
-    transition: 0.5s;
-    box-shadow: 10px 10px 0 #FBC638;
-  }
-  
-  .cta .second {
-    transition: 0.5s;
-    margin-right: 0px;
-  }
-  
-  .cta:hover  .second {
-    transition: 0.5s;
-    margin-right: 45px;
-  }
-  
-  .span {
-    transform: skewX(15deg)
-  }
-  
-  .second {
-    width: 20px;
-    margin-left: 30px;
-    position: relative;
-    top: 12%;
-  }
-  
-  .one {
-    transition: 0.4s;
-    transform: translateX(-60%);
-  }
-  
-  .two {
-    transition: 0.5s;
-    transform: translateX(-30%);
-  }
-  
-  .cta:hover .three {
-    animation: color_anim 1s infinite 0.2s;
-  }
-  
-  .cta:hover .one {
-    transform: translateX(0%);
-    animation: color_anim 1s infinite 0.6s;
-  }
-  
-  .cta:hover .two {
-    transform: translateX(0%);
-    animation: color_anim 1s infinite 0.4s;
-  }
-  
-  @keyframes color_anim {
-    0% {
-      fill: white;
+
+    /* PHONE SCREEN STYLE BOX */
+    .sms-box {
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+      position: relative;
+      transition: all 0.3s ease;
     }
-  
-    50% {
-      fill: #FBC638;
+
+    /* Hover State */
+    .sms-box:hover {
+      border-color: var(--level-primary);
+      box-shadow: 0 0 20px var(--level-glow);
     }
-  
-    100% {
-      fill: white;
+
+    /* Selected State */
+    .phishing-radio:checked+.phishing-label .sms-box {
+      border-color: var(--level-highlight);
+      /* Pink Border */
+      box-shadow: 0 0 30px var(--level-glow);
     }
-  }
-  
-  #passwordInput {
-    font-weight:bold;
-    text-align: center;
-    font-family: 'Orbitron', sans-serif;
-  }
-  /* Progress bar container */
-  .progress-container {
-    display: flex;
-    align-items: center;
-    height: 20px; /* Height of the progress bar */
-    width: 30%; /* Half the size of the original */
-    margin-left: 20px; /* Margin left of the logo */
-    margin-right: 20px;
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  /* Individual steps in the progress bar */
-  .progress-step {
-    flex: 1; /* Distribute space evenly */
-    text-align: center;
-    color: white;
-    position: relative; /* For pseudo-elements positioning */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8em; /* Smaller font size for the text */
-    font-family: 'Orbitron', sans-serif;
-  }
-  
-  /* Pseudo-element for the step connecting lines */
-  .progress-step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 0;
-    height: 2%; /* Line thickness */
-    width: 100%; /* Line width */
-    background: white; /* Line color */
-    z-index: -1;
-    transform: translateX(50%);
-  }
-  
-  /* Colors for each step based on the design */
-  .step-1 { background: linear-gradient(to right, #FFF, #FFF); border-radius: 6px 0 0 6px; }
-  .step-2 { background: linear-gradient(to right, #BB17A9, #ac0a99); border-radius: 0; }
-  .step-3 { background: linear-gradient(to right, #fff, #fff); border-radius: 0; }
-  .step-4 { background: linear-gradient(to right, #fff, #fff); border-radius: 0 6px 6px 0; }
-  
-  .choose-legitimate-message {
-    margin-top: 20px; /* This line adds margin-top to create space between the center box and the text */
-    text-align: center; /* This line centers the "Choose the legitimate message" text */
-    font-family: 'Orbitron', sans-serif;
-  }
-</style>
+
+    /* Phone Header */
+    .sms-header {
+      background: #111;
+      padding: 15px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    .back-arrow {
+      color: #007aff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-avatar {
+      width: 40px;
+      height: 40px;
+      background: #888;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .contact-name {
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .header-icons {
+      font-size: 18px;
+      color: #007aff;
+    }
+
+    /* Message Area */
+    .sms-content {
+      padding: 20px;
+      flex-grow: 1;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      /* Ensure items align to start (left) */
+    }
+
+    .timestamp {
+      text-align: center;
+      align-self: center;
+      /* Center timestamp in the middle */
+      color: #666;
+      font-size: 11px;
+      margin-bottom: 15px;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+    }
+
+    .message-bubble {
+      background: #262626;
+      padding: 12px 16px;
+      /* Slightly tighter padding */
+      border-radius: 18px;
+      border-top-left-radius: 4px;
+      /* Simulating incoming msg */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      /* Slightly larger text */
+      line-height: 1.4;
+      color: #fff;
+      text-align: left;
+      /* Explicit left align */
+      max-width: 85%;
+      /* Don't span full width */
+      margin-right: auto;
+      /* Push to left */
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .message-bubble p {
+      margin: 0;
+      margin-bottom: 8px;
+    }
+
+    .message-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg-sign {
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 8px;
+      display: block;
+      font-style: italic;
+    }
+
+    /* Pink Confirm Button - TRANSPARENT DEFAULT */
+    .cyber-btn {
+      margin-top: 35px;
+      background: rgba(0, 0, 0, 0.5);
+      /* Transparent-ish default */
+      border: 2px solid #c026d3;
+      /* Pink Border */
+      color: #f0abfc;
+      /* Light Pink text */
+      padding: 12px 50px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 1.4vw, 20px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: 0 0 15px rgba(192, 38, 211, 0.2);
+      transition: all 0.3s;
+    }
+
+    .cyber-btn:hover {
+      background: #c026d3;
+      /* Filled Pink */
+      color: #fff;
+      box-shadow: 0 0 30px #d946ef;
+      transform: scale(1.05);
+      /* Slight grow */
+    }
+
+    /* Result Message */
+    .result-message {
+      height: 40px;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 10px #fff;
+    }
+
+    .result-message.incorrect {
+      color: var(--error-red);
+      text-shadow: 0 0 10px red;
+    }
+
+    /* ============ PAUSE MENU ============ */
+    .pause-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+    }
+
+    .pause-overlay.active {
+      display: flex;
+    }
+
+    .pause-menu {
+      background: #000;
+      border: 2px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
+      padding: 40px 60px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .pause-menu h1 {
+      font-size: clamp(24px, 4vw, 48px);
+      font-weight: 900;
+      color: var(--hud-primary);
+      text-shadow: 0 0 20px var(--hud-primary);
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .pause-menu .cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 40px;
+      font-family: Arial, sans-serif;
+      font-size: clamp(16px, 2vw, 24px);
+      font-weight: 700;
+      color: #000;
+      background: var(--hud-primary);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      transform: skewX(-10deg);
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .pause-menu .cta:hover {
+      box-shadow: 6px 6px 0 #1a5f0c;
+      transform: skewX(-10deg) scale(1.05);
+    }
+
+    .hint-box,
+    .left-hint-box {
+      border: 1px solid var(--hud-primary);
+      box-shadow: 0 0 20px var(--hud-glow);
+      color: var(--hud-primary);
+      background: #000;
+      position: fixed;
+      padding: 20px;
+      width: 300px;
+      z-index: 1500;
+      transition: all 0.4s;
+    }
+
+    .hint-box {
+      top: 80px;
+      right: -400px;
+    }
+
+    .hint-box.visible {
+      right: 20px;
+    }
+
+    .left-hint-box {
+      top: 80px;
+      left: -400px;
+    }
+
+    .left-hint-box.visible {
+      left: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .top-bar {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .game-container {
+        height: auto;
+        padding-top: 150px;
+        overflow-y: auto;
+        display: block;
+      }
+
+      .phishing-container {
+        flex-wrap: wrap;
+        flex-direction: row;
+        min-height: auto;
+        max-height: none;
+        padding-bottom: 50px;
+        gap: 20px;
+      }
+
+      .phishing-item {
+        flex: 1 1 100%;
+        max-width: none;
+      }
+
+      /* Stack vertically on small screens */
+    }
+  </style>
 </head>
+
 <body>
-<div class="top-bar">
-  <div class="logo">MASTERM1ND</div>
-  <div class="progress-container">
-    <div class="progress-step step-1">SPEAR</div>
-    <div class="progress-step step-2">SMISHING</div>
-    <div class="progress-step step-3">VISHING</div>
-    <div class="progress-step step-4">EMAIL</div>
-    </div>
-  
-  <div class="loader"></div>
-  <div class="lives-remaining">Lives Remaining: 2</div>
-  <div class="control-buttons">
-    <button class="timer">TIMER</button>
-    <button onclick="pause()">PAUSE</button>
-    <button onclick="showHint()">HINT</button>
-    <button onclick="quitToMainMenu()">QUIT</button>
+
+  <div class="top-bar">
+    <div class="logo">MASTERM1ND</div>
+    <div class="progress-container">
+      <div class="progress-step step-1">SPEAR</div>
+      <div class="progress-step step-2">SMISHING</div>
+      <div class="progress-step step-3">VISHING</div>
+      <div class="progress-step step-4">EMAIL</div>
+    </div>
+    <div class="loader"></div>
+    <div class="lives-remaining">Lives Remaining: 2</div>
+    <div class="control-buttons">
+      <button class="timer">00:00:00</button>
+      <button onclick="Pause()">PAUSE</button>
+      <button onclick="showHint()">HINT</button>
+      <button onclick="quitToMainMenu()">QUIT</button>
+    </div>
   </div>
-  <div class="overlay"></div>
-</div>
-  <div class="center-box">
+
+  <div class="game-container">
     <video autoplay loop muted playsinline>
-      <source src="assets/Smishing2.mp4" type="video/mp4">
-      Your browser does not support the video tag.
+      <source src="assets/Ph2.mp4" type="video/mp4">
     </video>
-    <div class="phishing-container">
-      <label class="phishing-item">
-        <input type="radio" name="phishing-choice" class="phishing-radio" value="Real" id="real">
-        <div class="phishing-label"><img src="assets/Agent.jpg" alt=""></div>
-      </label>
-      <label class="phishing-item">
-        <input type="radio" name="phishing-choice" class="phishing-radio" value="Fake" id="real2">
-        <div class="phishing-label"><img src="assets/Goverment.jpg" alt=""></div>
-      </label>
-      <label class="phishing-item">
-        <input type="radio" name="phishing-choice" class="phishing-radio" value="Fake" id="fake">
-        <div class="phishing-label"><img src="assets/Unknown.jpg" alt=""></div>
-      </label>
+
+    <div class="center-box">
+      <div class="instruction-text">Pick the suspicious message</div>
+
+      <div class="phishing-container">
+        <!-- Message 1 (Left) -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="Real1" id="real1">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar">AM</div>
+                  <div class="contact-name">Agent M &gt;</div>
+                </div>
+                <!-- Removed "Details" text -->
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 8:12 PM</div>
+                <div class="message-bubble">
+                  <p>Simon,</p>
+                  <p>Update time. Securely submit your Project MASTERM1ND findings via our encrypted portal. Remember,
+                    confirm with a call post-submission. Stay sharp.</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <!-- Message 2 (Center) -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="Real2" id="real2">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar" style="background:#888;">G</div>
+                  <div class="contact-name">GovComms &gt;</div>
+                </div>
+                <!-- Removed "Details" text -->
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 8:08 PM</div>
+                <div class="message-bubble">
+                  <p>Gov Alert: Simon,</p>
+                  <p>For Project MASTERM1ND's continuity, your immediate report is essential. Use gov-secure link ONLY.
+                    Check your secure app for details.</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <!-- Message 3 (Right - Target) -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="Fake" id="fake">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar" style="background:#555;">U</div>
+                  <div class="contact-name">Unknown &gt;</div>
+                </div>
+                <!-- Removed "Details" text -->
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 8:14 PM</div>
+                <div class="message-bubble">
+                  <p>Urgent:</p>
+                  <p>Simon, we've detected a breach! Send your MASTERM1ND data immediately to this number for secure
+                    analysis. Don't risk project compromise!</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <button class="cyber-btn" id="confirmbutton" onclick="confirm()">Confirm</button>
+      <div class="result-message" id="resultMessage"></div>
     </div>
-    <br><br>
-    <button class="btn btn-outline-success"  id="confirmbutton" onclick="confirm()">
-      <span class="transition"></span>
-      <span class="gradient"></span>
-      <span class="label">Confirm</span>
-    </button>
-    <br><br>
-    <p id="disText"><b>INCORRECT CHOICE</b></p>
-  </div> 
-  <div class="choose-legitimate-message"><img src="./msg3.png" alt=""></div>
-  <div class="hint-box" id="hintBox" style="display: none;">
-    be wary of unexpected requests, especially those asking for sensitive information or to follow links outside established secure channels. Genuine communications will follow known protocols and not request sensitive information
-    </div>
-  <div class="hint-box" id="autoHintBox" style="left: 20px; right: auto; display: none;">
-  Pick the suspicious message
-</div>
-    <div class="pause-menu" id="pasue-menu" style="display: none;">
+  </div>
+
+  <!-- Pause Menu -->
+  <div class="pause-overlay" id="pause-overlay">
+    <div class="pause-menu">
       <h1>Game Paused</h1>
-      <br>
-        <button type="button" id="Resume" class="cta" onclick="resume()">
-          <span class="span">Resume</span>
-          <span class="second">
-            <svg width="50px" height="20px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-              <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <path class="one" d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z" fill="#FFFFFF"></path>
-                <path class="two" d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z" fill="#FFFFFF"></path>
-                <path class="three" d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z" fill="#FFFFFF"></path>
-              </g>
-            </svg>
-          </span> 
+      <button type="button" class="cta" onclick="resume()">
+        <span style="transform: skewX(10deg); margin-right:10px;">Resume</span>
+        <svg width="30px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg"
+          style="transform: skewX(10deg);">
+          <g stroke="none" stroke-width="1" fill="#000" fill-rule="evenodd">
+            <path
+              d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z" />
+            <path
+              d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z" />
+            <path
+              d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z" />
+          </g>
+        </svg>
       </button>
-    
-    
     </div>
-  </body>
- <script>
-/*****************************
- *  SOUND EFFECTS (SFX)
- *****************************/
-const SFX = {
-  pause: new Audio("assets/pause-89443.mp3"),
-  unpause: new Audio("assets/unpause-106278.mp3"),
-  gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
-  popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
-  wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
-  correct: new Audio("assets/success-48018-(right).mp3"),
-};
+  </div>
 
-Object.values(SFX).forEach(s => {
-  s.volume = 0.6;
-  s.preload = "auto";
-});
+  <div class="left-hint-box" id="leftHintBox">
+    Try to choose the suspicious message. Look for urgent requests or unusual contact methods.
+  </div>
 
-function playSFX(sound) {
-  sound.currentTime = 0;
-  sound.play().catch(() => {});
-}
+  <div class="hint-box" id="hintBox">
+    Legitimate agencies rarely ask for sensitive data via SMS or use "Unknown" numbers for urgent security alerts.
+  </div>
 
-/*****************************
- *  GAME STATE
- *****************************/
-var livesRemaining = 2;
-var timer5;
-var totalMilliseconds5 = 0;
-var totalTimeInSeconds5;
+  <script>
+    const SFX = {
+      pause: new Audio("assets/pause-89443.mp3"),
+      unpause: new Audio("assets/unpause-106278.mp3"),
+      gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
+      popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
+      wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
+      correct: new Audio("assets/success-48018-(right).mp3"),
+    };
+    Object.values(SFX).forEach(s => { s.volume = 0.6; s.preload = "auto"; });
 
-/*****************************
- *  TIMER
- *****************************/
-function formatTime5(milliseconds) {
-  var minutes = Math.floor(milliseconds / (60 * 1000));
-  var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
-  var remainingMilliseconds = milliseconds % 1000;
-
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-  remainingMilliseconds =
-    remainingMilliseconds < 100
-      ? remainingMilliseconds < 10
-        ? "00" + remainingMilliseconds
-        : "0" + remainingMilliseconds
-      : remainingMilliseconds;
-
-  return minutes + ":" + seconds + ":" + remainingMilliseconds;
-}
-
-function startTimer5() {
-  timer5 = setInterval(function () {
-    totalMilliseconds5 += 100;
-    document.querySelector(".top-bar .timer").textContent =
-      formatTime5(totalMilliseconds5);
-  }, 100);
-}
-
-window.onload = function () {
-  showLeftHint();
-  startTimer5();
-};
-
-function stopTimer5() {
-  clearInterval(timer5);
-  totalTimeInSeconds5 = totalMilliseconds5 / 1000;
-  localStorage.setItem("totalTimeInSeconds5", totalTimeInSeconds5);
-}
-
-/*****************************
- *  HINTS
- *****************************/
-function showHint() {
-  playSFX(SFX.popup);
-
-  var hintBox = document.getElementById("hintBox");
-  hintBox.style.right = "10px";
-
-  if (hintBox.style.display === "none") {
-    hintBox.style.display = "block";
-  } else {
-    hintBox.style.display = "none";
-  }
-}
-
-function showLeftHint() {
-  playSFX(SFX.popup);
-
-  const autoHint = document.getElementById("autoHintBox");
-  autoHint.style.display = "block";
-
-  setTimeout(() => {
-    autoHint.style.opacity = 1;
-  }, 100);
-
-  setTimeout(() => {
-    autoHint.style.opacity = 0;
-    setTimeout(() => {
-      autoHint.style.display = "none";
-    }, 500);
-  }, 5100);
-}
-
-/*****************************
- *  PAUSE / RESUME
- *****************************/
-function pause() {
-  var pauseMenu = document.getElementById("pasue-menu");
-
-  if (pauseMenu.style.display === "none") {
-    playSFX(SFX.pause);
-    stopTimer5();
-    pauseMenu.style.display = "block";
-  } else {
-    playSFX(SFX.unpause);
-    pauseMenu.style.display = "none";
-    startTimer5();
-  }
-}
-
-function resume() {
-  playSFX(SFX.unpause);
-  document.getElementById("pasue-menu").style.display = "none";
-  startTimer5();
-}
-
-/*****************************
- *  CONFIRM LOGIC
- *****************************/
-function confirm() {
-  var real1 = document.getElementById("real");
-  var real2 = document.getElementById("real2");
-  var fake = document.getElementById("fake");
-  var disappearingText = document.getElementById("disText");
-
-  if (real1.checked || real2.checked) {
-    playSFX(SFX.wrong);
-    livesRemaining--;
-
-    document.querySelector(".top-bar .lives-remaining").textContent =
-      "Lives Remaining: " + livesRemaining;
-
-    disappearingText.style.display = "block";
-    disappearingText.style.color = "red";
-    disappearingText.style.fontWeight = "BOLD";
-
-    setTimeout(() => {
-      disappearingText.style.display = "none";
-    }, 1000);
-
-    if (livesRemaining === 0) {
-      playSFX(SFX.gameOver);
-      setTimeout(function () {
-        stopTimer5();
-        window.location.href = "GameOverSMSishing.html";
-      }, 1000);
+    function playSFX(sound) {
+      sound.currentTime = 0;
+      sound.play().catch(() => { });
     }
-  }
 
-  if (fake.checked) {
-    playSFX(SFX.correct);
-    stopTimer5();
+    var livesRemaining = 2; // Started with 2 per request (or old code)
+    var timer4;
+    var totalMilliseconds4 = 0;
 
-    setTimeout(function () {
-      window.location.href = "RecapSMSishing.html";
-    }, 1000);
-  }
-}
+    function formatTime(ms) {
+      var min = Math.floor(ms / 60000);
+      var sec = Math.floor((ms % 60000) / 1000);
+      var msec = ms % 1000;
+      return (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec) + ":" + (msec < 100 ? (msec < 10 ? "00" + msec : "0" + msec) : msec);
+    }
 
-/*****************************
- *  QUIT BUTTON
- *****************************/
-function quitToMainMenu() {
-  playSFX(SFX.popup);
-  window.location.href = "LevelSelect.html";
-}
-</script>
+    function startTimer() {
+      timer4 = setInterval(() => {
+        totalMilliseconds4 += 100;
+        document.querySelector(".top-bar .timer").textContent = formatTime(totalMilliseconds4);
+      }, 100);
+    }
 
+    function stopTimer() {
+      clearInterval(timer4);
+    }
 
-  </html>
+    window.onload = function () {
+      startTimer();
+      playSFX(SFX.popup);
+      const lh = document.getElementById("leftHintBox");
+      lh.classList.add("visible");
+      setTimeout(() => lh.classList.remove("visible"), 8000);
+    };
 
+    function showHint() {
+      playSFX(SFX.popup);
+      document.getElementById("hintBox").classList.toggle("visible");
+    }
 
+    function Pause() {
+      const overlay = document.getElementById("pause-overlay");
+      if (!overlay.classList.contains("active")) {
+        playSFX(SFX.pause);
+        overlay.classList.add("active");
+        stopTimer();
+      } else {
+        resume();
+      }
+    }
 
+    function resume() {
+      playSFX(SFX.unpause);
+      document.getElementById("pause-overlay").classList.remove("active");
+      startTimer();
+    }
 
+    function quitToMainMenu() {
+      playSFX(SFX.popup);
+      window.location.href = "LevelSelect.html";
+    }
 
+    function confirm() {
+      const fakeOption = document.getElementById("fake");
+      const msg = document.getElementById("resultMessage");
+      const selected = document.querySelector('input[name="phishing-choice"]:checked');
+      if (!selected) return;
 
+      // The 'fake' option is the CORRECT choice in this context (picking the suspicious one)
+
+      if (fakeOption.checked) {
+        playSFX(SFX.correct);
+        stopTimer();
+        msg.className = "result-message correct";
+        msg.textContent = "CORRECT. THREAT IDENTIFIED.";
+        setTimeout(() => window.location.href = "RecapSMSishing.html", 1500);
+      } else {
+        playSFX(SFX.wrong);
+        livesRemaining--;
+        document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
+        msg.className = "result-message incorrect";
+        msg.textContent = "INCORRECT. THIS MESSAGE IS SAFE.";
+
+        if (livesRemaining === 0) {
+          playSFX(SFX.gameOver);
+          stopTimer();
+          setTimeout(() => window.location.href = "GameOverSMSishing.html", 1200);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
