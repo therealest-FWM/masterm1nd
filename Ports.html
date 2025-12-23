@@ -19,6 +19,11 @@
       --glass-bg: rgba(20, 10, 0, 0.7);
       --glass-border: rgba(255, 165, 0, 0.4);
       --dark-bg: #000;
+
+      /* NEON GREEN HUD VARS */
+      --hud-primary: #39ff14;
+      --hud-secondary: #2adb11;
+      --hud-glow: rgba(57, 255, 20, 0.4);
     }
 
     * {
@@ -41,22 +46,114 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-      background: linear-gradient(180deg, rgba(30, 15, 0, 0.95) 0%, rgba(10, 5, 0, 0.9) 100%);
+      padding: 6px 20px;
+      /* Thinner bar */
+      background: linear-gradient(180deg, rgba(10, 20, 10, 0.95) 0%, rgba(5, 10, 5, 0.9) 100%);
+      /* Green tint bg */
       position: relative;
       z-index: 100;
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+      gap: 15px;
+      color: var(--hud-primary);
     }
 
     .top-bar .logo {
       font-weight: 900;
       font-size: clamp(16px, 2vw, 24px);
-      text-shadow: 0 0 10px var(--primary-neon);
+      text-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      width: clamp(200px, 30vw, 400px);
+      margin: 0 15px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--hud-secondary);
+    }
+
+    .progress-step {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(9px, 1vw, 12px);
+      padding: 2px 0;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #888;
+      background: #111;
+    }
+
+    .step-ports {
+      /* Orange Gradient */
+      background: linear-gradient(to right, #ffa500, #ff8c00);
+      color: #000;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Loader (Green) */
+    .loader {
+      width: 24px;
+      aspect-ratio: 1.154;
+      position: relative;
+      background: conic-gradient(from 120deg at 50% 64%, #0000, #39ff14 1deg 120deg, #0000 121deg);
+      animation: loader-main 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+    }
+
+    .loader::before,
+    .loader::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      transform-origin: 50% 66%;
+      animation: loader-piece 1.5s infinite;
+    }
+
+    .loader::after {
+      --s: -1;
+    }
+
+    @keyframes loader-main {
+
+      0%,
+      30% {
+        transform: rotate(0);
+      }
+
+      70% {
+        transform: rotate(120deg);
+      }
+
+      70.01%,
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes loader-piece {
+      0% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
+      }
+
+      30%,
+      70% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(calc(var(--s, 1) * -5px), 10px);
+      }
+
+      100% {
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
+      }
     }
 
     .top-bar .lives-remaining {
+      flex-grow: 1;
       text-align: center;
       font-size: clamp(12px, 1.5vw, 18px);
+      color: var(--hud-primary);
+      text-shadow: 0 0 5px var(--hud-primary);
     }
 
     .control-buttons {
@@ -66,9 +163,9 @@
 
     .control-buttons button {
       background: transparent;
-      border: 1px solid var(--secondary-neon);
-      color: var(--primary-neon);
-      padding: 6px 12px;
+      border: 1px solid var(--hud-secondary);
+      color: var(--hud-primary);
+      padding: 6px 14px;
       font-family: 'Orbitron', sans-serif;
       font-size: clamp(10px, 1.2vw, 14px);
       cursor: pointer;
@@ -77,9 +174,9 @@
     }
 
     .control-buttons button:hover {
-      background: var(--primary-neon);
+      background: var(--hud-primary);
       color: #000;
-      box-shadow: 0 0 15px var(--primary-neon);
+      box-shadow: 0 0 15px var(--hud-primary);
     }
 
     /* ============ GAME CONTAINER ============ */
@@ -226,8 +323,8 @@
       right: -400px;
       width: 320px;
       background: var(--dark-bg);
-      border: 2px solid var(--primary-neon);
-      color: var(--primary-neon);
+      border: 2px solid var(--hud-primary);
+      color: var(--hud-primary);
       padding: 20px;
       border-radius: 8px;
       transition: right 0.4s ease;
@@ -260,18 +357,18 @@
 
     .pause-menu {
       background: var(--dark-bg);
-      border: 2px solid var(--primary-neon);
+      border: 2px solid var(--hud-primary);
       padding: 40px 60px;
       text-align: center;
       border-radius: 8px;
-      box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+      box-shadow: 0 0 30px var(--hud-glow);
     }
 
     .pause-menu h1 {
       font-size: clamp(24px, 4vw, 48px);
       font-weight: 900;
-      color: var(--primary-neon);
-      text-shadow: 0 0 20px var(--primary-neon);
+      color: var(--hud-primary);
+      text-shadow: 0 0 20px var(--hud-primary);
       margin-bottom: 30px;
       font-style: italic;
     }
@@ -284,7 +381,7 @@
       font-size: clamp(14px, 2vw, 20px);
       font-weight: 700;
       color: #000;
-      background: var(--primary-neon);
+      background: var(--hud-primary);
       border: none;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -293,7 +390,7 @@
     }
 
     .pause-menu .cta:hover {
-      box-shadow: 8px 8px 0 #4d2b00;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
       transform: skewX(-10deg) scale(1.05);
     }
   </style>
@@ -303,6 +400,10 @@
 
   <div class="top-bar">
     <div class="logo">MASTERM1ND</div>
+    <div class="progress-container">
+      <div class="progress-step step-ports">PORTS</div>
+    </div>
+    <div class="loader"></div>
     <div class="lives-remaining">Lives Remaining: 2</div>
     <div class="control-buttons">
       <button class="timer">TIMER</button>
@@ -314,7 +415,7 @@
 
   <div class="game-container">
     <video autoplay loop muted playsinline>
-      <source src="assets/portsV.mp4" type="video/mp4">
+      <source src="assets/port.mp4" type="video/mp4">
     </video>
 
     <div class="center-box">
@@ -335,7 +436,7 @@
   <!-- Full-screen Live Feed Overlay -->
   <div id="livePanel">
     <button class="exit-btn" onclick="exitScreen()">EXIT FEED</button>
-    <iframe src="https://itch.io/embed-upload/10070774?color=000000" allowfullscreen allow="fullscreen; autoplay">
+    <iframe src="https://itch.io/embed-upload/10070774?color=000000" allowfullscreen allow="fullscreen;">
     </iframe>
   </div>
 
@@ -388,10 +489,11 @@
       if (input === "duckl1ng") {
         playSFX(SFX.correct);
         result.textContent = "Key-Code Valid. Access granted!";
-        result.style.color = "var(--primary-neon)";
+        result.style.color = "#39ff14"; // Neon Green
+        result.style.textShadow = "0 0 10px #39ff14";
 
         loc.textContent = "UNLOCKED 🔓";
-        loc.style.color = "var(--primary-neon)";
+        loc.style.color = "#39ff14"; // Neon Green
 
         setTimeout(() => {
           window.location.href = "PortsRecap.html";

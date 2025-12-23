@@ -367,6 +367,8 @@
       font-size: inherit;
       resize: none;
       outline: none;
+      pointer-events: none;
+      /* Allows click to pass through to label */
     }
 
     /* Confirm Button (Narrower) */
@@ -412,8 +414,9 @@
     }
 
     .result-message.correct {
-      color: var(--level-primary);
-      text-shadow: 0 0 10px #fff;
+      color: #39ff14;
+      /* Neon Green (Global Standard) */
+      text-shadow: 0 0 10px #39ff14;
     }
 
     .result-message.incorrect {
