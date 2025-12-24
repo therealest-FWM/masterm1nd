@@ -662,9 +662,9 @@
     let bgMusic = null;
     if (localStorage.getItem("audioUnlocked") === "true") {
       // Ideally use unique theme if available, or fallback
-      bgMusic = new Audio("assets/NEON.mp3");
+      bgMusic = new Audio("assets/04-Lufus-SpaceTime.mp3");
       bgMusic.loop = true;
-      bgMusic.volume = 0.5;
+      bgMusic.volume = 0.2;
       bgMusic.play().catch(() => { });
     }
 
@@ -711,7 +711,7 @@
         playSFX(SFX.pause);
         overlay.classList.add("active");
         stopTimer();
-        if (bgMusic) bgMusic.volume = 0.1;
+        if (bgMusic) bgMusic.volume = 0.05;
       } else {
         resume();
       }
@@ -721,7 +721,7 @@
       playSFX(SFX.unpause);
       document.getElementById("pause-overlay").classList.remove("active");
       startTimer();
-      if (bgMusic) bgMusic.volume = 0.5;
+      if (bgMusic) bgMusic.volume = 0.2;
     }
 
     function quitToMainMenu() {

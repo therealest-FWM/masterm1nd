@@ -69,9 +69,9 @@
     let bgMusic = null;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/.mp3"); // Game Over theme
+      bgMusic = new Audio("assets/00_Six Two Remastered.wav"); // Game Over theme
       bgMusic.loop = true;
-      bgMusic.volume = 0.5;
+      bgMusic.volume = 0.05;
       bgMusic.preload = "auto";
       bgMusic.play().catch(() => { });
     }

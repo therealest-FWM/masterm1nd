@@ -380,6 +380,19 @@
 
     window.addEventListener('resize', resize);
     window.onload = initParticles;
+
+    /*****************************
+     *  BACKGROUND MUSIC
+     *****************************/
+    let bgMusic = null;
+
+    if (localStorage.getItem("audioUnlocked") === "true") {
+      bgMusic = new Audio("assets/MiamiSoul.mp3");
+      bgMusic.loop = true;
+      bgMusic.volume = 0.2;
+      bgMusic.preload = "auto";
+      bgMusic.play().catch(() => { });
+    }
   </script>
 </body>
 

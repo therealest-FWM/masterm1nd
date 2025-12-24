@@ -94,9 +94,9 @@
         // Background Music
         let bgMusic = null;
         if (localStorage.getItem("audioUnlocked") === "true") {
-            bgMusic = new Audio("assets/.mp3");
+            bgMusic = new Audio("assets/00_Six Two Remastered.wav");
             bgMusic.loop = true;
-            bgMusic.volume = 0.5;
+            bgMusic.volume = 0.05;
             bgMusic.preload = "auto";
             bgMusic.play().catch(() => { });
         }

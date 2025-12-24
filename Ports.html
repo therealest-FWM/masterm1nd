@@ -474,6 +474,19 @@
     }
 
     /*****************************
+     *  BACKGROUND MUSIC (PER PAGE)
+     *****************************/
+    let bgMusic = null;
+
+    if (localStorage.getItem("audioUnlocked") === "true") {
+      bgMusic = new Audio("assets/CyberspaceHunters.mp3"); // Ports theme
+      bgMusic.loop = true;
+      bgMusic.volume = 0.05; // Low volume as requested
+      bgMusic.preload = "auto";
+      bgMusic.play().catch(() => { });
+    }
+
+    /*****************************
      *  GAME STATE
      *****************************/
     var livesRemaining = 2;
@@ -548,11 +561,13 @@
     function accessScreen() {
       playSFX(SFX.popup);
       document.getElementById("livePanel").style.display = "block";
+      if (bgMusic) bgMusic.volume = 0;
     }
 
     function exitScreen() {
       playSFX(SFX.popup);
       document.getElementById("livePanel").style.display = "none";
+      if (bgMusic) bgMusic.volume = 0.05;
     }
 
     /*****************************

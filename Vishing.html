@@ -599,11 +599,11 @@
      *  BACKGROUND MUSIC WITH DUCKING
      *****************************/
     let bgMusic = null;
-    const NORMAL_VOLUME = 0.5;
-    const DUCKED_VOLUME = 0.1;
+    const NORMAL_VOLUME = 0.2;
+    const DUCKED_VOLUME = 0.05;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/NEON.mp3"); // Vishing theme
+      bgMusic = new Audio("assets/02-Lufus-EmergencyMeeting.mp3"); // Vishing theme
       bgMusic.loop = true;
       bgMusic.volume = NORMAL_VOLUME;
       bgMusic.preload = "auto";

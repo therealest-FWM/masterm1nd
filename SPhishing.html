@@ -710,9 +710,9 @@ Agent M
     let bgMusic = null;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/.mp3"); // Spear Phishing theme
+      bgMusic = new Audio("assets/01-Lufus-TheOne.mp3"); // Spear Phishing theme
       bgMusic.loop = true;
-      bgMusic.volume = 0.5;
+      bgMusic.volume = 0.2;
       bgMusic.preload = "auto";
       bgMusic.play().catch(() => { });
     }

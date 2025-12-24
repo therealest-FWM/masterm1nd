@@ -390,6 +390,20 @@
 
     // Init
     renderLevels();
+
+    /*****************************
+     *  BACKGROUND MUSIC
+     *****************************/
+    let bgMusic = null;
+
+    if (localStorage.getItem("audioUnlocked") === "true") {
+      bgMusic = new Audio("assets/lastarea.wav");
+      bgMusic.loop = true;
+      bgMusic.volume = 0.2;
+      bgMusic.preload = "auto";
+      bgMusic.play().catch(() => { });
+    }
+
     setTimeout(() => {
       const preloadVideo = document.createElement('video');
       preloadVideo.src = "assets/BackgroundP1LoopWatermark.mp4";
@@ -398,31 +412,27 @@
       preloadVideo.playsInline = true;
       preloadVideo.style.display = "none";
       document.body.appendChild(preloadVideo);
-}, 2000); // Wait 2 seconds before preloading
+    }, 2000); // Wait 2 seconds before preloading
 
-const unlockSound = new Audio("assets/silence.mp3"); // tiny silent file
-  unlockSound.preload = "auto";
+    const unlockSound = new Audio("assets/silence.mp3"); // tiny silent file
+    unlockSound.preload = "auto";
 
-  document.getElementById("play-btn").addEventListener("click", () => {
-    unlockSound.play().then(() => {
-      localStorage.setItem("audioUnlocked", "true");
+    document.getElementById("play-btn").addEventListener("click", () => {
+      unlockSound.play().then(() => {
+        localStorage.setItem("audioUnlocked", "true");
 
-      if (selectedLevelFile) {
-        window.location.href = selectedLevelFile;
-      } else {
-        alert("Please select an unlocked level.");
-      }
-    }).catch(() => {
-      // fallback if blocked
-      localStorage.setItem("audioUnlocked", "true");
+        if (selectedLevelFile) {
+          window.location.href = selectedLevelFile;
+        } else {
+          alert("Please select an unlocked level.");
+        }
+      }).catch(() => {
+        // fallback if blocked
+        localStorage.setItem("audioUnlocked", "true");
+      });
     });
-  });
   </script>
 </body>
 
 
 </html>
-
-
-
-

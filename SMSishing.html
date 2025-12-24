@@ -751,6 +751,19 @@
       sound.play().catch(() => { });
     }
 
+    /*****************************
+     *  BACKGROUND MUSIC (PER PAGE)
+     *****************************/
+    let bgMusic = null;
+
+    if (localStorage.getItem("audioUnlocked") === "true") {
+      bgMusic = new Audio("assets/03-Lufus-FutureMushroom.mp3"); // SMSishing theme
+      bgMusic.loop = true;
+      bgMusic.volume = 0.2;
+      bgMusic.preload = "auto";
+      bgMusic.play().catch(() => { });
+    }
+
     var livesRemaining = 2; // Started with 2 per request (or old code)
     var timer4;
     var totalMilliseconds4 = 0;
