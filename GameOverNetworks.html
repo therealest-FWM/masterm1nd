@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Over - Networks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .game-over-box {
+            width: 850px;
+            padding: 80px;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ff4444;
+            text-align: center;
+            border: 3px solid #ff4444;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 68, 68, 0.5);
+        }
+
+        .game-over-box h1 {
+            color: #ff4444;
+            font-size: clamp(36px, 5vw, 64px);
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #ff4444;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .game-over-box p {
+            color: #ff4444;
+            font-size: clamp(16px, 2vw, 20px);
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            margin: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(14px, 1.5vw, 18px);
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid #ff4444;
+            background: transparent;
+            color: #ff4444;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            background: #ff4444;
+            color: #000;
+            box-shadow: 0 0 20px #ff4444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-over-box">
+        <h1>MISSION FAILED</h1>
+        <p>You have been detected. All lives lost.</p>
+        <button type="button" class="btn" onclick="tryAgain()">Try Again</button>
+        <button type="button" class="btn" onclick="quit()">Quit to Menu</button>
+    </div>
+
+    <script>
+        // Background Music
+        let bgMusic = null;
+        if (localStorage.getItem("audioUnlocked") === "true") {
+            bgMusic = new Audio("assets/.mp3");
+            bgMusic.loop = true;
+            bgMusic.volume = 0.5;
+            bgMusic.preload = "auto";
+            bgMusic.play().catch(() => { });
+        }
+
+        function tryAgain() {
+            window.location.href = 'Networks.html';
+        }
+
+        function quit() {
+            window.location.href = 'LevelSelect.html';
+        }
+    </script>
+
+</body>
+
+</html>

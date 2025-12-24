@@ -4,801 +4,1359 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <!--<link rel="stylesheet" href="networks.css">
-<script src="networks.js"></script>-->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-  <title>Networks</title>
+  <title>Networks Level</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    body,
-    html {
-      height: 100%;
+    :root {
+      /* HUD COLORS (NEON GREEN) */
+      --hud-primary: #39ff14;
+      --hud-secondary: #2adb11;
+      --hud-glow: rgba(57, 255, 20, 0.4);
+
+      /* PAGE THEMES */
+      --red-theme: #ff0000;
+      --red-bg: rgba(255, 0, 0, 0.6);
+      --green-theme: #00ff00;
+      --green-bg: rgba(0, 255, 0, 0.6);
+
+      --dark-bg: #0a0a0a;
+      --box-bg: rgba(20, 20, 25, 0.95);
+      --error-red: #ff4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html,
+    body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      color: #0F0;
-      /* Green text */
-      background: #000;
-      /* Black background */
-    }
-
-    .bg {
-      /* The image used */
-      background-image: url(assets/Background1.jpg);
-      opacity: 0.5;
-      /* Full height */
-      height: 100%;
-
-      /* Center and scale the image nicely */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      position: relative;
-    }
-
-    .top-bar .logo {
-      font-weight: bold;
-      font-size: 150%;
-    }
-
-    .top-bar .lives-remaining {
-      flex-grow: 1;
-      /* Makes it take up the available space */
-      text-align: center;
-    }
-
-    /* top bar buttons animation */
-    .top-bar .control-buttons button {
-      --color: #00A97F;
-      --color2: rgb(10, 25, 30);
-      padding: 0.8em 1.75em;
-      background-color: transparent;
-      font-family: 'Orbitron', sans-serif;
-      border-radius: 6px;
-      border: .3px solid var(--color);
-      transition: .5s;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      z-index: 1;
-      font-weight: 300;
-      font-size: 17px;
-      text-transform: uppercase;
-      color: var(--color);
-      background: none;
-      border: none;
-      color: #0F0;
-      /* Green text */
-      margin: 0 10px;
-      padding: 5px 3px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .top-bar .control-buttons button::after,
-    .top-bar .control-buttons button::before {
-      content: '';
-      display: block;
-      font-family: 'Orbitron', sans-serif;
-      height: 100%;
+      padding: 0;
       width: 100%;
-      transform: skew(90deg) translate(-50%, -50%);
-      position: absolute;
-      inset: 50%;
-      left: 25%;
-      z-index: -1;
-      transition: .5s ease-out;
-      background-color: var(--color);
-    }
-
-    .top-bar .control-buttons button::before {
-      top: -50%;
-      left: -25%;
-      transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+      height: 100%;
+      background: var(--dark-bg);
       font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
     }
 
-    .top-bar .control-buttons button:hover::before {
-      transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .top-bar .control-buttons button:hover::after {
-      transform: skew(45deg) translate(-50%, -50%);
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .top-bar .control-buttons button:hover {
-      color: var(--color2);
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .top-bar .control-buttons button:active {
-      filter: brightness(.7);
-      transform: scale(.98);
-      font-family: 'Orbitron', sans-serif;
-    }
-
+    /* ============ TOP BAR (NEON GREEN) ============ */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-      background-color: #272727;
-      /* Black background */
-      color: #0F0;
-      /* Green text */
-      font-family: 'Orbitron', sans-serif;
+      padding: 6px 20px;
+      background: linear-gradient(180deg, rgba(10, 20, 10, 0.95) 0%, rgba(5, 10, 5, 0.9) 100%);
+      flex-wrap: nowrap;
+      gap: 15px;
+      z-index: 100;
+      position: relative;
+      color: var(--hud-primary);
+      border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.1);
     }
 
+    .top-bar .logo {
+      font-weight: 900;
+      font-size: clamp(16px, 2vw, 24px);
+      text-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    .top-bar .lives-remaining {
+      flex-grow: 1;
+      text-align: center;
+      font-size: clamp(12px, 1.5vw, 18px);
+      text-shadow: 0 0 5px var(--hud-primary);
+    }
+
+    .top-bar .control-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .top-bar .control-buttons button {
+      background: transparent;
+      border: 1px solid var(--hud-secondary);
+      color: var(--hud-primary);
+      padding: 6px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(10px, 1.2vw, 14px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .top-bar .control-buttons button:hover {
+      background: var(--hud-primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      width: clamp(200px, 30vw, 400px);
+      margin: 0 15px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--hud-secondary);
+    }
+
+    .progress-step {
+      flex: 1;
+      text-align: center;
+      font-size: clamp(9px, 1vw, 12px);
+      padding: 2px 0;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #888;
+      background: #111;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.red-active {
+      background: linear-gradient(to right, #8B0000, #CD5C5C);
+      color: #fff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .progress-step.green-active {
+      background: linear-gradient(to right, #013220, #0a5c3a);
+      color: #fff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Loader Animation */
     .loader {
-      width: 28px;
+      width: 24px;
       aspect-ratio: 1.154;
       position: relative;
-      background: conic-gradient(from 120deg at 50% 64%, #0000, #25b043 1deg 120deg, #0000 121deg);
-      animation: l27-0 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+      background: conic-gradient(from 120deg at 50% 64%, #0000, #39ff14 1deg 120deg, #0000 121deg);
+      animation: loader-main 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
     }
 
-    .loader:before,
-    .loader:after {
+    .loader::before,
+    .loader::after {
       content: '';
       position: absolute;
       inset: 0;
       background: inherit;
       transform-origin: 50% 66%;
-      animation: l27-1 1.5s infinite;
+      animation: loader-piece 1.5s infinite;
     }
 
-    .loader:after {
+    .loader::after {
       --s: -1;
     }
 
-    @keyframes l27-0 {
+    @keyframes loader-main {
 
       0%,
       30% {
-        transform: rotate(0)
+        transform: rotate(0);
       }
 
       70% {
-        transform: rotate(120deg)
+        transform: rotate(120deg);
       }
 
       70.01%,
       100% {
-        transform: rotate(360deg)
+        transform: rotate(360deg);
       }
     }
 
-    @keyframes l27-1 {
+    @keyframes loader-piece {
       0% {
-        transform: rotate(calc(var(--s, 1)*120deg)) translate(0)
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
       }
 
       30%,
       70% {
-        transform: rotate(calc(var(--s, 1)*120deg)) translate(calc(var(--s, 1)*-5px), 10px)
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(calc(var(--s, 1) * -5px), 10px);
       }
 
       100% {
-        transform: rotate(calc(var(--s, 1)*120deg)) translate(0)
+        transform: rotate(calc(var(--s, 1) * 120deg)) translate(0);
       }
     }
 
-    .gradient {
-      position: absolute;
+    /* ============ MAIN GAME AREA ============ */
+    .game-container {
+      position: relative;
       width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      border-radius: 0.6em;
-      margin-top: -0.25em;
-      background-image: linear-gradient(rgba(0, 0, 0, 0),
-          rgba(0, 0, 0, 0),
-          rgba(0, 0, 0, 0.3));
-    }
-
-    .label {
-      position: relative;
-      top: -1px;
-    }
-
-    .transition {
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-      transition-duration: 500ms;
-      background-color: rgba(16, 185, 129, 0.6);
-      border-radius: 9999px;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    button:hover .transition {
-      width: 14em;
-      height: 14em;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-
-    .label {
-      position: relative;
-      top: -1px;
-    }
-
-    .transition {
-      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-      transition-duration: 500ms;
-      background-color: rgba(16, 185, 129, 0.6);
-      border-radius: 9999px;
-      width: 0;
-      height: 0;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    button:hover .transition {
-      width: 10em;
-      height: 10em;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    .center-box h2 {
-      color: green;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .center-box {
-      position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      height: 85%;
-      padding: 20px;
-      border: 2px solid #1a3968;
-      box-sizing: border-box;
-      background: rgba(0, 0, 0, 0.7);
-      color: rgb(252, 253, 252);
-      text-align: center;
-      border-radius: 10px;
+      height: calc(100vh - 40px);
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
-    .center-box video {
+    .game-container video {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -1;
-      border-radius: 10px;
+      z-index: 0;
+      opacity: 0.5;
     }
 
-    .phone {
-      width: 300px;
-      height: 600px;
-      background-color: #333;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* POV Indicator */
+    .pov-indicator {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 3px solid var(--hud-primary);
+      border-radius: 4px;
+      color: var(--hud-primary);
+      font-weight: 700;
+      font-size: clamp(12px, 1.2vw, 16px);
+      z-index: 50;
+      text-shadow: 0 0 20px var(--hud-primary);
+      box-shadow: 0 0 25px var(--hud-glow);
+      transition: all 0.3s ease;
+    }
+
+    .pov-indicator.red-theme {
+      border-color: #ff3333;
+      color: #ff3333;
+      text-shadow: 0 0 15px #ff3333;
+      box-shadow: 0 0 20px rgba(255, 51, 51, 0.7);
+    }
+
+    .pov-indicator.green-theme {
+      border-color: #33ff33;
+      color: #33ff33;
+      text-shadow: 0 0 15px #33ff33;
+      box-shadow: 0 0 20px rgba(51, 255, 51, 0.7);
+    }
+
+    /* Page Sections */
+    .page-section {
+      display: none;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .page-section>* {
+      position: relative;
+      z-index: 2;
+    }
+
+    .page-section.active {
+      display: flex;
+    }
+
+    /* Red Theme (Pages 1-2) */
+    .red-theme-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, var(--red-bg) 0%, rgba(139, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.3) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Green Theme (Pages 3-4) */
+    .green-theme-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, var(--green-bg) 0%, rgba(1, 50, 32, 0.15) 50%, rgba(0, 0, 0, 0.3) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ============ PHONE DESIGN ============ */
+    .phone-container {
+      position: relative;
+      width: clamp(300px, 25vw, 400px);
+      height: clamp(600px, 80vh, 800px);
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      margin: auto;
-      position: relative;
+      border: 3px solid #333;
     }
 
-    .camera {
-      width: 100%;
-      height: 40px;
-      background-color: #444;
+    .phone-notch {
+      width: 120px;
+      height: 25px;
+      background: #000;
+      border-radius: 0 0 15px 15px;
       position: absolute;
-      top: 0%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-    }
-
-    .camera::before {
-      content: '';
-      width: 20px;
-      height: 20px;
-      background-color: #666;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
+      top: 0;
       left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .screen {
-      flex: 1;
-      background-color: #222;
+      transform: translateX(-50%);
+      z-index: 10;
       display: flex;
-      flex-direction: column-reverse;
-      /* Reverse order of messages */
       align-items: center;
-      justify-content: flex-start;
-      /* Align messages to the top */
-      color: white;
-      font-size: 24px;
-      overflow-y: hidden;
-      /* Remove vertical scrolling */
-    }
-
-    .button-bar {
-      width: 100%;
-      height: 60px;
-      background-color: #444;
-      display: flex;
       justify-content: center;
-      /* Center the button horizontally */
-      align-items: flex-end;
-      /* Align the button to the bottom */
-      position: absolute;
-      bottom: 0%;
     }
 
-    .button-phone {
-      width: 50px;
-      height: 50px;
-      background-color: #666;
+    .phone-notch::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #333;
       border-radius: 50%;
+      margin-top: 5px;
+    }
+
+    .phone-screen {
+      flex: 1;
+      background: #000;
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .phone-home-button {
+      width: 100%;
+      height: 50px;
+      background: #1a1a1a;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      position: absolute;
-      bottom: 9%;
     }
 
-    .button-phone:hover {
-      background-color: #888;
+    .phone-home-button::after {
+      content: '';
+      width: 50px;
+      height: 5px;
+      background: #444;
+      border-radius: 10px;
+    }
+
+    /* Network Selection UI */
+    .network-header {
+      padding: 20px;
+      background: rgba(10, 10, 10, 0.95);
+      color: #fff;
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 1px solid #333;
     }
 
     .network-list {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .network-button {
-      background: #333;
-      /* White background */
-      border: none;
-      /* No border */
-      color: white;
-      padding: 5% 5%;
-      /* Padding around text */
-      margin: 8%;
-      /* Margin between buttons */
-      width: calc(100% - 30px);
-      /* Full width within the container with padding */
-      text-align: center;
-      /* Align text to the left */
-      border-radius: 2%;
-      /* Rounded corners */
-      outline: none;
-      /* Remove outline */
-      cursor: pointer;
-      /* Change mouse cursor on hover */
-      box-shadow: inset 0 0 0 0 #0F0;
-      /* Set up for the highlight effect */
-      transition: box-shadow 0.3s ease;
-      /* Smooth transition for box-shadow */
-      font-size: 1em;
-      /* Set font size */
-      font-weight: bolder;
-    }
-
-    #passwordInput button {
-      display: block;
-    }
-
-    /* Add this CSS to hide the confirm button by default */
-    .confirm-button {
-      display: none;
-    }
-
-    .confirm-button {
-      background-color: #4CAF50;
-      /* Green */
-      border: none;
-      color: white;
       padding: 15px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 5px;
-      width: 80%;
-      /* Make button full width of container */
-      box-sizing: border-box;
-      /* Include padding in the button width */
-    }
-
-    .pause-menu button {
-      background-color: #0F0;
-      /* Green background*/
-      color: #000;
-      /* Black text */
-      border: none;
-      padding: 20px 20px;
-      font-family: 'Orbitron', sans-serif;
-      margin: 40px 0;
-      /* Space between buttons */
-      display: block;
-      /* Each button on a new line */
-      width: 100%;
-      /* Full width of the parent */
-      box-sizing: border-box;
-      /* Padding included in width */
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .input-container {
-      display: block;
-      /* Change from 'none' to 'block' */
-      text-align: center;
-    }
-
-    .password-input {
-      display: none;
-      margin-top: 5px;
-      text-align: center;
-    }
-
-    .progress-container {
-      display: flex;
-      align-items: center;
-      height: 20px;
-      /* Height of the progress bar */
-      width: 30%;
-      /* Half the size of the original */
-      margin-left: 20px;
-      /* Margin left of the logo */
-      margin-right: 20px;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .left-hint-box {
-      position: absolute;
-      top: 80px;
-      left: -400px;
-      width: 350px;
-      background: #000;
-      color: #0F0;
-      padding: 20px;
-      border: 2px solid #0F0;
-      border-radius: 5px;
-      transition: left 0.5s;
-      z-index: 100;
-      font-family: 'Orbitron', sans-serif;
-      display: none;
-    }
-
-    /* Individual steps in the progress bar */
-    .progress-step {
       flex: 1;
-      /* Distribute space evenly */
-      text-align: center;
-      color: white;
-      position: relative;
-      /* For pseudo-elements positioning */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
-      /* Smaller font size for the text */
-      font-family: 'Orbitron', sans-serif;
     }
 
-    /* Pseudo-element for the step connecting lines */
-    .progress-step:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 0;
-      height: 2%;
-      /* Line thickness */
-      width: 100%;
-      /* Line width */
-      background: white;
-      /* Line color */
-      z-index: -1;
-      transform: translateX(50%);
-    }
-
-    /* Colors for each step based on the design */
-    .step-1 {
-      background: linear-gradient(to right, #00327C, #0958cf);
-    }
-
-    .step-2 {
-      background: linear-gradient(to right, #fff, #fff);
-    }
-
-    .step-3 {
-      background: linear-gradient(to right, #fff, #fff);
-      border-radius: 0 6px 6px 0;
-    }
-
-    #network1 {
-      text-align: center;
-      align-items: center;
-    }
-
-    .hint-box {
-      position: absolute;
-      top: 80px;
-      /* Below the top bar */
-      right: -400px;
-      /* Start off screen */
-      width: 350px;
-      /* Width of the hint box */
-      background: #000;
-      /* Black background */
-      color: #0F0;
-      /* Green text */
-      padding: 20px;
-      border: 2px solid #0F0;
-      /* Green border */
-      border-radius: 5px;
-      transition: right 0.5s;
-      /* Smooth transition for the slide-in effect */
-      z-index: 100;
-      /* Ensure it's above other elements */
-      display: none;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .pause-menu {
-      position: fixed;
-      left: 38%;
-      right: 50px;
-      top: 200px;
-      padding: 70px 60px;
-      font-family: 'Orbitron', sans-serif;
-      background: #000;
-      /* Black background */
-      border: 2px solid #0F0;
-      /* Green border*/
-      color: #0F0;
-      /* Green text */
-      width: 380px;
-      /* Adjust width as needed */
-      display: none;
-    }
-
-    .pause-menu h1 {
-      position: fixed;
-      font-family: 'Orbitron', sans-serif;
-      bottom: 500px;
-      left: 32%;
-      margin-bottom: 50px;
-      /* Space between title and buttons*/
-    }
-
-    .pause-menu button {
-      background-color: #0F0;
-      /* Green background*/
-      color: #000;
-      /* Black text */
-      border: none;
-      padding: 20px 20px;
-      margin: 40px 0;
-      /* Space between buttons */
-      display: block;
-      /* Each button on a new line */
-      width: 100%;
-      /* Full width of the parent */
-      box-sizing: border-box;
-      /* Padding included in width */
+    .network-item {
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid #555;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 12px;
       cursor: pointer;
-      border-radius: 5px;
-    }
-
-    /* pause menu button animation */
-
-    .cta {
+      transition: all 0.3s ease;
       display: flex;
-      padding: 11px 33px;
-      text-decoration: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 130%;
-      color: white;
-      background: #6225E6;
-      transition: 1s;
-      box-shadow: 6px 6px 0 black;
-      transform: skewX(-15deg);
-      border: none;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .cta:focus {
+    .network-item:hover {
+      background: rgba(60, 60, 60, 0.9);
+      border-color: var(--hud-primary);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+    }
+
+    .network-name {
+      color: #fff;
+      font-size: clamp(14px, 1.2vw, 18px);
+      font-weight: 600;
+    }
+
+    .network-signal {
+      color: var(--hud-primary);
+      font-size: clamp(12px, 1vw, 16px);
+    }
+
+    .network-input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: rgba(20, 20, 20, 0.9);
+      border: 1px solid #555;
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(12px, 1vw, 16px);
       outline: none;
+      display: none;
     }
 
-    .cta:hover {
-      transition: 0.5s;
-      box-shadow: 10px 10px 0 #FBC638;
+    .network-input.active {
+      display: block;
     }
 
-    .cta .second {
-      transition: 0.5s;
-      margin-right: 0px;
+    .network-item:focus {
+      border-color: var(--hud-primary);
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
     }
 
-    .cta:hover .second {
-      transition: 0.5s;
-      margin-right: 45px;
+    /* ============ QTE OVERLAY ============ */
+    .qte-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1500;
     }
 
-    .span {
-      transform: skewX(15deg)
+    .qte-overlay.active {
+      display: flex;
     }
 
-    .second {
-      width: 20px;
-      margin-left: 30px;
+    .qte-container {
+      background: rgba(0, 0, 0, 0.9);
+      border: 3px solid var(--hud-primary);
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(57, 255, 20, 0.4);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .qte-title {
+      color: var(--hud-primary);
+      font-size: clamp(20px, 2.5vw, 36px);
+      font-weight: 900;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    .qte-sequence {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .qte-key {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #555;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #888;
+      background: #111;
+      transition: all 0.2s ease;
+    }
+
+    .qte-key.active {
+      border-color: var(--hud-primary);
+      color: var(--hud-primary);
+      box-shadow: 0 0 15px var(--hud-primary);
+      transform: scale(1.1);
+    }
+
+    .qte-key.pressed {
+      background: var(--hud-primary);
+      color: #000;
+      border-color: var(--hud-primary);
+    }
+
+    .qte-timer-bar {
+      width: 100%;
+      height: 8px;
+      background: #222;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .qte-timer-fill {
+      height: 100%;
+      background: var(--hud-primary);
+      width: 100%;
+      transition: width 3s linear;
+    }
+
+    .connecting-popup {
       position: relative;
-      top: 12%;
+      margin: 20px auto;
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid var(--hud-primary);
+      color: var(--hud-primary);
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 700;
+      display: none;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+      width: fit-content;
     }
 
-    .one {
-      transition: 0.4s;
-      transform: translateX(-60%);
+    .error-popup {
+      position: relative;
+      margin: 10px auto;
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #ff0000;
+      color: #ff0000;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      display: none;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+      width: fit-content;
     }
 
-    .two {
-      transition: 0.5s;
-      transform: translateX(-30%);
+    .connecting-popup.active,
+    .error-popup.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
     }
 
-    .cta:hover .three {
-      animation: color_anim 1s infinite 0.2s;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
-    .cta:hover .one {
-      transform: translateX(0%);
-      animation: color_anim 1s infinite 0.6s;
+    .qte-instruction {
+      color: #9ca3af;
+      font-size: clamp(14px, 1.5vw, 20px);
+      margin-bottom: 20px;
     }
 
-    .cta:hover .two {
-      transform: translateX(0%);
-      animation: color_anim 1s infinite 0.4s;
+    .qte-result {
+      color: var(--hud-primary);
+      font-size: clamp(18px, 2vw, 28px);
+      font-weight: 700;
+      min-height: 40px;
+      text-shadow: 0 0 15px var(--hud-primary);
     }
 
-    @keyframes color_anim {
-      0% {
-        fill: white;
+    .qte-result.fail {
+      color: #ff4444;
+      text-shadow: 0 0 15px #ff4444;
+    }
+
+    /* ============ MALL NETWORK OVERLAY ============ */
+    .mall-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .mall-overlay.active {
+      display: flex;
+    }
+
+    .mall-container {
+      position: relative;
+      width: 90%;
+      max-width: 1200px;
+      height: 80%;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border: 3px solid var(--hud-primary);
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
+      overflow: hidden;
+    }
+
+    .mall-header {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      border-bottom: 2px solid var(--hud-primary);
+    }
+
+    .mall-header h2 {
+      color: var(--hud-primary);
+      font-size: clamp(20px, 2.5vw, 36px);
+      margin: 0 0 10px 0;
+      text-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    .mall-header p {
+      color: #9ca3af;
+      font-size: clamp(12px, 1.2vw, 18px);
+      margin: 0;
+    }
+
+    .mall-map {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 100px);
+      background: linear-gradient(135deg, #0f1419 0%, #1a1f26 100%);
+      overflow: hidden;
+    }
+
+    .mall-floor-plan {
+      position: absolute;
+      width: 80%;
+      height: 70%;
+      top: 15%;
+      left: 10%;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+    }
+
+    .connected-device {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .device-dot {
+      width: 20px;
+      height: 20px;
+      background: var(--hud-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--hud-primary);
+      animation: pulse-device 2s ease-in-out infinite;
+      margin-bottom: 5px;
+    }
+
+    @keyframes pulse-device {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
       }
 
       50% {
-        fill: #FBC638;
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+    }
+
+    .device-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 10px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .connected-device:hover .device-dot {
+      background: #fff;
+      box-shadow: 0 0 25px #fff;
+      transform: scale(1.3);
+    }
+
+    .connected-device:hover .device-label {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .connected-device.correct {
+      animation: correctPulse 0.5s ease-in-out 3;
+    }
+
+    @keyframes correctPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
       }
 
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    /* Result Message on Mall */
+    .mall-result {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 15px 40px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid var(--hud-primary);
+      border-radius: 8px;
+      color: var(--hud-primary);
+      font-size: clamp(14px, 1.5vw, 22px);
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--hud-primary);
+      display: none;
+    }
+
+    .mall-result.show {
+      display: block;
+    }
+
+    @keyframes textFlash {
+
+      0%,
       100% {
-        fill: white;
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .flash-text {
+      animation: textFlash 1.5s infinite ease-in-out;
+      color: var(--hud-primary) !important;
+      text-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    .attachment-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .attachment-icon {
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    /* ============ CHAT DESIGN ============ */
+    .chat-container {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: clamp(11px, 0.95vw, 14px);
+      line-height: 1.3;
+      animation: messageSlide 0.3s ease;
+    }
+
+    @keyframes messageSlide {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.received {
+      align-self: flex-start;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: #fff;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.sent {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-input-bar {
+      padding: 12px;
+      background: rgba(20, 20, 20, 0.95);
+      border-top: 1px solid #333;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+      padding: 10px 15px;
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid #555;
+      border-radius: 20px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(11px, 1vw, 14px);
+      outline: none;
+    }
+
+    /* ============ LAPTOP DESIGN ============ */
+    .laptop-container {
+      position: relative;
+      width: clamp(600px, 70vw, 1000px);
+      height: clamp(400px, 60vh, 700px);
+      background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+      border: 2px solid #222;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .laptop-screen {
+      flex: 1;
+      background: #0a0a0a;
+      padding: 20px;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .laptop-base {
+      height: 20px;
+      background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+      border-radius: 0 0 8px 8px;
+      border-top: 1px solid #333;
+    }
+
+    /* Laptop - Chat View */
+    .laptop-messages {
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .laptop-message-header {
+      text-align: center;
+      color: #dc2626;
+      font-size: clamp(14px, 1.4vw, 20px);
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+    }
+
+    /* Hacking Progress & Data Complete Combined */
+    .hacking-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .hacking-title {
+      text-align: center;
+      color: #dc2626;
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+    }
+
+    .hacking-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .hacking-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hacking-label {
+      color: #e5e7eb;
+      font-size: clamp(11px, 1vw, 14px);
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 18px;
+      background: rgba(40, 40, 40, 0.8);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #555;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--hud-secondary), var(--hud-primary));
+      border-radius: 12px;
+      width: 0%;
+      transition: width 2s ease;
+      box-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    /* Data Extraction Complete */
+    .data-complete-title {
+      color: var(--hud-primary);
+      font-size: clamp(20px, 2.5vw, 34px);
+      font-weight: 900;
+      margin: 20px 0 12px 0;
+      text-shadow: 0 0 25px var(--hud-primary);
+      animation: pulse-glow 2s ease-in-out infinite;
+      display: none;
+    }
+
+    .data-complete-title.show {
+      display: block;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 20px var(--hud-primary);
+      }
+
+      50% {
+        text-shadow: 0 0 40px var(--hud-primary), 0 0 60px var(--hud-primary);
+      }
+    }
+
+    .data-device-info {
+      color: #9ca3af;
+      font-size: clamp(12px, 1.2vw, 16px);
+      margin-bottom: 15px;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      background: var(--hud-primary);
+      color: #000;
+      border: 2px solid var(--hud-secondary);
+      padding: 10px 30px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(12px, 1.1vw, 16px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+      margin-top: 12px;
+    }
+
+    .action-btn:hover {
+      background: var(--hud-secondary);
+      box-shadow: 0 0 30px var(--hud-primary);
+      transform: scale(1.05);
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ============ PAUSE MENU ============ */
+    .pause-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+    }
+
+    .pause-overlay.active {
+      display: flex;
+    }
+
+    .pause-menu {
+      background: #000;
+      border: 2px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
+      padding: 40px 60px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    .pause-menu h1 {
+      font-size: clamp(24px, 4vw, 48px);
+      font-weight: 900;
+      color: var(--hud-primary);
+      text-shadow: 0 0 20px var(--hud-primary);
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    /* Resume Button */
+    .pause-menu .cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 40px;
+      font-family: Arial, sans-serif;
+      font-size: clamp(16px, 2vw, 24px);
+      font-weight: 700;
+      color: #000;
+      background: var(--hud-primary);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      transform: skewX(-10deg);
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .pause-menu .cta:hover {
+      box-shadow: 6px 6px 0 #1a5f0c;
+      transform: skewX(-10deg) scale(1.05);
+    }
+
+    .pause-menu .cta .span {
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second {
+      margin-left: 20px;
+      transform: skewX(10deg);
+      display: flex;
+      align-items: center;
+    }
+
+    .pause-menu .cta .second svg {
+      width: 30px;
+      height: 15px;
+    }
+
+    /* Hint Box */
+    .hint-box {
+      position: fixed;
+      top: 80px;
+      right: -400px;
+      padding: 20px;
+      width: 300px;
+      transition: right 0.4s;
+      z-index: 1500;
+      border: 1px solid var(--hud-primary);
+      box-shadow: 0 0 20px var(--hud-glow);
+      color: var(--hud-primary);
+      background: #000;
+      border-radius: 4px;
+    }
+
+    .hint-box.visible {
+      right: 20px;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+      }
+
+      .game-container {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 140px;
+      }
+
+      .phone-container {
+        width: 90%;
+        max-width: 350px;
+      }
+
+      .laptop-container {
+        width: 95%;
+        height: auto;
+        min-height: 400px;
+      }
+
+      .pov-indicator {
+        top: 120px;
+        left: 10px;
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+
+      .hacking-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mall-container {
+        width: 95%;
+        height: 90%;
+      }
+
+      .connected-device {
+        width: 50px;
+        height: 50px;
+      }
+
+      .device-dot {
+        width: 15px;
+        height: 15px;
+      }
+
+      .qte-circle-container {
+        width: 200px;
+        height: 200px;
       }
     }
   </style>
-
 </head>
 
 <body>
+
+  <!-- TOP BAR -->
   <div class="top-bar">
     <div class="logo">MASTERM1ND</div>
     <div class="progress-container">
-      <div class="progress-step step-1">Networks</div>
+      <div class="progress-step" id="progress-indicator">Networks</div>
     </div>
     <div class="loader"></div>
-    <!-- <div class="lives-remaining">Lives Remaining: 3</div> -->
+    <div class="lives-remaining" id="lives-display">Lives Remaining: 3</div>
     <div class="control-buttons">
       <button class="timer">TIMER</button>
-      <button onclick="pause()">PAUSE</button>
+      <button onclick="pauseGame()">PAUSE</button>
       <button onclick="showHint()">HINT</button>
       <button onclick="quitToMainMenu()">QUIT</button>
     </div>
+  </div>
 
-    <div class="center-box">
-      <video autoplay loop muted playsinline>
-        <source src="assets/Net1.mp4" type="video/mp4">
-      </video>
-      <div class="phone">
+  <!-- GAME CONTAINER -->
+  <div class="game-container">
+    <video id="bg-video" autoplay loop muted playsinline>
+      <source src="assets/Netv2.mp4" type="video/mp4">
+    </video>
+
+    <!-- POV INDICATOR -->
+    <div class="pov-indicator red-theme" id="pov-indicator">KA.OS POV:</div>
+
+    <!-- PAGE 1: Network Selection -->
+    <div class="page-section active red-theme-bg" id="page1">
+      <div class="phone-container">
+        <div class="phone-notch"></div>
         <div class="phone-screen">
-          <div class="camera"></div>
-          <div class="screen"></div>
-          <br><br>
-          <h2>WiFi Networks</h2>
+          <div class="network-header">Wi-Fi Networks</div>
+          <div class="network-list">
+            <div class="network-item" onclick="selectNetwork('network1')">
+              <span class="network-name">Bob's MPhone</span>
+              <span class="network-signal">🔒</span>
+            </div>
+            <input type="password" id="network1-input" class="network-input" placeholder="Enter Password"
+              onkeydown="handleNetworkKeyPress(event, 'network1')">
 
-          <ul class="network-list">
-            <!-- Sample network items, replace with actual networks -->
-            <button class="button" onclick="toggleNetwork('network1')">Bob's Iphone</button>
-            <input type="password" id="network1" class="input-container" placeholder="Enter Password">
-            <button onclick="connect('network1')">Connect</button>
-          </ul>
-          <ul class="network-list">
-            <!-- Sample network items, replace with actual networks -->
-            <button class="button" onclick="toggleNetwork('network2')">XTECH LTD.</button>
-            <input type="number" id="network2" class="input-container" placeholder="Enter Employee ID">
-            <button onclick="connect('network2')">Connect</button>
-          </ul>
-          <ul class="network-list">
-            <!-- Sample network items, replace with actual networks -->
-            <button class="button" onclick="toggleNetwork('network3')">MTX Mall Guests</button>
-            <input type="email" id="network3" class="input-container" placeholder="Enter your Email">
-            <button onclick="connect('network3')">Connect</button>
-          </ul>
-        </div>
-        <!-- Other network items... -->
+            <div class="network-item" onclick="selectNetwork('network2')">
+              <span class="network-name">XTECH LTD.</span>
+              <span class="network-signal">🔒</span>
+            </div>
+            <input type="number" id="network2-input" class="network-input" placeholder="Enter Employee ID"
+              onkeydown="handleNetworkKeyPress(event, 'network2')">
 
-        <!-- Password input field -->
-        <div id="passwordInput" class="password-input">
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password">
-        </div>
-
-        <!-- Confirm Button -->
-        <div class="text-center"> <!-- Center the button -->
-          <!-- Change the button to an anchor tag with href attribute -->
-
-
-          <div class="button-bar">
-            <div class="button-phone"></div>
+            <div class="network-item" onclick="connectFreeMallNetwork()">
+              <span class="network-name">MTX Mall Guests</span>
+              <span class="network-signal"></span>
+            </div>
+          </div>
+          <div id="connecting-popup" class="connecting-popup">
+            Connecting...<br>Please Wait
+          </div>
+          <div id="error-popup" class="error-popup">
+            CONNECTION FAILED
           </div>
         </div>
+        <div class="phone-home-button"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: Text Messages -->
+    <div class="page-section red-theme-bg" id="page2">
+      <div class="phone-container">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="network-header">Messages</div>
+          <div class="chat-container" id="chat-messages">
+            <!-- Messages will be added by JavaScript -->
+          </div>
+          <div class="chat-input-bar">
+            <input type="text" placeholder="Type your message..." readonly>
+          </div>
+        </div>
+        <div class="phone-home-button"></div>
+      </div>
+    </div>
+
+    <!-- MALL NETWORK OVERLAY (After chat) -->
+    <div class="mall-overlay" id="mall-overlay">
+      <div class="mall-container">
+        <div class="mall-header">
+          <h2>MTX MALL NETWORK</h2>
+          <p class="flash-text">Select the target device</p>
+          <div class="qte-timer-bar" style="margin-top: 10px;">
+            <div id="mall-timer-fill" class="qte-timer-fill"></div>
+          </div>
+        </div>
+        <div class="mall-map">
+          <div class="mall-floor-plan"></div>
+          <!-- Devices will be added by JavaScript -->
+        </div>
+        <div class="mall-result" id="mall-result"></div>
+      </div>
+    </div>
+
+    <!-- QTE OVERLAY (Breach Larry's MPhone) -->
+    <div class="qte-overlay" id="qte-overlay">
+      <div class="qte-container">
+        <div class="qte-title">BREACH LARRY'S MPHONE</div>
+        <div class="qte-instruction">Press the highlighted keys quickly!</div>
+        <div class="qte-timer-bar">
+          <div id="qte-timer-fill" class="qte-timer-fill"></div>
+        </div>
+        <div class="qte-sequence" id="qte-sequence">
+          <div class="qte-key" id="key-0"></div>
+          <div class="qte-key" id="key-1"></div>
+          <div class="qte-key" id="key-2"></div>
+          <div class="qte-key" id="key-3"></div>
+          <div class="qte-key" id="key-4"></div>
+        </div>
+        <div class="qte-result" id="qte-result"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: Laptop - Chat View -->
+    <div class="page-section green-theme-bg" id="page3">
+      <div class="laptop-container">
+        <div class="laptop-screen">
+          <div class="laptop-messages">
+            <div class="laptop-message-header">COMMUNICATION<br>Larry's MPhone</div>
+            <div class="chat-container">
+              <div class="message received">Larry, were you followed?</div>
+              <div class="message sent">no boss</div>
+              <div class="message received">Good. Send me the data.</div>
+              <div class="message sent attachment-container">
+                data.docx
+                <span class="attachment-icon">📎</span>
+              </div>
+              <div class="message received">Thanks, received.</div>
+              <div class="message received">Good work Larry.</div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: Laptop - Hacking Progress + Data Complete (Combined) -->
+    <div class="page-section green-theme-bg" id="page4">
+      <div class="laptop-container">
+        <div class="laptop-screen">
+          <div class="hacking-container">
+            <div class="hacking-title">Device Hacked<br><span style="font-size: 0.6em; color: #9ca3af;">Device Name:
+                Larry's MPhone</span></div>
+            <div class="hacking-grid">
+              <div class="hacking-item">
+                <div class="hacking-label">Accessing Photos...</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progress1"></div>
+                </div>
+              </div>
+              <div class="hacking-item">
+                <div class="hacking-label">Extracting Data...</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progress2"></div>
+                </div>
+              </div>
+              <div class="hacking-item">
+                <div class="hacking-label">Retrieving Messages...</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progress3"></div>
+                </div>
+              </div>
+              <div class="hacking-item">
+                <div class="hacking-label">Copying Passwords...</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progress4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="data-complete-title" id="data-complete-title">ALL Data Extracted</div>
+            <button class="action-btn" id="confirm-btn" onclick="completeLevel()"
+              style="display: none;">Confirm</button>
+          </div>
+        </div>
+        <div class="laptop-base"></div>
       </div>
     </div>
   </div>
-  <div class="pause-menu" id="pasue-menu" style="display: none;">
-    <h1>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Game Paused</h1>
-    <br>
-    <button type="button" id="Resume" class="cta" onclick="resume()">
-      <span class="span">Resume</span>
-      <span class="second">
-        <svg width="50px" height="20px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path class="one"
-              d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
-              fill="#FFFFFF"></path>
-            <path class="two"
-              d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
-              fill="#FFFFFF"></path>
-            <path class="three"
-              d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
-              fill="#FFFFFF"></path>
-          </g>
-        </svg>
-      </span>
-    </button>
+
+  <!-- PAUSE MENU -->
+  <div class="pause-overlay" id="pause-overlay">
+    <div class="pause-menu">
+      <h1>Game Paused</h1>
+      <button type="button" class="cta" onclick="resumeGame()">
+        <span class="span">Resume</span>
+        <span class="second">
+          <svg width="40px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <path
+                d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z"
+                fill="#000" />
+            </g>
+          </svg>
+        </span>
+      </button>
+    </div>
   </div>
-  <!-- Your existing JavaScript code... -->
+
+  <!-- HINT BOX -->
   <div class="hint-box" id="hintBox">
-    Try entering your email in the third input field.
+    Connect to the free MTX Mall network and look for the target's name in the text messages.
   </div>
-  <div class="left-hint-box" id="leftHintBox">
-    Try to connect to the network
-  </div>
+
   <script>
     /*****************************
      *  SOUND EFFECTS (SFX)
@@ -806,6 +1364,7 @@
     const SFX = {
       pause: new Audio("assets/pause-89443.mp3"),
       unpause: new Audio("assets/unpause-106278.mp3"),
+      gameOver: new Audio("assets/cyber-punk-95771-(GameOver).mp3"),
       popup: new Audio("assets/correct-choice-43861-(popup).mp3"),
       wrong: new Audio("assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3"),
       correct: new Audio("assets/success-48018-(right).mp3"),
@@ -822,177 +1381,460 @@
     }
 
     /*****************************
-     *  BACKGROUND MUSIC (PER PAGE)
+     *  BACKGROUND MUSIC
      *****************************/
     let bgMusic = null;
-
     if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/.mp3"); // Networks theme
+      bgMusic = new Audio("assets/NEON.mp3");
       bgMusic.loop = true;
       bgMusic.volume = 0.5;
       bgMusic.preload = "auto";
       bgMusic.play().catch(() => { });
     }
-
-    /*****************************
-     *  TIMER
-     *****************************/
+    // Timer management
     var timer10;
     var totalMilliseconds10 = 0;
-    var totalTimeInSeconds10;
+    var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
+    if (savedMilliseconds !== null) {
+      totalMilliseconds10 = Number(savedMilliseconds);
+    }
 
     function formatTime10(milliseconds) {
       var minutes = Math.floor(milliseconds / (60 * 1000));
       var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
       var remainingMilliseconds = milliseconds % 1000;
-
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
-      remainingMilliseconds =
-        remainingMilliseconds < 100
-          ? remainingMilliseconds < 10
-            ? "00" + remainingMilliseconds
-            : "0" + remainingMilliseconds
-          : remainingMilliseconds;
-
+      remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
       return minutes + ":" + seconds + ":" + remainingMilliseconds;
     }
 
     function startTimer10() {
+      if (timer10) clearInterval(timer10);
       timer10 = setInterval(function () {
         totalMilliseconds10 += 100;
-        document.querySelector(".top-bar .timer").textContent =
-          formatTime10(totalMilliseconds10);
+        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+        var timerDisplay10 = document.querySelector(".top-bar .timer");
+        if (timerDisplay10) {
+          timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+        }
       }, 100);
     }
 
-    window.onload = function () {
-      startTimer10();
-      showLeftHintBox();
-    };
-
     function stopTimer10() {
-      clearInterval(timer10);
-      totalTimeInSeconds10 = totalMilliseconds10 / 1000;
-      localStorage.setItem("totalTimeInSeconds10", totalTimeInSeconds10);
-    }
-
-    /*****************************
-     *  NETWORK TOGGLE
-     *****************************/
-    function toggleNetwork(networkId) {
-      playSFX(SFX.popup);
-      var inputField = document.getElementById(networkId);
-      inputField.style.display =
-        inputField.style.display === "none" ? "block" : "none";
-    }
-
-    /*****************************
-     *  CONNECT LOGIC
-     *****************************/
-    function connect(networkId) {
-      var password = document.getElementById(networkId).value;
-
-      // Correct long password
-      if ((networkId === "network1" || networkId === "network2") && password.length === 88) {
-        playSFX(SFX.correct);
-        document.getElementById(networkId).nextElementSibling.textContent = "Connected";
-
-        setTimeout(function () {
-          window.location.href = "MMTest.html";
-        }, 2000);
-      }
-
-      // Email network
-      else if (networkId === "network3") {
-        if (!password.includes("@")) {
-          playSFX(SFX.wrong);
-
-          var input = document.getElementById(networkId);
-          input.value = 'An E-Mail should have an "@" to connect';
-          input.style.color = "red";
-
-          input.onfocus = function () {
-            this.value = "";
-            this.style.color = "";
-          };
-
-          return;
-        }
-
-        playSFX(SFX.correct);
-        document.getElementById(networkId).nextElementSibling.textContent = "Connected";
-        localStorage.setItem("totalMilliseconds10", totalMilliseconds10);
-
-        setTimeout(function () {
-          window.location.href = "text.html";
-        }, 2000);
-      }
-
-      // Wrong password
-      else {
-        playSFX(SFX.wrong);
-        document.getElementById(networkId).nextElementSibling.textContent = "Wrong Password";
+      if (timer10) {
+        clearInterval(timer10);
+        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
       }
     }
 
-    /*****************************
-     *  HINT
-     *****************************/
-    function showHint() {
-      playSFX(SFX.popup);
-      var hintBox = document.getElementById("hintBox");
-      hintBox.style.right = "10px";
-      hintBox.style.display =
-        hintBox.style.display === "none" ? "block" : "none";
-    }
+    // Lives system
+    var livesRemaining = 3;
 
-    /*****************************
-     *  PAUSE / RESUME
-     *****************************/
-    function pause() {
-      var pauseMenu = document.getElementById("pasue-menu");
-      if (pauseMenu.style.display === "none") {
-        playSFX(SFX.pause);
+    function loseLife() {
+      livesRemaining--;
+      document.getElementById('lives-display').textContent = 'Lives Remaining: ' + livesRemaining;
+      playSFX(SFX.wrong);
+
+      if (livesRemaining === 0) {
         stopTimer10();
-        pauseMenu.style.display = "block";
+        playSFX(SFX.gameOver);
+        setTimeout(() => {
+          window.location.href = 'GameOverNetworks.html';
+        }, 1000);
+        return false;
+      }
+      return true;
+    }
+
+    // Page navigation
+    var currentPage = 1;
+
+    function goToPage(pageNum) {
+      // Hide all pages
+      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+
+      // Show target page
+      document.getElementById('page' + pageNum).classList.add('active');
+      currentPage = pageNum;
+
+      // Update POV indicator and progress bar
+      var povIndicator = document.getElementById('pov-indicator');
+      var progressIndicator = document.getElementById('progress-indicator');
+
+      povIndicator.classList.remove('red-theme', 'green-theme');
+      progressIndicator.classList.remove('red-active', 'green-active');
+
+      if (pageNum <= 2) {
+        povIndicator.textContent = 'KA.OS POV:';
+        povIndicator.classList.add('red-theme');
+        progressIndicator.classList.add('red-active');
+        povIndicator.style.top = '60px';
       } else {
-        playSFX(SFX.unpause);
-        pauseMenu.style.display = "none";
-        startTimer10();
+        povIndicator.textContent = 'SIMON POV:';
+        povIndicator.classList.add('green-theme');
+        progressIndicator.classList.add('green-active');
+        povIndicator.style.top = '60px';
+      }
+
+      // Update video source
+      var video = document.getElementById('bg-video');
+      var videoSource = video.querySelector('source');
+      if (pageNum <= 2) {
+        videoSource.src = 'assets/Netv2.mp4';
+      } else {
+        videoSource.src = 'assets/Netsv2.mp4';
+      }
+      video.load();
+
+      // Trigger page-specific actions
+      if (pageNum === 2) {
+        startChatAnimation();
+      } else if (pageNum === 3) {
+        setTimeout(() => goToPage(4), 6000);
+      } else if (pageNum === 4) {
+        startHackingAnimation();
       }
     }
 
-    function resume() {
-      playSFX(SFX.unpause);
-      document.getElementById("pasue-menu").style.display = "none";
-      startTimer10();
+    // Network selection (locked networks)
+    var selectedNetwork = null;
+
+    function selectNetwork(networkId) {
+      // Hide all inputs
+      document.querySelectorAll('.network-input').forEach(input => {
+        input.classList.remove('active');
+      });
+
+      // Show selected network's input
+      document.getElementById(networkId + '-input').classList.add('active');
+      selectedNetwork = networkId;
     }
 
-    /*****************************
-     *  QUIT
-     *****************************/
-    function quitToMainMenu() {
-      playSFX(SFX.popup);
-      window.location.href = "LevelSelect.html";
+    function handleNetworkKeyPress(e, networkId) {
+      if (e.key === 'Enter') {
+        var errorPopup = document.getElementById('error-popup');
+        errorPopup.classList.add('active');
+        playSFX(SFX.wrong);
+        setTimeout(() => {
+          errorPopup.classList.remove('active');
+        }, 2000);
+      }
     }
 
-    /*****************************
-     *  LEFT AUTO HINT
-     *****************************/
-    function showLeftHintBox() {
+    function connectFreeMallNetwork() {
+      // Show connecting popup
+      var popup = document.getElementById('connecting-popup');
+      popup.classList.add('active');
       playSFX(SFX.popup);
-      const leftHint = document.getElementById("leftHintBox");
-      leftHint.style.display = "block";
 
       setTimeout(() => {
-        leftHint.style.left = "10px";
-      }, 50);
+        popup.classList.remove('active');
+        goToPage(2);
+      }, 2000);
+    }
 
+    // Chat animation
+    var chatMessages = [
+      { text: "Larry, were you followed?", type: "received" },
+      { text: "no boss", type: "sent" },
+      { text: "Good. Send me the data.", type: "received" },
+      { text: "data.docx", type: "sent", isAttachment: true },
+      { text: "Thanks, received.", type: "received" },
+      { text: "Good work Larry.", type: "received" }
+    ];
+
+    var chatIndex = 0;
+
+    function startChatAnimation() {
+      var chatContainer = document.getElementById('chat-messages');
+      chatContainer.innerHTML = '';
+      chatIndex = 0;
+
+      function addNextMessage() {
+        if (chatIndex < chatMessages.length) {
+          var msg = chatMessages[chatIndex];
+          var msgDiv = document.createElement('div');
+          if (msg.isAttachment) {
+            msgDiv.className = 'message ' + msg.type + ' attachment-container';
+            msgDiv.innerHTML = msg.text + '<span class="attachment-icon">📎</span>';
+          } else {
+            msgDiv.className = 'message ' + msg.type;
+            msgDiv.textContent = msg.text;
+          }
+          chatContainer.appendChild(msgDiv);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+          if (msg.type === 'received') playSFX(SFX.popup);
+          chatIndex++;
+          setTimeout(addNextMessage, 1500);
+        } else {
+          setTimeout(() => {
+            document.getElementById('mall-overlay').classList.add('active');
+            createMallDevices();
+          }, 2000);
+        }
+      }
+
+      addNextMessage();
+    }
+
+    // Mall network overlay
+    var devices = [
+      { name: "User's MPad", x: 15, y: 20 },
+      { name: "John's Laptop", x: 35, y: 30 },
+      { name: "Larry's MPhone", x: 55, y: 45, correct: true },
+      { name: "Sarah's Phone", x: 75, y: 25 },
+      { name: "Mike's Tablet", x: 25, y: 60 },
+      { name: "Store Camera", x: 65, y: 70 },
+      { name: "Guest Device", x: 45, y: 15 },
+      { name: "Emma's MPhone", x: 85, y: 55 }
+    ];
+
+    var mallTimer;
+
+    function createMallDevices() {
+      var map = document.querySelector('.mall-map');
+
+      // Clear existing devices
+      document.querySelectorAll('.connected-device').forEach(d => d.remove());
+
+      devices.forEach((device, index) => {
+        var deviceDiv = document.createElement('div');
+        deviceDiv.className = 'connected-device';
+        deviceDiv.style.left = device.x + '%';
+        deviceDiv.style.top = device.y + '%';
+        deviceDiv.innerHTML = `
+          <div class="device-dot"></div>
+          <div class="device-label">${device.name}</div>
+        `;
+        deviceDiv.onclick = function () {
+          selectDevice(device, deviceDiv);
+        };
+        map.appendChild(deviceDiv);
+
+        // Random movement animation
+        setInterval(() => {
+          var randomX = device.x + (Math.random() - 0.5) * 15;
+          var randomY = device.y + (Math.random() - 0.5) * 15;
+          deviceDiv.style.left = Math.max(5, Math.min(95, randomX)) + '%';
+          deviceDiv.style.top = Math.max(5, Math.min(95, randomY)) + '%';
+        }, 800 + Math.random() * 400);
+      });
+
+      // Start 5-second timer for dot minigame
+      var timerFill = document.getElementById('mall-timer-fill');
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
       setTimeout(() => {
-        leftHint.style.left = "-400px";
+        timerFill.style.transition = 'width 5s linear';
+        timerFill.style.width = '0%';
+      }, 10);
+
+      clearTimeout(mallTimer);
+      mallTimer = setTimeout(() => {
+        if (document.getElementById('mall-overlay').classList.contains('active')) {
+          handleMallFail('TIME EXPIRED!');
+        }
       }, 5000);
     }
+
+    function handleMallFail(reason) {
+      var resultDiv = document.getElementById('mall-result');
+      resultDiv.textContent = reason + ' -1 Life';
+      resultDiv.style.borderColor = '#ff4444';
+      resultDiv.style.color = '#ff4444';
+      resultDiv.classList.add('show');
+
+      if (loseLife()) {
+        setTimeout(() => {
+          resultDiv.classList.remove('show');
+          createMallDevices(); // Restart
+        }, 1500);
+      }
+    }
+
+    function selectDevice(device, deviceDiv) {
+      var resultDiv = document.getElementById('mall-result');
+
+      if (device.correct) {
+        clearTimeout(mallTimer);
+        playSFX(SFX.correct);
+        deviceDiv.classList.add('correct');
+        resultDiv.textContent = 'CORRECT! Connected to Target Device';
+        resultDiv.style.borderColor = 'var(--hud-primary)';
+        resultDiv.style.color = 'var(--hud-primary)';
+        resultDiv.classList.add('show');
+
+        setTimeout(() => {
+          document.getElementById('mall-overlay').classList.remove('active');
+          startQTE();
+        }, 2000);
+      } else {
+        clearTimeout(mallTimer);
+        handleMallFail('WRONG DEVICE!');
+      }
+    }
+
+    // QTE System (Key Sequence)
+    var qteSequence = [];
+    var qteIndex = 0;
+    var qteTimer;
+    var qteKeys = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+
+    function startQTE() {
+      document.getElementById('qte-overlay').classList.add('active');
+      document.getElementById('qte-result').textContent = '';
+      qteSequence = [];
+      qteIndex = 0;
+
+      // Generate 5 random keys
+      for (let i = 0; i < 5; i++) {
+        let key = qteKeys[Math.floor(Math.random() * qteKeys.length)];
+        qteSequence.push(key);
+        let keyElement = document.getElementById('key-' + i);
+        keyElement.textContent = key;
+        keyElement.classList.remove('active', 'pressed');
+      }
+
+      nextQteStep();
+    }
+
+    function nextQteStep() {
+      if (qteIndex >= 5) {
+        // QTE Complete
+        playSFX(SFX.correct);
+        document.getElementById('qte-result').textContent = 'BREACH SUCCESSFUL!';
+        document.getElementById('qte-result').className = 'qte-result';
+        setTimeout(() => {
+          document.getElementById('qte-overlay').classList.remove('active');
+          goToPage(3);
+        }, 1500);
+        return;
+      }
+
+      // Highlight current key
+      document.querySelectorAll('.qte-key').forEach(k => k.classList.remove('active'));
+      document.getElementById('key-' + qteIndex).classList.add('active');
+
+      // Reset timer bar
+      var timerFill = document.getElementById('qte-timer-fill');
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+
+      setTimeout(() => {
+        timerFill.style.transition = 'width 5s linear';
+        timerFill.style.width = '0%';
+      }, 10);
+
+      // Start 5-second timer
+      clearTimeout(qteTimer);
+      qteTimer = setTimeout(() => {
+        // Failed to press in time
+        handleQteFail('TOO SLOW!');
+      }, 5000);
+    }
+
+    function handleQteFail(reason) {
+      clearTimeout(qteTimer);
+      var resultDiv = document.getElementById('qte-result');
+      resultDiv.textContent = reason + ' -1 Life';
+      resultDiv.className = 'qte-result fail';
+
+      if (loseLife()) {
+        setTimeout(() => {
+          startQTE(); // Restart sequence
+        }, 1500);
+      }
+    }
+
+    // Key listener for QTE
+    window.addEventListener('keydown', function (e) {
+      if (!document.getElementById('qte-overlay').classList.contains('active')) return;
+      if (qteIndex >= 5) return;
+
+      var pressedKey = e.key.toUpperCase();
+      var targetKey = qteSequence[qteIndex];
+
+      if (pressedKey === targetKey) {
+        // Correct key
+        playSFX(SFX.popup);
+        clearTimeout(qteTimer);
+        document.getElementById('key-' + qteIndex).classList.add('pressed');
+        qteIndex++;
+        setTimeout(nextQteStep, 200);
+      } else {
+        // Wrong key - only penalize if it's one of the potential QTE keys to avoid accidental triggers
+        if (qteKeys.indexOf(pressedKey) !== -1) {
+          handleQteFail('WRONG KEY!');
+        }
+      }
+    });
+
+    // Hacking animation with combined data extraction
+    function startHackingAnimation() {
+      var delays = [0, 500, 1000, 1500];
+      delays.forEach((delay, index) => {
+        setTimeout(() => {
+          document.getElementById('progress' + (index + 1)).style.width = '100%';
+          playSFX(SFX.popup);
+        }, delay);
+      });
+
+      // Show "ALL Data Extracted" message after all progress bars complete
+      setTimeout(() => {
+        playSFX(SFX.correct);
+        document.getElementById('data-complete-title').classList.add('show');
+        document.getElementById('confirm-btn').style.display = 'inline-block';
+      }, 3500);
+    }
+
+    // Game controls
+    function pauseGame() {
+      playSFX(SFX.pause);
+      document.getElementById('pause-overlay').classList.add('active');
+      stopTimer10();
+      if (bgMusic) bgMusic.pause();
+    }
+
+    function resumeGame() {
+      playSFX(SFX.unpause);
+      document.getElementById('pause-overlay').classList.remove('active');
+      startTimer10();
+      if (bgMusic) bgMusic.play().catch(() => { });
+    }
+
+    function showHint() {
+      playSFX(SFX.popup);
+      document.getElementById('hintBox').classList.toggle('visible');
+      setTimeout(() => {
+        document.getElementById('hintBox').classList.remove('visible');
+      }, 5000);
+    }
+
+    function quitToMainMenu() {
+      window.location.href = 'LevelSelect.html';
+    }
+
+    function completeLevel() {
+      localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+      window.location.href = 'Netrecap.html';
+    }
+
+    // Initialize
+    window.addEventListener('load', function () {
+      var timerDisplay10 = document.querySelector(".top-bar .timer");
+      if (timerDisplay10) {
+        timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+      }
+      startTimer10();
+
+      // Set initial progress bar color
+      document.getElementById('progress-indicator').classList.add('red-active');
+
+      setTimeout(() => {
+        showHint();
+      }, 5000);
+    });
   </script>
 
 </body>
