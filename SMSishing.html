@@ -784,6 +784,7 @@
 
     function stopTimer() {
       clearInterval(timer4);
+      localStorage.setItem("totalTimeInSecondsSMS", totalMilliseconds4 / 1000);
     }
 
     window.onload = function () {
@@ -832,6 +833,7 @@
       if (fakeOption.checked) {
         playSFX(SFX.correct);
         stopTimer();
+        localStorage.setItem("livesRemainingSMS", livesRemaining);
         msg.className = "result-message correct";
         msg.textContent = "CORRECT. THREAT IDENTIFIED.";
         setTimeout(() => window.location.href = "RecapSMSishing.html", 1500);

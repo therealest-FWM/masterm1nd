@@ -504,7 +504,7 @@
       <div class="progress-step step-4">EMAIL</div>
     </div>
     <div class="loader"></div>
-    <div class="lives-remaining">Lives Remaining: 2</div>
+    <div class="lives-remaining">Lives Remaining: 1</div>
     <div class="control-buttons">
       <button class="timer">00:00:00</button>
       <button onclick="Pause()">PAUSE</button>
@@ -626,7 +626,7 @@
       });
     }
 
-    var livesRemaining = 2; // Matches other levels
+    var livesRemaining = 1; // Matches user request for 1 life
     var timer4;
     var totalMilliseconds4 = 0;
     var selectedOption = null;
@@ -647,6 +647,7 @@
 
     function stopTimer() {
       clearInterval(timer4);
+      localStorage.setItem("totalTimeInSecondsVishing", totalMilliseconds4 / 1000);
     }
 
     window.onload = function () {

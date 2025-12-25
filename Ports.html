@@ -508,6 +508,7 @@
         loc.textContent = "UNLOCKED 🔓";
         loc.style.color = "#39ff14"; // Neon Green
 
+        stopTimer();
         setTimeout(() => {
           window.location.href = "PortsRecap.html";
         }, 1500);
@@ -553,6 +554,7 @@
 
     function stopTimer() {
       clearInterval(timer);
+      localStorage.setItem("totalTimeInSecondsPorts", totalMilliseconds / 1000);
     }
 
     /*****************************

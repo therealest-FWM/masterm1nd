@@ -175,7 +175,27 @@
   window.onload = function () {
     var y = document.getElementById("time");
     var totalTimeInSeconds4 = localStorage.getItem('totalTimeInSeconds4');
-    y.textContent = "Time taken: " + totalTimeInSeconds4;
+    var scoreDisplay = document.querySelector(".score");
+
+    if (totalTimeInSeconds4 === null) {
+      totalTimeInSeconds4 = 0;
+    } else {
+      totalTimeInSeconds4 = parseFloat(totalTimeInSeconds4);
+    }
+
+    if (y) {
+      y.textContent = "Time taken: " + totalTimeInSeconds4.toFixed(1) + " seconds";
+    }
+
+    if (scoreDisplay) {
+      if (totalTimeInSeconds4 <= 15) {
+        scoreDisplay.textContent = "Score: ★★★";
+      } else if (totalTimeInSeconds4 <= 30) {
+        scoreDisplay.textContent = "Score: ★★☆";
+      } else {
+        scoreDisplay.textContent = "Score: ★☆☆";
+      }
+    }
   };
   /*****************************
  *  QUIT BUTTON

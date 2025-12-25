@@ -174,8 +174,29 @@
     }
     window.onload = function () {
       var y = document.getElementById("time");
-      var totalTimeInSeconds7 = localStorage.getItem('totalTimeInSeconds7');
-      y.textContent = "Time taken: " + totalTimeInSeconds7;
+      var totalTimeInSeconds = localStorage.getItem('totalTimeInSecondsVishing');
+      var scoreDisplay = document.querySelector(".score");
+
+      if (totalTimeInSeconds === null) {
+        totalTimeInSeconds = 0;
+      } else {
+        totalTimeInSeconds = parseFloat(totalTimeInSeconds);
+      }
+
+      if (y) {
+        y.textContent = "Time taken: " + totalTimeInSeconds.toFixed(1) + " seconds";
+      }
+
+      if (scoreDisplay) {
+        // Allowing more time for 3 stars because of voice clips (e.g., 40s instead of 20s)
+        if (totalTimeInSeconds <= 90) {
+          scoreDisplay.textContent = "Score: ★★★";
+        } else if (totalTimeInSeconds <= 120) {
+          scoreDisplay.textContent = "Score: ★★☆";
+        } else {
+          scoreDisplay.textContent = "Score: ★☆☆";
+        }
+      }
     };
     /*****************************
    *  QUIT BUTTON

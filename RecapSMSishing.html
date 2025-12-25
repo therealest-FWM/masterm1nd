@@ -173,8 +173,35 @@
   }
   window.onload = function () {
     var y = document.getElementById("time");
-    var totalTimeInSeconds5 = localStorage.getItem('totalTimeInSeconds5');
-    y.textContent = "Time taken: " + totalTimeInSeconds5;
+    var totalTimeInSeconds = localStorage.getItem('totalTimeInSecondsSMS');
+    var livesLeft = localStorage.getItem('livesRemainingSMS');
+    var scoreDisplay = document.querySelector(".score");
+
+    if (totalTimeInSeconds === null) {
+      totalTimeInSeconds = 0;
+    } else {
+      totalTimeInSeconds = parseFloat(totalTimeInSeconds);
+    }
+
+    if (livesLeft === null) {
+      livesLeft = 2;
+    } else {
+      livesLeft = parseInt(livesLeft);
+    }
+
+    if (y) {
+      y.textContent = "Time taken: " + totalTimeInSeconds.toFixed(1) + " seconds";
+    }
+
+    if (scoreDisplay) {
+      if (livesLeft === 2 && totalTimeInSeconds <= 20) {
+        scoreDisplay.textContent = "Score: ★★★";
+      } else if (livesLeft >= 1 && totalTimeInSeconds <= 40) {
+        scoreDisplay.textContent = "Score: ★★☆";
+      } else {
+        scoreDisplay.textContent = "Score: ★☆☆";
+      }
+    }
   };
   /*****************************
  *  QUIT BUTTON
