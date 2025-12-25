@@ -8,114 +8,305 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    body,
-    html {
-      height: 100%;
+    :root {
+      --primary-neon: #39ff14;
+      --secondary-neon: #2adb11;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html,
+    body {
       margin: 0;
       padding: 0;
-      background-image: url('assets/MMBG.jpg');
-      /* Adjust with your image path */
-      background-size: cover;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
-      /* For absolute positioning of MASTERM1ND text */
-      font-family: 'Arial', sans-serif;
-      /* Optional: add a font-family */
     }
 
-    .menu {
-      position: relative;
-      /* Relative position for diagonal alignment */
-    }
-
-    .button {
-      background-color: black;
-      /* Adjust background color as needed */
-      color: #39ff14;
-      padding: 50px 100px;
-      margin: 10px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      opacity: 0.8;
+    /* --- Background Layers --- */
+    .bg-layer {
       position: absolute;
-      white-space: nowrap;
-      font-size: 3em;
-      /* Larger text */
-      font-weight: bold;
-      /* Bold text */
-      font-family: 'Orbitron', sans-serif;
-      border: 2px;
-      border-color: #39ff14;
-      border-style: ridge;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background-image: url('assets/LSBG6.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0);
+      animation:
+        bg-fade-in 4s ease-out forwards,
+        bg-pulse 10s ease-in-out infinite alternate 4s;
     }
 
-    .button:hover {
-      transform: scale(1.1);
-      opacity: 1;
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
     }
 
-    /* Diagonal positioning */
-    .button:nth-child(1) {
-      top: -100px;
-      left: 150px;
+    .scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50.5%, transparent 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
     }
 
-    .button:nth-child(2) {
-      top: 200px;
-      left: -120px;
+    #particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
     }
 
-    /* Neon green text in the top right */
+    /* --- Content --- */
+    .splash-container {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+      width: 100%;
+      max-width: 90vw;
+      padding: 20px;
+    }
+
     .neon-title {
-      position: absolute;
-      top: 80px;
-      right: -600px;
-      font-size: 3em;
+      font-size: clamp(32px, 8vw, 100px);
+      /* Slightly smaller to fit background frame */
+      color: var(--primary-neon);
+      text-shadow:
+        0 0 10px var(--primary-neon),
+        0 0 20px var(--primary-neon),
+        0 0 40px var(--primary-neon),
+        0 0 80px var(--primary-neon);
+      margin: 0 auto 40px auto;
+      letter-spacing: 0.15em;
+      font-weight: 900;
+      opacity: 0;
+      animation:
+        title-fade-in 2.5s ease-out forwards 1s,
+        title-flicker 4s infinite 3.5s;
+      text-transform: uppercase;
+      transform: skewX(-10deg);
+      /* Slightly more skew for cyber look */
+      width: 100%;
+      display: block;
+    }
+
+    .start-button {
+      position: relative;
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--primary-neon);
+      padding: 18px 50px;
+      font-size: clamp(1.2em, 2vw, 1.8em);
+      font-weight: 700;
       font-family: 'Orbitron', sans-serif;
-      color: #39ff14;
-      /* Neon green */
-      text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14, 0 0 40px #39ff14;
-      /* Neon glow effect */
+      border: 3px solid var(--secondary-neon);
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+      animation: button-appear 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 4s;
+    }
+
+    .start-button:hover {
+      transform: scale(1.05);
+      background: var(--primary-neon);
+      color: #000;
+      box-shadow: 0 0 30px var(--primary-neon);
+      text-shadow: none;
+    }
+
+    .start-button:active {
+      transform: scale(0.98);
+    }
+
+    @keyframes bg-fade-in {
+      0% {
+        filter: brightness(0);
+        opacity: 0;
+      }
+
+      100% {
+        filter: brightness(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bg-pulse {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      100% {
+        transform: scale(1.05);
+        filter: brightness(1.15);
+      }
+    }
+
+    @keyframes title-fade-in {
+      from {
+        opacity: 0;
+        transform: skewX(-10deg) translateY(-30px);
+        filter: blur(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: skewX(-10deg) translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes button-appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes title-flicker {
+
+      0%,
+      18%,
+      22%,
+      25%,
+      53%,
+      57%,
+      100% {
+        text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon), 0 0 40px var(--primary-neon), 0 0 80px var(--primary-neon);
+        opacity: 1;
+      }
+
+      20%,
+      24%,
+      55% {
+        text-shadow: none;
+        opacity: 0.6;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div>
+  <div class="bg-layer"></div>
+  <div class="bg-overlay"></div>
+  <div class="scanline"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="splash-container">
     <div class="neon-title">MASTERM1ND</div>
+    <button class="start-button" onclick="startGame()">Start Game</button>
   </div>
-  <div class="menu">
-    <button class="button" onclick="selectL()">Select Level</button>
-    <button class="button" onclick="tuto()">Tutorial</button>
-  </div>
+
   <script>
-    function tuto() {
-      setTimeout(function () {
-        window.location.href = 'Tutorial.html';
-      }, 500)
-    }
-    function selectL() {
-      setTimeout(function () {
-        window.location.href = 'openCS.html';
-      }, 500)
+    function startGame() {
+      const unlockSound = new Audio("assets/silence.mp3");
+      unlockSound.play().then(() => {
+        localStorage.setItem("audioUnlocked", "true");
+        window.location.href = 'MainMenu.html';
+      }).catch(() => {
+        localStorage.setItem("audioUnlocked", "true");
+        window.location.href = 'MainMenu.html';
+      });
     }
 
-    /*****************************
-     *  BACKGROUND MUSIC
-     *****************************/
-    let bgMusic = null;
+    // --- Particle System ---
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particlesList = [];
 
-    if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/MiamiSoul.mp3");
-      bgMusic.loop = true;
-      bgMusic.volume = 0.2;
-      bgMusic.preload = "auto";
-      bgMusic.play().catch(() => { });
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
     }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+        this.alpha = Math.random() * 0.5 + 0.1;
+        this.life = Math.random() * 100 + 100;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life--;
+        if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+          this.reset();
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      resize();
+      for (let i = 0; i < 50; i++) {
+        particlesList.push(new Particle());
+      }
+      animate();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particlesList.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    window.onload = initParticles;
   </script>
-
 </body>
 
 </html>
