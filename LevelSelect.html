@@ -418,18 +418,11 @@
     unlockSound.preload = "auto";
 
     document.getElementById("play-btn").addEventListener("click", () => {
-      unlockSound.play().then(() => {
-        localStorage.setItem("audioUnlocked", "true");
-
-        if (selectedLevelFile) {
-          window.location.href = selectedLevelFile;
-        } else {
-          alert("Please select an unlocked level.");
-        }
-      }).catch(() => {
-        // fallback if blocked
-        localStorage.setItem("audioUnlocked", "true");
-      });
+      if (selectedLevelFile) {
+        window.location.href = selectedLevelFile;
+      } else {
+        alert("Please select an unlocked level.");
+      }
     });
   </script>
 </body>
