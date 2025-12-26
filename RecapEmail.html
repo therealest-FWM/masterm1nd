@@ -176,8 +176,36 @@
   }
   window.onload = function () {
     var y = document.getElementById("time");
-    var totalTimeInSeconds3 = localStorage.getItem('totalTimeInSeconds3');
-    y.textContent = "Time taken: " + totalTimeInSeconds3;
+    var totalTimeInSeconds = localStorage.getItem('totalTimeInSecondsEmail');
+    var livesLeft = localStorage.getItem('livesRemainingEmail');
+    var scoreDisplay = document.querySelector(".score");
+
+    if (totalTimeInSeconds === null) {
+      totalTimeInSeconds = 0;
+    } else {
+      totalTimeInSeconds = parseFloat(totalTimeInSeconds);
+    }
+
+    if (livesLeft === null) {
+      livesLeft = 3;
+    } else {
+      livesLeft = parseInt(livesLeft);
+    }
+
+    if (y) {
+      y.textContent = "Time taken: " + totalTimeInSeconds.toFixed(1) + " seconds";
+    }
+
+    if (scoreDisplay) {
+      // Stars based on lives remaining (3 lives total)
+      if (livesLeft === 3) {
+        scoreDisplay.textContent = "Score: ★★★";
+      } else if (livesLeft === 2) {
+        scoreDisplay.textContent = "Score: ★★☆";
+      } else {
+        scoreDisplay.textContent = "Score: ★☆☆";
+      }
+    }
   };
   /*****************************
    *  QUIT BUTTON

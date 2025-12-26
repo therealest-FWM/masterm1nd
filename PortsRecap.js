@@ -1,42 +1,43 @@
-function retry(){
+function retry() {
     var retryBut = document.getElementById("retry");
-    window.location.href= 'Ports.html'
-    }
-    function cont(){
+    window.location.href = 'Ports.html'
+}
+function cont() {
     var continueBut = document.getElementById("continue");
-    window.location.href= 'endCS.html'
-    }
-    window.onload = function() {
-        var y = document.getElementById("timeTaken2");
-        var z = document.getElementById("score");
-        var totalTimeInSeconds2 = localStorage.getItem('totalTimeInSeconds2');
-        if (totalTimeInSeconds2 !== null) {
-            totalTimeInSeconds2 = Number(totalTimeInSeconds2);
-            if (y) {
-                y.textContent = "Time taken: " + totalTimeInSeconds2 + " seconds";
-            }
+    window.location.href = 'endCS.html'
+}
+window.onload = function () {
+    var y = document.getElementById("timeTaken2");
+    var z = document.getElementById("score");
+    var totalTimeInSecondsPorts = localStorage.getItem('totalTimeInSecondsPorts');
 
-            if (z && totalTimeInSeconds2 > 1 && totalTimeInSeconds2 < 20) {
+    if (totalTimeInSecondsPorts !== null) {
+        totalTimeInSecondsPorts = parseFloat(totalTimeInSecondsPorts);
+        if (y) {
+            y.textContent = "Time taken: " + totalTimeInSecondsPorts.toFixed(1) + " seconds";
+        }
+
+        if (z) {
+            if (totalTimeInSecondsPorts <= 50) {
                 z.textContent = "Score: ★★★";
-            }
-            if (z && totalTimeInSeconds2 >= 20 && totalTimeInSeconds2 < 30) {
+            } else if (totalTimeInSecondsPorts <= 80) {
                 z.textContent = "Score: ★★☆";
-            }
-            if (z && totalTimeInSeconds2 >= 30 && totalTimeInSeconds2 < 45) {
+            } else {
                 z.textContent = "Score: ★☆☆";
             }
-        } else {
-            if (y) {
-                y.textContent = "Time taken: Not available";
-            }
         }
-    };
+    } else {
+        if (y) {
+            y.textContent = "Time taken: Not available";
+        }
+    }
+};
 /*****************************
  *  QUIT BUTTON
  *****************************/
 function quitToMainMenu() {
-  window.location.href ="LevelSelect.html";
+    window.location.href = "LevelSelect.html";
 }
-    
+
 
 
