@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Networks Level</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -204,6 +205,11 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .game-container video.active {
       opacity: 0.5;
     }
 
@@ -1163,8 +1169,11 @@
 
   <!-- GAME CONTAINER -->
   <div class="game-container">
-    <video id="bg-video" autoplay loop muted playsinline>
-      <source src="assets/Netv2.mp4" type="video/mp4">
+    <video id="bg-video-kaos" class="active" autoplay loop muted playsinline>
+      <source src="assets/NetKBG.mp4" type="video/mp4">
+    </video>
+    <video id="bg-video-simon" autoplay loop muted playsinline>
+      <source src="assets/NetSBG.mp4" type="video/mp4">
     </video>
 
     <!-- POV INDICATOR -->
@@ -1477,15 +1486,17 @@
         povIndicator.style.top = '60px';
       }
 
-      // Update video source
-      var video = document.getElementById('bg-video');
-      var videoSource = video.querySelector('source');
+      // Update video visibility
+      var videoKaos = document.getElementById('bg-video-kaos');
+      var videoSimon = document.getElementById('bg-video-simon');
+
       if (pageNum <= 2) {
-        videoSource.src = 'assets/Netv2.mp4';
+        videoKaos.classList.add('active');
+        videoSimon.classList.remove('active');
       } else {
-        videoSource.src = 'assets/Netsv2.mp4';
+        videoKaos.classList.remove('active');
+        videoSimon.classList.add('active');
       }
-      video.load();
 
       // Trigger page-specific actions
       if (pageNum === 2) {
