@@ -236,14 +236,12 @@
 
   <script>
     function startGame() {
-      const unlockSound = new Audio("assets/silence.mp3");
-      unlockSound.play().then(() => {
-        localStorage.setItem("audioUnlocked", "true");
+      const gameOverSound = new Audio("assets/27.wav");
+      localStorage.setItem("audioUnlocked", "true");
+      gameOverSound.play().catch(() => { });
+      setTimeout(() => {
         window.location.href = 'MainMenu.html';
-      }).catch(() => {
-        localStorage.setItem("audioUnlocked", "true");
-        window.location.href = 'MainMenu.html';
-      });
+      }, 600);
     }
 
     // --- Particle System ---

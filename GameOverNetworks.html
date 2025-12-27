@@ -30,6 +30,10 @@
         // Background Music
         let bgMusic = null;
         if (localStorage.getItem("audioUnlocked") === "true") {
+            const introSFX = new Audio("assets/cyber-punk-95771-(GameOver).mp3");
+            introSFX.volume = 0.5;
+            introSFX.play().catch(() => { });
+
             bgMusic = new Audio("assets/00_Six Two Remastered.wav");
             bgMusic.loop = true;
             bgMusic.volume = 0.05;

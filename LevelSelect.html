@@ -398,12 +398,12 @@
     let bgMusic = null;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
-      bgMusic = new Audio("assets/lastarea.wav");
+      bgMusic = new Audio("assets/AntiMatterMagic.ogg");
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
       bgMusic.preload = "auto";
       bgMusic.addEventListener("loadedmetadata", () => {
-        bgMusic.currentTime = 0; // Default start time
+        bgMusic.currentTime = 6; // Default start time
         bgMusic.play().catch(() => { });
       });
     }

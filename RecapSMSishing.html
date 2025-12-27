@@ -44,6 +44,10 @@
     let bgMusic = null;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
+      const introSFX = new Audio("assets/success-48018-(right).mp3");
+      introSFX.volume = 0.5;
+      introSFX.play().catch(() => { });
+
       bgMusic = new Audio("assets/Stars.mp3"); // Recap theme
       bgMusic.loop = true;
       bgMusic.volume = 0.05;

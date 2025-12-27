@@ -588,6 +588,74 @@
 
       /* Stack vertically on small screens */
     }
+
+    /* Music Toggle */
+    .music-control {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--primary-neon);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #333;
+      transition: .4s;
+      border: 1px solid var(--primary-neon);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 3px;
+      background-color: var(--primary-neon);
+      transition: .4s;
+      box-shadow: 0 0 10px var(--primary-neon);
+    }
+
+    input:checked+.slider {
+      background-color: rgba(57, 255, 20, 0.2);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(24px);
+    }
+
+    .slider.round {
+      border-radius: 24px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -725,6 +793,14 @@
           </g>
         </svg>
       </button>
+
+      <div class="music-control">
+        <span>Stop Music</span>
+        <label class="switch">
+          <input type="checkbox" id="musicToggle" onchange="toggleMusic()">
+          <span class="slider round"></span>
+        </label>
+      </div>
     </div>
   </div>
 
@@ -764,7 +840,9 @@
       bgMusic.preload = "auto";
       bgMusic.addEventListener("loadedmetadata", () => {
         bgMusic.currentTime = 40; // Default start time
-        bgMusic.play().catch(() => { });
+        if (localStorage.getItem("isMuted") !== "true") {
+          bgMusic.play().catch(() => { });
+        }
       });
     }
 
@@ -804,12 +882,32 @@
       document.getElementById("hintBox").classList.toggle("visible");
     }
 
+    function toggleMusic() {
+      const isStopped = document.getElementById("musicToggle").checked;
+      localStorage.setItem("isMuted", isStopped);
+      if (bgMusic) {
+        if (isStopped) {
+          bgMusic.pause();
+        } else {
+          // Only play if the game is NOT currently paused
+          if (!document.getElementById("pause-overlay").classList.contains("active")) {
+            bgMusic.play().catch(() => { });
+          }
+        }
+      }
+    }
+
     function Pause() {
       const overlay = document.getElementById("pause-overlay");
+
       if (!overlay.classList.contains("active")) {
         playSFX(SFX.pause);
         overlay.classList.add("active");
         stopTimer();
+        if (bgMusic) bgMusic.pause();
+
+        // Sync toggle
+        document.getElementById("musicToggle").checked = localStorage.getItem("isMuted") === "true";
       } else {
         resume();
       }
@@ -819,6 +917,9 @@
       playSFX(SFX.unpause);
       document.getElementById("pause-overlay").classList.remove("active");
       startTimer();
+      if (bgMusic && localStorage.getItem("isMuted") !== "true") {
+        bgMusic.play().catch(() => { });
+      }
     }
 
     function quitToMainMenu() {
