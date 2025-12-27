@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VISHING</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -515,7 +516,7 @@
 
   <div class="game-container">
     <video autoplay loop muted playsinline>
-      <source src="assets/Ph3.mp4" type="video/mp4">
+      <source src="assets/VishBG.mp4" type="video/mp4">
     </video>
 
     <div class="center-box">
@@ -607,7 +608,10 @@
       bgMusic.loop = true;
       bgMusic.volume = NORMAL_VOLUME;
       bgMusic.preload = "auto";
-      bgMusic.play().catch(() => { });
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 0; // Default start time
+        bgMusic.play().catch(() => { });
+      });
     }
 
     // Duck music when voice clips play
@@ -710,8 +714,10 @@
         return;
       }
 
-      // Fake is the correct choice (Identify AI Voice)
-      if (selectedOption === 'fake') {
+      // 45-second clip (labeled 'fake' in code) should be the correct answer
+      // But user says: "picking the real one and it displays its correct (the fake one)"
+      // So I will swap the target.
+      if (selectedOption === 'real') {
         playSFX(SFX.correct);
         stopTimer();
         msg.className = "result-message correct";

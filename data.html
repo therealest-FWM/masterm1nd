@@ -1,616 +1,722 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<title>Password level 1</title>
-<style>
-  body, html {
-  height: 100%;
-  margin: 0;
-  font-family: 'Courier New', Courier, monospace;
-  color: #0F0; /* Green text */
-  background: #000; /* Black background */
-}
-.bg {
-  /* The image used */
-  background-image: url(assets/Background1.jpg);
-  opacity: 0.5;
-  /* Full height */
-  height: 100%;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>Password level 1</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      color: #0F0;
+      /* Green text */
+      background: #000;
+      /* Black background */
+    }
 
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
+    .bg {
+      /* The image used */
+      background-image: url(assets/Background1.jpg);
+      opacity: 0.5;
+      /* Full height */
+      height: 100%;
 
-
-.top-bar .logo {
-  font-weight: bold;
-  font-size: 150%;
-}
-.top-bar .lives-remaining {
-  flex-grow: 1; /* Makes it take up the available space */
-  text-align: center;
-  font-family: 'Orbitron', sans-serif;
-}
-
-/* top bar buttons animation */
-.top-bar .control-buttons button {
-  --color: #00A97F;
-  --color2: rgb(10, 25, 30);
-  padding: 0.8em 1.75em;
-  background-color: transparent;
-  border-radius: 6px;
-  border: .3px solid var(--color);
-  transition: .5s;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 1;
-  font-weight: 300;
-  font-size: 17px;
-  font-family: 'Orbitron', sans-serif;
-  text-transform: uppercase;
-  color: var(--color);
-  background: none;
-  border: none;
-  color: #0F0; /* Green text */
-  margin: 0 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 16px;
- }
- 
- .top-bar .control-buttons button::after, .top-bar .control-buttons button::before {
-  content: '';
-  display: block;
-  height: 100%;
-  width: 100%;
-  transform: skew(90deg) translate(-50%, -50%);
-  position: absolute;
-  inset: 50%;
-  left: 25%;
-  z-index: -1;
-  transition: .5s ease-out;
-  background-color: var(--color);
- }
- 
- .top-bar .control-buttons button::before {
-  top: -50%;
-  left: -25%;
-  transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
- }
- 
- .top-bar .control-buttons button:hover::before {
-  transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
- }
- 
- .top-bar .control-buttons button:hover::after {
-  transform: skew(45deg) translate(-50%, -50%);
- }
- 
- .top-bar .control-buttons button:hover {
-  color: var(--color2);
- }
- 
- .top-bar .control-buttons button:active {
-  filter: brightness(.7);
-  transform: scale(.98);
- }
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #272727; /* Black background */
-  color: #0F0; /* Green text */
-  font-family: 'Orbitron', sans-serif;
-}
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
 
 
-/* top loading animation */
-.loader {
-    width: 28px;
-    aspect-ratio: 1.154;
-    position: relative;
-    background: conic-gradient(from 120deg at 50% 64%,#0000, #25b043 1deg 120deg,#0000 121deg);
-    animation: l27-0 1.5s infinite cubic-bezier(0.3,1,0,1);
-  }
-  .loader:before,
-  .loader:after {
-    content:'';
-    position: absolute;
-    inset:0;
-    background:inherit;
-    transform-origin: 50% 66%;
-    animation: l27-1 1.5s infinite;
-  }
-  .loader:after {
-    --s:-1;
-  }
-  @keyframes l27-0 {
-     0%,30%      {transform: rotate(0)}
-     70%         {transform: rotate(120deg)}
-     70.01%,100% {transform: rotate(360deg)}
-  }
-  @keyframes l27-1 {
-     0%      {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
-     30%,70% {transform: rotate(calc(var(--s,1)*120deg)) translate(calc(var(--s,1)*-5px),10px)}
-     100%    {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
-  }
+    .top-bar .logo {
+      font-weight: bold;
+      font-size: 150%;
+    }
+
+    .top-bar .lives-remaining {
+      flex-grow: 1;
+      /* Makes it take up the available space */
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* top bar buttons animation */
+    .top-bar .control-buttons button {
+      --color: #00A97F;
+      --color2: rgb(10, 25, 30);
+      padding: 0.8em 1.75em;
+      background-color: transparent;
+      border-radius: 6px;
+      border: .3px solid var(--color);
+      transition: .5s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      z-index: 1;
+      font-weight: 300;
+      font-size: 17px;
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      color: var(--color);
+      background: none;
+      border: none;
+      color: #0F0;
+      /* Green text */
+      margin: 0 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .top-bar .control-buttons button::after,
+    .top-bar .control-buttons button::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      transform: skew(90deg) translate(-50%, -50%);
+      position: absolute;
+      inset: 50%;
+      left: 25%;
+      z-index: -1;
+      transition: .5s ease-out;
+      background-color: var(--color);
+    }
+
+    .top-bar .control-buttons button::before {
+      top: -50%;
+      left: -25%;
+      transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+    }
+
+    .top-bar .control-buttons button:hover::before {
+      transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
+    }
+
+    .top-bar .control-buttons button:hover::after {
+      transform: skew(45deg) translate(-50%, -50%);
+    }
+
+    .top-bar .control-buttons button:hover {
+      color: var(--color2);
+    }
+
+    .top-bar .control-buttons button:active {
+      filter: brightness(.7);
+      transform: scale(.98);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #272727;
+      /* Black background */
+      color: #0F0;
+      /* Green text */
+      font-family: 'Orbitron', sans-serif;
+    }
 
 
+    /* top loading animation */
+    .loader {
+      width: 28px;
+      aspect-ratio: 1.154;
+      position: relative;
+      background: conic-gradient(from 120deg at 50% 64%, #0000, #25b043 1deg 120deg, #0000 121deg);
+      animation: l27-0 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+    }
 
+    .loader:before,
+    .loader:after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      transform-origin: 50% 66%;
+      animation: l27-1 1.5s infinite;
+    }
 
-/* input design codes below */
+    .loader:after {
+      --s: -1;
+    }
 
-  .input {
-    max-width: 190%;
-    border: none;
-    outline: none;
-    background: none;
-    font-size: 18px;
-    color: #222;
-    padding: 15px 5px 10px 20px;
-    box-shadow: inset 4px 4px 4px rgba(15, 15, 15, 0.315),4px 4px 4px rgba(28, 28, 28, 0.13);
-    border-radius: 25px;
-    background-clip: padding-box;
-  }
-  
-  .input:focus {
-    padding-bottom: 10px;
-  }
-  
-  .input::placeholder {
-    color: #222;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    font-size: 19px;
-    font-weight: 700;
-    letter-spacing: .3px;
-  }
-  
-  .input:focus::placeholder {
-    color: #999;
-  }
-  
+    @keyframes l27-0 {
 
-#passwordInput{
-  color: green;
-  font-weight: bold; 
-}
+      0%,
+      30% {
+        transform: rotate(0)
+      }
 
+      70% {
+        transform: rotate(120deg)
+      }
 
-  .gradient {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    border-radius: 0.6em;
-    margin-top: -0.25em;
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0.3)
-    );
-  }
-  
-  .label {
-    position: relative;
-    top: -1px;
-  }
-  
-  .transition {
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    transition-duration: 500ms;
-    background-color: rgba(16, 185, 129, 0.6);
-    border-radius: 9999px;
-    width: 0;
-    height: 0;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  button:hover .transition {
-    width: 14em;
-    height: 14em;
-  }
-  
-  button:active {
-    transform: scale(0.97);
-  }
-  
-  
-  .label {
-    position: relative;
-    top: -1px;
-  }
-  
-  .transition {
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    transition-duration: 500ms;
-    background-color: rgba(16, 185, 129, 0.6);
-    border-radius: 9999px;
-    width: 0;
-    height: 0;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  button:hover .transition {
-    width: 10em;
-    height: 10em;
-  }
-  
-  button:active {
-    transform: scale(0.97);
-  }
+      70.01%,
+      100% {
+        transform: rotate(360deg)
+      }
+    }
 
-.center-box h2 {
-  color: green; 
-}
+    @keyframes l27-1 {
+      0% {
+        transform: rotate(calc(var(--s, 1)*120deg)) translate(0)
+      }
 
-.hint-box {
-  position: absolute;
-  top: 80px; /* Below the top bar */
-  right: -400px; /* Start off screen */
-  width: 350px; /* Width of the hint box */
-  background: #000; /* Black background */
-  color: #0F0; /* Green text */
-  padding: 20px;
-  border: 2px solid #0F0; /* Green border */
-  border-radius: 5px;
-  transition: right 0.5s; /* Smooth transition for the slide-in effect */
-  z-index: 100; /* Ensure it's above other elements */
-  font-family: 'Orbitron', sans-serif;
-}
+      30%,
+      70% {
+        transform: rotate(calc(var(--s, 1)*120deg)) translate(calc(var(--s, 1)*-5px), 10px)
+      }
+
+      100% {
+        transform: rotate(calc(var(--s, 1)*120deg)) translate(0)
+      }
+    }
 
 
 
 
-.center-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: 80%;
-    padding: 20px;
-    border: 2px solid #813636;
-    box-sizing: border-box;
-    background: rgba(108, 23, 14, 0.7);
-    color: rgb(252, 253, 252);
-    text-align: center;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    /* input design codes below */
 
-  .laptop {
-    width: 75%; /* Adjust based on your preference */
-    height: 85%; /* Adjust based on your preference */
-    background: #000000; /* Laptop body color */
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    box-shadow: 0px 0px 10px #000;
-  }
+    .input {
+      max-width: 190%;
+      border: none;
+      outline: none;
+      background: none;
+      font-size: 18px;
+      color: #222;
+      padding: 15px 5px 10px 20px;
+      box-shadow: inset 4px 4px 4px rgba(15, 15, 15, 0.315), 4px 4px 4px rgba(28, 28, 28, 0.13);
+      border-radius: 25px;
+      background-clip: padding-box;
+    }
 
-  
+    .input:focus {
+      padding-bottom: 10px;
+    }
 
-  .laptop-screen {
-    width: 90%; /* Adjust based on your preference */
-    height: 80%; /* Adjust based on your preference */
-    background: #323232; /* Screen color */
-    border-radius: 10px;
-    box-shadow: inset 0px 0px 10px #AAA;
-    /* Placeholder for actual content inside the screen */
-  }
+    .input::placeholder {
+      color: #222;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
 
-  .hacking-container {
-  position: absolute;
-  top: 10%;
-  left: 5%;
-  right: 5%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 20px;
-  align-items: center;
-}
+    .input:focus::placeholder {
+      color: #999;
+    }
 
-.hacking-title {
-  grid-column: 1 / -1; /* Span across all columns */
-  color: #FF4136;
-  text-align: center;
-  font-size: 2em;
-  margin-bottom: 20px;
-}
 
-.hacking-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    #passwordInput {
+      color: green;
+      font-weight: bold;
+    }
 
-.hacking-text {
-  color: #FFF;
-  margin-bottom: 5px;
-}
 
-.loading-bar {
-  width: 80%;
-  background: #00ff40;
-  padding: 3px;
-  border-radius: 5px;
-}
+    .gradient {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      border-radius: 0.6em;
+      margin-top: -0.25em;
+      background-image: linear-gradient(rgba(0, 0, 0, 0),
+          rgba(0, 0, 0, 0),
+          rgba(0, 0, 0, 0.3));
+    }
 
-.loading-progress {
-  width: 0;
-  height: 20px;
-  background: linear-gradient(to right, #777, #ddd);
-  border-radius: 3px;
-  transition: width 2s ease;
-}
+    .label {
+      position: relative;
+      top: -1px;
+    }
 
-.hacking-status p {
-      margin: 4%x 0; /* Adjust the margin as needed */
+    .transition {
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      transition-duration: 500ms;
+      background-color: rgba(16, 185, 129, 0.6);
+      border-radius: 9999px;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    button:hover .transition {
+      width: 14em;
+      height: 14em;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+
+    .label {
+      position: relative;
+      top: -1px;
+    }
+
+    .transition {
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      transition-duration: 500ms;
+      background-color: rgba(16, 185, 129, 0.6);
+      border-radius: 9999px;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    button:hover .transition {
+      width: 10em;
+      height: 10em;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .center-box h2 {
+      color: green;
+    }
+
+    .hint-box {
+      position: absolute;
+      top: 80px;
+      /* Below the top bar */
+      right: -400px;
+      /* Start off screen */
+      width: 350px;
+      /* Width of the hint box */
+      background: #000;
+      /* Black background */
+      color: #0F0;
+      /* Green text */
+      padding: 20px;
+      border: 2px solid #0F0;
+      /* Green border */
+      border-radius: 5px;
+      transition: right 0.5s;
+      /* Smooth transition for the slide-in effect */
+      z-index: 100;
+      /* Ensure it's above other elements */
+      font-family: 'Orbitron', sans-serif;
+    }
+
+
+
+
+    .center-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      height: 80%;
+      padding: 20px;
+      border: 2px solid #813636;
+      box-sizing: border-box;
+      background: rgba(108, 23, 14, 0.7);
+      color: rgb(252, 253, 252);
+      text-align: center;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .laptop {
+      width: 75%;
+      /* Adjust based on your preference */
+      height: 85%;
+      /* Adjust based on your preference */
+      background: #000000;
+      /* Laptop body color */
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0px 0px 10px #000;
+    }
+
+
+
+    .laptop-screen {
+      width: 90%;
+      /* Adjust based on your preference */
+      height: 80%;
+      /* Adjust based on your preference */
+      background: #323232;
+      /* Screen color */
+      border-radius: 10px;
+      box-shadow: inset 0px 0px 10px #AAA;
+      /* Placeholder for actual content inside the screen */
+    }
+
+    .hacking-container {
+      position: absolute;
+      top: 10%;
+      left: 5%;
+      right: 5%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px;
+      align-items: center;
+    }
+
+    .hacking-title {
+      grid-column: 1 / -1;
+      /* Span across all columns */
+      color: #FF4136;
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .hacking-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hacking-text {
+      color: #FFF;
+      margin-bottom: 5px;
+    }
+
+    .loading-bar {
+      width: 80%;
+      background: #00ff40;
+      padding: 3px;
+      border-radius: 5px;
+    }
+
+    .loading-progress {
+      width: 0;
+      height: 20px;
+      background: linear-gradient(to right, #777, #ddd);
+      border-radius: 3px;
+      transition: width 2s ease;
+    }
+
+    .hacking-status p {
+      margin: 4%x 0;
+      /* Adjust the margin as needed */
       font-size: larger;
-      font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-    
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
+
     }
 
     .device-hacked {
-      font-size: 1em; /* Adjust size as needed */
+      font-size: 1em;
+      /* Adjust size as needed */
       color: red;
     }
 
-    .device-name, .device-name-value {
-      font-size: 0.8em; /* Adjust size as needed */
+    .device-name,
+    .device-name-value {
+      font-size: 0.8em;
+      /* Adjust size as needed */
       color: white;
     }
 
     .hacking-completion {
-      margin-top: 20px; /* Adjust spacing as needed */
+      margin-top: 20px;
+      /* Adjust spacing as needed */
     }
 
     .data-extracted {
-      font-size: 1.5em; /* Make 'ALL Data Extracted' larger than the rest */
-      color: #0F0; /* Match the bright green color from the photo */
-      font-weight: bold; /* Add emphasis */
-      font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-    
+      font-size: 1.5em;
+      /* Make 'ALL Data Extracted' larger than the rest */
+      color: #0F0;
+      /* Match the bright green color from the photo */
+      font-weight: bold;
+      /* Add emphasis */
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
+
     }
 
     .confirm-button-container {
       position: absolute;
-      bottom: 20%; /* Adjust distance from bottom as needed */
-      width: 100%; /* Full width to center the button */
-      text-align: center; /* Center the button */
-      font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
+      bottom: 20%;
+      /* Adjust distance from bottom as needed */
+      width: 100%;
+      /* Full width to center the button */
+      text-align: center;
+      /* Center the button */
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
     }
 
     .confirm-button {
       padding: 10px 20px;
       position: absolute;
-      font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
       bottom: 15%;
       left: 40%;
-      margin: 0 auto; /* Centers the button */
+      margin: 0 auto;
+      /* Centers the button */
       font-size: 18px;
-      color: #790802; /* Green text */
-      background-color: #000000; /* Black background */
-      border: 2px solid #32100e; /* Green border */
+      color: #790802;
+      /* Green text */
+      background-color: #000000;
+      /* Black background */
+      border: 2px solid #32100e;
+      /* Green border */
       border-radius: 5px;
       outline: none;
       cursor: pointer;
-      box-shadow: 0 0 15px #932a24, 0 0 25px #a51d15; /* Neon glow effect */
+      box-shadow: 0 0 15px #932a24, 0 0 25px #a51d15;
+      /* Neon glow effect */
       text-transform: uppercase;
-      transition: transform 0.1s ease, box-shadow 0.1s ease; /* Transition for button press and hover glow */
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      /* Transition for button press and hover glow */
     }
-  
+
     .confirm-button:hover {
-      box-shadow: 0 0 25px #481411, 0 0 40px #9a1c15; /* Increased glow on hover */
+      box-shadow: 0 0 25px #481411, 0 0 40px #9a1c15;
+      /* Increased glow on hover */
     }
-  
+
     .confirm-button:active {
-      box-shadow: 0 0 5px #c6463f, 0 0 10px #790802; /* Reduced glow on press */
+      box-shadow: 0 0 5px #c6463f, 0 0 10px #790802;
+      /* Reduced glow on press */
     }
-.pause-menu {
-  position: fixed;
-  left: 38%;
-  right: 50px;
-  top: 200px;
-  padding: 70px 60px;
-  background: #000; /* Black background */
-  border: 2px solid #0F0; /* Green border*/ 
-  color: #0F0; /* Green text */
-  width: 380px; /* Adjust width as needed */
-  display: none;
-}
-.pause-menu h1 {
-  position: fixed;
-  bottom: 55%;
-  left: 42%;
-  margin-bottom: 3%; /* Space between title and buttons*/ 
-}
-.pause-menu button {
-  background-color: #0F0; /* Green background*/ 
-  color: #000; /* Black text */
-  border: none;
-  padding: 20px 20px;
-  margin: 40px 0; /* Space between buttons */
-  display: block; /* Each button on a new line */
-  width: 100%; /* Full width of the parent */
-  box-sizing: border-box; /* Padding included in width */
-  cursor: pointer;
-  border-radius: 5px;
-}
 
-/* pause menu button animation */
+    .pause-menu {
+      position: fixed;
+      left: 38%;
+      right: 50px;
+      top: 200px;
+      padding: 70px 60px;
+      background: #000;
+      /* Black background */
+      border: 2px solid #0F0;
+      /* Green border*/
+      color: #0F0;
+      /* Green text */
+      width: 380px;
+      /* Adjust width as needed */
+      display: none;
+    }
 
-.cta {
-  display: flex;
-  padding: 11px 33px;
-  text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-  font-size: 130%;
-  color: white;
-  background: #6225E6;
-  transition: 1s;
-  box-shadow: 6px 6px 0 black;
-  transform: skewX(-15deg);
-  border: none;
-}
+    .pause-menu h1 {
+      position: fixed;
+      bottom: 55%;
+      left: 42%;
+      margin-bottom: 3%;
+      /* Space between title and buttons*/
+    }
 
-.cta:focus {
-  outline: none;
-}
+    .pause-menu button {
+      background-color: #0F0;
+      /* Green background*/
+      color: #000;
+      /* Black text */
+      border: none;
+      padding: 20px 20px;
+      margin: 40px 0;
+      /* Space between buttons */
+      display: block;
+      /* Each button on a new line */
+      width: 100%;
+      /* Full width of the parent */
+      box-sizing: border-box;
+      /* Padding included in width */
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-.cta:hover {
-  transition: 0.5s;
-  box-shadow: 10px 10px 0 #FBC638;
-}
+    /* pause menu button animation */
 
-.cta .second {
-  transition: 0.5s;
-  margin-right: 0px;
-}
+    .cta {
+      display: flex;
+      padding: 11px 33px;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 130%;
+      color: white;
+      background: #6225E6;
+      transition: 1s;
+      box-shadow: 6px 6px 0 black;
+      transform: skewX(-15deg);
+      border: none;
+    }
 
-.cta:hover  .second {
-  transition: 0.5s;
-  margin-right: 45px;
-}
+    .cta:focus {
+      outline: none;
+    }
 
-.span {
-  transform: skewX(15deg)
-}
+    .cta:hover {
+      transition: 0.5s;
+      box-shadow: 10px 10px 0 #FBC638;
+    }
 
-.second {
-  width: 20px;
-  margin-left: 30px;
-  position: relative;
-  top: 12%;
-}
+    .cta .second {
+      transition: 0.5s;
+      margin-right: 0px;
+    }
 
-.one {
-  transition: 0.4s;
-  transform: translateX(-60%);
-}
+    .cta:hover .second {
+      transition: 0.5s;
+      margin-right: 45px;
+    }
 
-.two {
-  transition: 0.5s;
-  transform: translateX(-30%);
-}
+    .span {
+      transform: skewX(15deg)
+    }
 
-.cta:hover .three {
-  animation: color_anim 1s infinite 0.2s;
-}
+    .second {
+      width: 20px;
+      margin-left: 30px;
+      position: relative;
+      top: 12%;
+    }
 
-.cta:hover .one {
-  transform: translateX(0%);
-  animation: color_anim 1s infinite 0.6s;
-}
+    .one {
+      transition: 0.4s;
+      transform: translateX(-60%);
+    }
 
-.cta:hover .two {
-  transform: translateX(0%);
-  animation: color_anim 1s infinite 0.4s;
-}
+    .two {
+      transition: 0.5s;
+      transform: translateX(-30%);
+    }
 
-@keyframes color_anim {
-  0% {
-    fill: white;
-  }
+    .cta:hover .three {
+      animation: color_anim 1s infinite 0.2s;
+    }
 
-  50% {
-    fill: #FBC638;
-  }
+    .cta:hover .one {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.6s;
+    }
 
-  100% {
-    fill: white;
-  }
-}
+    .cta:hover .two {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.4s;
+    }
 
-#passwordInput {
-  font-weight:bold;
-  text-align: center;
-}
-/* Progress bar container */
-.progress-container {
-  display: flex;
-  align-items: center;
-  height: 20px; /* Height of the progress bar */
-  width: 30%; /* Half the size of the original */
-  margin-left: 20px; /* Margin left of the logo */
-  margin-right: 20px;
-}
+    @keyframes color_anim {
+      0% {
+        fill: white;
+      }
 
-/* Individual steps in the progress bar */
-.progress-step {
-  flex: 1; /* Distribute space evenly */
-  text-align: center;
-  color: white;
-  position: relative; /* For pseudo-elements positioning */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8em; /* Smaller font size for the text */
-}
+      50% {
+        fill: #FBC638;
+      }
 
-/* Pseudo-element for the step connecting lines */
-.progress-step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 0;
-  height: 2%; /* Line thickness */
-  width: 100%; /* Line width */
-  background: white; /* Line color */
-  z-index: -1;
-  transform: translateX(50%);
-}
+      100% {
+        fill: white;
+      }
+    }
 
-/* Colors for each step based on the design */
-.step-1 { background: linear-gradient(to right, #00327C, #0958cf); }
-.step-2 { background: linear-gradient(to right, #fff,#fff); }
-.step-3 { background: linear-gradient(to right, #fff,#fff); border-radius: 0 6px 6px 0; }
+    #passwordInput {
+      font-weight: bold;
+      text-align: center;
+    }
 
-</style>
-<script src="PasswordL1.js"></script>
+    /* Progress bar container */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      /* Height of the progress bar */
+      width: 30%;
+      /* Half the size of the original */
+      margin-left: 20px;
+      /* Margin left of the logo */
+      margin-right: 20px;
+    }
+
+    /* Individual steps in the progress bar */
+    .progress-step {
+      flex: 1;
+      /* Distribute space evenly */
+      text-align: center;
+      color: white;
+      position: relative;
+      /* For pseudo-elements positioning */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      /* Smaller font size for the text */
+    }
+
+    /* Pseudo-element for the step connecting lines */
+    .progress-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      height: 2%;
+      /* Line thickness */
+      width: 100%;
+      /* Line width */
+      background: white;
+      /* Line color */
+      z-index: -1;
+      transform: translateX(50%);
+    }
+
+    /* Colors for each step based on the design */
+    .step-1 {
+      background: linear-gradient(to right, #00327C, #0958cf);
+    }
+
+    .step-2 {
+      background: linear-gradient(to right, #fff, #fff);
+    }
+
+    .step-3 {
+      background: linear-gradient(to right, #fff, #fff);
+      border-radius: 0 6px 6px 0;
+    }
+  </style>
+  <script src="PasswordL1.js"></script>
 
 </head>
+
 <body>
-<div class="top-bar">
-  <div class="logo">MASTERM1ND</div>
-  <div class="progress-container">
-    <div class="progress-step step-1">Networks</div>
- </div>
-  
-  <div class="loader"></div>
-  <!--<div class="lives-remaining">Lives Remaining: 3</div>-->
-  <div class="control-buttons">
-    <button class="timer">TIMER</button>
-    <button onclick="Pause()">PAUSE</button>
-    <button onclick="showHint()">HINT</button>
-    <button onclick="heelo()">QUIT</button>
-  </div>
-  <div class="overlay"></div>
-  <div class="center-box">
-    <!-- Your existing HTML structure -->
-    <div class="laptop">
+  <div class="top-bar">
+    <div class="logo">MASTERM1ND</div>
+    <div class="progress-container">
+      <div class="progress-step step-1">Networks</div>
+    </div>
+
+    <div class="loader"></div>
+    <!--<div class="lives-remaining">Lives Remaining: 3</div>-->
+    <div class="control-buttons">
+      <button class="timer">TIMER</button>
+      <button onclick="Pause()">PAUSE</button>
+      <button onclick="showHint()">HINT</button>
+      <button onclick="heelo()">QUIT</button>
+    </div>
+    <div class="overlay"></div>
+    <div class="center-box">
+      <!-- Your existing HTML structure -->
+      <div class="laptop">
         <div class="laptop-screen">
           <!-- New content for laptop simulation -->
           <div class="hacking-status-container">
@@ -628,21 +734,21 @@
           <button class="confirm-button" id="confirmButton">Confirm</button>
         </div>
       </div>
-  </div>
-  
-  <script src="networks.js"></script>
-  <script>
-    // Timer continuation - resume from localStorage and keep counting
-    var timer10;
-    var totalMilliseconds10 = 0;
+    </div>
 
-    // Load saved timer state from localStorage
-    var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
-    if (savedMilliseconds !== null) {
+    <script src="networks.js"></script>
+    <script>
+      // Timer continuation - resume from localStorage and keep counting
+      var timer10;
+      var totalMilliseconds10 = 0;
+
+      // Load saved timer state from localStorage
+      var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
+      if (savedMilliseconds !== null) {
         totalMilliseconds10 = Number(savedMilliseconds);
-    }
+      }
 
-    function formatTime10(milliseconds) {
+      function formatTime10(milliseconds) {
         var minutes = Math.floor(milliseconds / (60 * 1000));
         var seconds = Math.floor((milliseconds % (60 * 1000)) / 1000);
         var remainingMilliseconds = milliseconds % 1000;
@@ -650,46 +756,47 @@
         seconds = seconds < 10 ? "0" + seconds : seconds;
         remainingMilliseconds = remainingMilliseconds < 100 ? (remainingMilliseconds < 10 ? "00" + remainingMilliseconds : "0" + remainingMilliseconds) : remainingMilliseconds;
         return minutes + ":" + seconds + ":" + remainingMilliseconds;
-    }
+      }
 
-    function startTimer10() {
+      function startTimer10() {
         if (timer10) clearInterval(timer10);
         timer10 = setInterval(function () {
-            totalMilliseconds10 += 100;
-            // Save timer state to localStorage every 100ms
-            localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
-            // Update timer display on page
-            var timerDisplay10 = document.querySelector(".top-bar .timer");
-            if (timerDisplay10) {
-                timerDisplay10.textContent = formatTime10(totalMilliseconds10);
-            }
+          totalMilliseconds10 += 100;
+          // Save timer state to localStorage every 100ms
+          localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+          // Update timer display on page
+          var timerDisplay10 = document.querySelector(".top-bar .timer");
+          if (timerDisplay10) {
+            timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+          }
         }, 100);
-    }
+      }
 
-    function stopTimer10() {
+      function stopTimer10() {
         if (timer10) {
-            clearInterval(timer10);
-            localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+          clearInterval(timer10);
+          localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
         }
-    }
+      }
 
-    // Start timer when page loads
-    window.onload = function() {
+      // Start timer when page loads
+      window.onload = function () {
         // Display initial timer value
         var timerDisplay10 = document.querySelector(".top-bar .timer");
         if (timerDisplay10) {
-            timerDisplay10.textContent = formatTime10(totalMilliseconds10);
+          timerDisplay10.textContent = formatTime10(totalMilliseconds10);
         }
         startTimer10();
-    };
+      };
 
-    // Add an event listener to the confirm button
-    document.getElementById('confirmButton').addEventListener('click', function() {
-      // Save timer before redirecting to Netrecap (where it will be stopped and converted to seconds)
-      localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
-      window.location.href = 'Netrecap.html';
-    });
-  </script>
+      // Add an event listener to the confirm button
+      document.getElementById('confirmButton').addEventListener('click', function () {
+        // Save timer before redirecting to Netrecap (where it will be stopped and converted to seconds)
+        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
+        window.location.href = 'Netrecap.html';
+      });
+    </script>
 
 </body>
+
 </html>

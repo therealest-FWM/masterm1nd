@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Networks Level</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -204,6 +205,11 @@
       height: 100%;
       object-fit: cover;
       z-index: 0;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .game-container video.active {
       opacity: 0.5;
     }
 
@@ -1163,8 +1169,11 @@
 
   <!-- GAME CONTAINER -->
   <div class="game-container">
-    <video id="bg-video" autoplay loop muted playsinline>
-      <source src="assets/Netv2.mp4" type="video/mp4">
+    <video id="bg-video-kaos" class="active" autoplay loop muted playsinline>
+      <source src="assets/NetKBG.mp4" type="video/mp4">
+    </video>
+    <video id="bg-video-simon" autoplay loop muted playsinline>
+      <source src="assets/NetSBG.mp4" type="video/mp4">
     </video>
 
     <!-- POV INDICATOR -->
@@ -1389,15 +1398,14 @@
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
       bgMusic.preload = "auto";
-      bgMusic.play().catch(() => { });
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 0; // Default start time
+        bgMusic.play().catch(() => { });
+      });
     }
-    // Timer management
+    // Timer management - starts at 0 like other levels
     var timer10;
     var totalMilliseconds10 = 0;
-    var savedMilliseconds = localStorage.getItem('totalMilliseconds10');
-    if (savedMilliseconds !== null) {
-      totalMilliseconds10 = Number(savedMilliseconds);
-    }
 
     function formatTime10(milliseconds) {
       var minutes = Math.floor(milliseconds / (60 * 1000));
@@ -1413,7 +1421,6 @@
       if (timer10) clearInterval(timer10);
       timer10 = setInterval(function () {
         totalMilliseconds10 += 100;
-        localStorage.setItem('totalMilliseconds10', totalMilliseconds10);
         var timerDisplay10 = document.querySelector(".top-bar .timer");
         if (timerDisplay10) {
           timerDisplay10.textContent = formatTime10(totalMilliseconds10);
@@ -1477,15 +1484,17 @@
         povIndicator.style.top = '60px';
       }
 
-      // Update video source
-      var video = document.getElementById('bg-video');
-      var videoSource = video.querySelector('source');
+      // Update video visibility
+      var videoKaos = document.getElementById('bg-video-kaos');
+      var videoSimon = document.getElementById('bg-video-simon');
+
       if (pageNum <= 2) {
-        videoSource.src = 'assets/Netv2.mp4';
+        videoKaos.classList.add('active');
+        videoSimon.classList.remove('active');
       } else {
-        videoSource.src = 'assets/Netsv2.mp4';
+        videoKaos.classList.remove('active');
+        videoSimon.classList.add('active');
       }
-      video.load();
 
       // Trigger page-specific actions
       if (pageNum === 2) {
@@ -1625,6 +1634,7 @@
       var timerFill = document.getElementById('mall-timer-fill');
       timerFill.style.transition = 'none';
       timerFill.style.width = '100%';
+      timerFill.offsetWidth; // Force reflow to ensure the reset is applied
       setTimeout(() => {
         timerFill.style.transition = 'width 5s linear';
         timerFill.style.width = '0%';
@@ -1696,12 +1706,29 @@
         keyElement.classList.remove('active', 'pressed');
       }
 
+      // Start 10-second timer for the WHOLE sequence
+      var timerFill = document.getElementById('qte-timer-fill');
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      timerFill.offsetWidth; // Force reflow
+      setTimeout(() => {
+        timerFill.style.transition = 'width 10s linear';
+        timerFill.style.width = '0%';
+      }, 10);
+
+      clearTimeout(qteTimer);
+      qteTimer = setTimeout(() => {
+        // Failed to press all in time
+        handleQteFail('TOO SLOW!');
+      }, 10000);
+
       nextQteStep();
     }
 
     function nextQteStep() {
       if (qteIndex >= 5) {
         // QTE Complete
+        clearTimeout(qteTimer);
         playSFX(SFX.correct);
         document.getElementById('qte-result').textContent = 'BREACH SUCCESSFUL!';
         document.getElementById('qte-result').className = 'qte-result';
@@ -1715,23 +1742,6 @@
       // Highlight current key
       document.querySelectorAll('.qte-key').forEach(k => k.classList.remove('active'));
       document.getElementById('key-' + qteIndex).classList.add('active');
-
-      // Reset timer bar
-      var timerFill = document.getElementById('qte-timer-fill');
-      timerFill.style.transition = 'none';
-      timerFill.style.width = '100%';
-
-      setTimeout(() => {
-        timerFill.style.transition = 'width 5s linear';
-        timerFill.style.width = '0%';
-      }, 10);
-
-      // Start 5-second timer
-      clearTimeout(qteTimer);
-      qteTimer = setTimeout(() => {
-        // Failed to press in time
-        handleQteFail('TOO SLOW!');
-      }, 5000);
     }
 
     function handleQteFail(reason) {

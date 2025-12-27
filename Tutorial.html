@@ -1,82 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutorial</title>
-\<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: black; /* Replace with background image if needed */
-  }
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: black;
+      /* Replace with background image if needed */
+    }
 
-  .tutorial-container {
-    color: #39FF14; /* Neon green-like color */
-    text-align: center;
-    width: 90%; /* Responsive width */
-    font-size: 2vw; /* Responsive font size */
-    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-  }
+    .tutorial-container {
+      color: #39FF14;
+      /* Neon green-like color */
+      text-align: center;
+      width: 90%;
+      /* Responsive width */
+      font-size: 2vw;
+      /* Responsive font size */
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
+    }
 
-  .header {
-    font-size: 3vw; /* Larger font size for header */
-    margin-bottom: 2%; /* Space below the header */
-    font-weight: bold; /* Bold font for the header */
-    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-  }
+    .header {
+      font-size: 3vw;
+      /* Larger font size for header */
+      margin-bottom: 2%;
+      /* Space below the header */
+      font-weight: bold;
+      /* Bold font for the header */
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
+    }
 
-  .content {
-    margin-bottom: 2%; /* Space between paragraphs */
-  }
+    .content {
+      margin-bottom: 2%;
+      /* Space between paragraphs */
+    }
 
-  .play-button {
-    font-family: 'Orbitron', sans-serif; /* Cyber-tech font */
-    position: absolute; /* Position the button at the bottom center */
-    bottom: 2%; /* Position from the bottom */
-    left: 50%; /* Start from the middle */
-    transform: translateX(-50%); /* Center the button */
-    background-color: #39FF14; /* Neon green background */
-    color: black; /* Text color */
-    padding: 1em 2em; /* Padding inside the button */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 1.5em; /* Larger text */
-    cursor: pointer; /* Pointer cursor on hover */
-    text-decoration: none; /* No underline */
-    transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
-  }
+    .play-button {
+      font-family: 'Orbitron', sans-serif;
+      /* Cyber-tech font */
+      position: absolute;
+      /* Position the button at the bottom center */
+      bottom: 2%;
+      /* Position from the bottom */
+      left: 50%;
+      /* Start from the middle */
+      transform: translateX(-50%);
+      /* Center the button */
+      background-color: #39FF14;
+      /* Neon green background */
+      color: black;
+      /* Text color */
+      padding: 1em 2em;
+      /* Padding inside the button */
+      border: none;
+      /* No border */
+      border-radius: 5px;
+      /* Rounded corners */
+      font-size: 1.5em;
+      /* Larger text */
+      cursor: pointer;
+      /* Pointer cursor on hover */
+      text-decoration: none;
+      /* No underline */
+      transition: background-color 0.3s, transform 0.3s;
+      /* Transition for hover effects */
+    }
 
-  .play-button:hover {
-    background-color: #2eb82e; /* Slightly different green on hover */
-    
-  }
+    .play-button:hover {
+      background-color: #2eb82e;
+      /* Slightly different green on hover */
 
-</style>
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="tutorial-container">
-  <div class="header">Tutorial</div>
-  <div class="content">MASTERM1ND is played using a standard mouse and keyboard.</div>
-  <div class="content">The Passwords level involves clicking on the text field and entering a password attempt then clicking "Confirm"</div>
-  <div class="content">The Phishing level involves multiple forms of mouse selections and then clicking the confirm button.</div>
-  <div class="content">The Networks level combines play methods from the first 2 levels allowing you to select options and use text fields to complete it.</div>
-  <div class="content">The Ports level allows you use the arrow keys and WASD to navigate a (VR Optional) 3D environment and also uses a text field as well.</div>
-</div>
-<button class="play-button" onclick="playV()">Play Video</button>
-<script>
-  function playV(){
-    setTimeout(function() {
-      window.location.href = 'TutorialPlayer.html';
-    }, 500)
-  }
-</script>
+  <div class="tutorial-container">
+    <div class="header">Tutorial</div>
+    <div class="content">MASTERM1ND is played using a standard mouse and keyboard.</div>
+    <div class="content">The Passwords level involves clicking on the text field and entering a password attempt then
+      clicking "Confirm"</div>
+    <div class="content">The Phishing level involves multiple forms of mouse selections and then clicking the confirm
+      button.</div>
+    <div class="content">The Networks level combines play methods from the first 2 levels allowing you to select options
+      and use text fields to complete it.</div>
+    <div class="content">The Ports level allows you use the arrow keys and WASD to navigate a (VR Optional) 3D
+      environment and also uses a text field as well.</div>
+  </div>
+  <button class="play-button" onclick="playV()">Play Video</button>
+  <script>
+    function playV() {
+      setTimeout(function () {
+        window.location.href = 'TutorialPlayer.html';
+      }, 500)
+    }
+  </script>
 </body>
+
 </html>

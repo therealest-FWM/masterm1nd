@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EMAIL PHISHING</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -523,7 +524,7 @@
 
   <div class="game-container">
     <video autoplay loop muted playsinline>
-      <source src="assets/Ph4.mp4" type="video/mp4">
+      <source src="assets/EmailBG.mp4" type="video/mp4">
     </video>
 
     <div class="center-box">
@@ -665,7 +666,10 @@
       bgMusic = new Audio("assets/04-Lufus-SpaceTime.mp3");
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
-      bgMusic.play().catch(() => { });
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 0; // Default start time
+        bgMusic.play().catch(() => { });
+      });
     }
 
     var livesRemaining = 3; // Increased to 3 per user request
