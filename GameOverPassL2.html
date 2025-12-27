@@ -4,63 +4,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <title>Game Over</title>
+  <link rel="stylesheet" href="results.css">
   <script src="./GameOver.js"></script>
-  <style>
-    body,
-    html {
-      height: 100%;
-      margin: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      /* Black background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .game-over-box {
-      width: 850px;
-      /* Same as previous .center-box */
-      padding: 200px;
-      /* Same as previous .center-box */
-      box-sizing: border-box;
-      background: rgba(0, 0, 0, 0.7);
-      /* Semi-transparent black background */
-      color: #f00;
-      /* Red text color for the game over message */
-      text-align: center;
-      border: 2px solid #f00;
-      /* Red border */
-      border-radius: 10px;
-      position: relative;
-    }
-
-    .game-over-box h1 {
-      color: #f00;
-      /* Red text color */
-      margin-bottom: 0.5em;
-    }
-
-    .game-over-box p {
-      color: #f00;
-      /* Red text color */
-      margin-bottom: 0.5em;
-    }
-  </style>
 </head>
 
-<body>
-
-  <div class="game-over-box">
+<body class="failure-bg">
+  <div class="result-card failure-theme">
     <h1>Game Over</h1>
-    <button type="button" class="btn btn-outline-danger" onclick="quitToMainMenu()">Quit</button>
-    <button type="button" id="try" onclick="tryA()" class="btn btn-outline-danger">Try Again</button>
+    <h2>Password Breach Failed</h2>
 
+    <div class="lesson-box"
+      style="border-left-color: var(--neon-red); background: linear-gradient(90deg, rgba(255,0,60,0.05) 0%, transparent 100%);">
+      <p style="color: #ffb3b3; margin: 0;">The system has detected unauthorized activity. Review your strategy and
+        attempt the breach again.</p>
+    </div>
+
+    <div class="action-buttons">
+      <button type="button" id="try" onclick="tryA()" class="cyber-btn btn-red">Try Again</button>
+      <button type="button" id="quit" onclick="Quit()" class="cyber-btn btn-red">Quit</button>
+    </div>
   </div>
+
   <script>
     /*****************************
      *  BACKGROUND MUSIC (PER PAGE)
@@ -76,16 +41,12 @@
     }
 
     function tryA() {
-      var tryV = document.getElementById("try");
-      if (tryV) {
-        window.location.href = 'PasswordL2.html';
-      }
+      // var tryV = document.getElementById("try"); // unused var removed
+      window.location.href = 'PasswordL2.html';
     }
-    /*****************************
-   *  QUIT BUTTON
-   *****************************/
-    function quitToMainMenu() {
-      window.location.href = "LevelSelect.html";
+    function Quit() {
+      // var quit = document.getElementById("quit"); // unused var removed
+      window.location.href = "LevelSelect.html"
     }
   </script>
 </body>
