@@ -4,112 +4,730 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial</title>
+  <title>MASTERM1ND - Tutorial</title>
   <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
-    body,
-    html {
+    :root {
+      --primary-neon: #39ff14;
+      --secondary-neon: #2adb11;
+      --glass-bg: rgba(0, 20, 0, 0.6);
+      --glass-border: rgba(57, 255, 20, 0.4);
+      --dark-bg: #0a0a0a;
+      --blue-primary: #3b82f6;
+      --blue-secondary: #1d4ed8;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html,
+    body {
       margin: 0;
       padding: 0;
+      width: 100%;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: black;
-      /* Replace with background image if needed */
-    }
-
-    .tutorial-container {
-      color: #39FF14;
-      /* Neon green-like color */
-      text-align: center;
-      width: 90%;
-      /* Responsive width */
-      font-size: 2vw;
-      /* Responsive font size */
+      background: var(--dark-bg);
       font-family: 'Orbitron', sans-serif;
-      /* Cyber-tech font */
+      color: var(--primary-neon);
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
+    /* Background */
+    .bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: radial-gradient(ellipse at center, rgba(0, 40, 0, 0.3) 0%, var(--dark-bg) 70%);
+    }
+
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.03) 50.5%, transparent 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    /* Main Container */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* Header */
     .header {
-      font-size: 3vw;
-      /* Larger font size for header */
-      margin-bottom: 2%;
-      /* Space below the header */
-      font-weight: bold;
-      /* Bold font for the header */
-      font-family: 'Orbitron', sans-serif;
-      /* Cyber-tech font */
+      text-align: center;
+      margin-bottom: 40px;
     }
 
-    .content {
-      margin-bottom: 2%;
-      /* Space between paragraphs */
+    .header h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow:
+        0 0 10px var(--primary-neon),
+        0 0 20px var(--primary-neon),
+        0 0 40px var(--primary-neon);
+      margin: 0;
     }
 
-    .play-button {
+    .header p {
+      color: #888;
+      font-size: clamp(12px, 1.5vw, 16px);
+      margin-top: 10px;
+      letter-spacing: 2px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--glass-bg);
+      border: 2px solid var(--secondary-neon);
+      color: var(--secondary-neon);
+      padding: 15px 40px;
       font-family: 'Orbitron', sans-serif;
-      /* Cyber-tech font */
-      position: absolute;
-      /* Position the button at the bottom center */
-      bottom: 2%;
-      /* Position from the bottom */
-      left: 50%;
-      /* Start from the middle */
-      transform: translateX(-50%);
-      /* Center the button */
-      background-color: #39FF14;
-      /* Neon green background */
-      color: black;
-      /* Text color */
-      padding: 1em 2em;
-      /* Padding inside the button */
-      border: none;
-      /* No border */
-      border-radius: 5px;
-      /* Rounded corners */
-      font-size: 1.5em;
-      /* Larger text */
+      font-size: clamp(12px, 1.5vw, 16px);
+      font-weight: 700;
+      letter-spacing: 2px;
       cursor: pointer;
-      /* Pointer cursor on hover */
-      text-decoration: none;
-      /* No underline */
-      transition: background-color 0.3s, transform 0.3s;
-      /* Transition for hover effects */
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
     }
 
-    .play-button:hover {
-      background-color: #2eb82e;
-      /* Slightly different green on hover */
+    .tab-btn:hover {
+      background: rgba(0, 40, 0, 0.8);
+      border-color: var(--primary-neon);
+      color: var(--primary-neon);
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+    }
 
+    .tab-btn.active {
+      background: var(--primary-neon);
+      color: var(--dark-bg);
+      border-color: var(--primary-neon);
+      box-shadow: 0 0 30px var(--primary-neon);
+    }
+
+    .tab-btn.blue {
+      border-color: var(--blue-secondary);
+      color: var(--blue-primary);
+    }
+
+    .tab-btn.blue:hover {
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .tab-btn.blue.active {
+      background: var(--blue-primary);
+      color: #fff;
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 30px var(--blue-primary);
+    }
+
+    /* Tutorial Content */
+    .tutorial-content {
+      display: none;
+    }
+
+    .tutorial-content.active {
+      display: block;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px currentColor;
+    }
+
+    .section-title.green {
+      color: var(--primary-neon);
+    }
+
+    .section-title.blue {
+      color: var(--blue-primary);
+    }
+
+    /* Steps Container */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Step Card */
+    .step-card {
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 30px;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .step-card:hover {
+      border-color: var(--primary-neon);
+      box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+      transform: translateX(10px);
+    }
+
+    .step-card.blue:hover {
+      border-color: var(--blue-primary);
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Step Number */
+    .step-number {
+      flex-shrink: 0;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-neon);
+      color: var(--dark-bg);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 0 0 20px var(--primary-neon);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .step-number.blue {
+      background: var(--blue-primary);
+      box-shadow: 0 0 20px var(--blue-primary);
+      animation: pulse-glow-blue 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px var(--primary-neon);
+      }
+
+      50% {
+        box-shadow: 0 0 40px var(--primary-neon), 0 0 60px var(--primary-neon);
+      }
+    }
+
+    @keyframes pulse-glow-blue {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px var(--blue-primary);
+      }
+
+      50% {
+        box-shadow: 0 0 40px var(--blue-primary), 0 0 60px var(--blue-primary);
+      }
+    }
+
+    /* Step Content */
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h3 {
+      font-size: clamp(16px, 2vw, 22px);
+      margin: 0 0 10px 0;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .step-content p {
+      font-size: clamp(12px, 1.3vw, 16px);
+      color: #aaa;
+      margin: 0;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    /* Visual Demo */
+    .step-visual {
+      flex-shrink: 0;
+      width: 200px;
+      height: 100px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Mock Input Field */
+    .mock-input {
+      width: 160px;
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid var(--glass-border);
+      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      color: var(--secondary-neon);
+      text-align: center;
+      animation: input-blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes input-blink {
+
+      0%,
+      100% {
+        border-color: var(--glass-border);
+      }
+
+      50% {
+        border-color: var(--primary-neon);
+        box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+      }
+    }
+
+    /* Cursor Animation */
+    .mock-input.typing::after {
+      content: '|';
+      animation: cursor-blink 0.8s step-end infinite;
+    }
+
+    @keyframes cursor-blink {
+
+      0%,
+      50% {
+        opacity: 1;
+      }
+
+      51%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Mock Button */
+    .mock-btn {
+      padding: 8px 20px;
+      background: var(--glass-bg);
+      border: 2px solid var(--secondary-neon);
+      color: var(--secondary-neon);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      animation: btn-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes btn-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: none;
+      }
+
+      50% {
+        transform: scale(1.1);
+        background: var(--primary-neon);
+        color: var(--dark-bg);
+        box-shadow: 0 0 20px var(--primary-neon);
+      }
+    }
+
+    /* Mock Email Card */
+    .mock-email-grid {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mock-email {
+      width: 60px;
+      height: 50px;
+      background: rgba(15, 30, 60, 0.8);
+      border: 2px solid var(--blue-secondary);
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 8px;
+      color: var(--blue-primary);
+      transition: all 0.3s ease;
+    }
+
+    .mock-email.selected {
+      border-color: #fff;
+      box-shadow: 0 0 15px #fff;
+      background: rgba(59, 130, 246, 0.3);
+    }
+
+    .mock-email:nth-child(1) {
+      animation: email-select 3s ease-in-out infinite;
+    }
+
+    .mock-email:nth-child(3) {
+      animation: email-select 3s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes email-select {
+
+      0%,
+      40%,
+      100% {
+        border-color: var(--blue-secondary);
+        box-shadow: none;
+        background: rgba(15, 30, 60, 0.8);
+      }
+
+      50%,
+      90% {
+        border-color: #fff;
+        box-shadow: 0 0 15px #fff;
+        background: rgba(59, 130, 246, 0.3);
+      }
+    }
+
+    /* Arrow Indicator */
+    .arrow-indicator {
+      font-size: 24px;
+      color: var(--primary-neon);
+      animation: arrow-bounce 1s ease-in-out infinite;
+    }
+
+    @keyframes arrow-bounce {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(10px);
+      }
+    }
+
+    /* Tips Section */
+    .tips-section {
+      margin-top: 40px;
+      padding: 25px;
+      background: rgba(0, 40, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+    }
+
+    .tips-section.blue {
+      background: rgba(0, 20, 60, 0.3);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .tips-section h4 {
+      font-size: clamp(14px, 1.5vw, 18px);
+      margin: 0 0 15px 0;
+      color: var(--primary-neon);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .tips-section.blue h4 {
+      color: var(--blue-primary);
+    }
+
+    .tips-section ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #aaa;
+      font-size: clamp(11px, 1.2vw, 14px);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    .tips-section li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    /* Back Button */
+    .back-btn-container {
+      text-align: center;
+      margin-top: 50px;
+      padding-bottom: 30px;
+    }
+
+    .back-btn {
+      background: var(--glass-bg);
+      border: 2px solid var(--secondary-neon);
+      color: var(--secondary-neon);
+      padding: 15px 50px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      background: var(--primary-neon);
+      color: var(--dark-bg);
+      border-color: var(--primary-neon);
+      box-shadow: 0 0 30px var(--primary-neon);
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .step-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .step-visual {
+        width: 100%;
+        height: 80px;
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-btn {
+        width: 80%;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="tutorial-container">
-    <div class="header">Tutorial</div>
-    <div class="content">MASTERM1ND is played using a standard mouse and keyboard.</div>
-    <div class="content">The Passwords level involves clicking on the text field and entering a password attempt then
-      clicking "Confirm"</div>
-    <div class="content">The Phishing level involves multiple forms of mouse selections and then clicking the confirm
-      button.</div>
-    <div class="content">The Networks level combines play methods from the first 2 levels allowing you to select options
-      and use text fields to complete it.</div>
-    <div class="content">The Ports level allows you use the arrow keys and WASD to navigate a (VR Optional) 3D
-      environment and also uses a text field as well.</div>
+  <div class="bg-layer"></div>
+  <div class="scanline"></div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>How to Play</h1>
+      <p>Master the game mechanics to become a true cybersecurity expert</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('password')">Password Levels</button>
+      <button class="tab-btn blue" onclick="showTab('phishing')">Phishing Levels</button>
+    </div>
+
+    <!-- Password Tutorial -->
+    <div class="tutorial-content active" id="password-content">
+      <h2 class="section-title green">🔐 Password Cracking Tutorial</h2>
+
+      <div class="steps-container">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Click the Text Field</h3>
+            <p>Locate the password input field in the center of the screen. Click on it to activate it and start typing
+              your guess.</p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-input typing">Click here...</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Enter Your Password Guess</h3>
+            <p>Type your password guess using your keyboard. Use the hints provided to figure out the correct password.
+              Look for clues in usernames, dates, or other visible information.</p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-input" style="color: #2adb11; font-weight: bold;">1205</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Click CONFIRM to Submit</h3>
+            <p>Once you've entered your guess, click the <strong>CONFIRM</strong> button to submit. You can also press
+              <strong>Enter</strong> on your keyboard. Be careful - you only have 3 lives!</p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-btn">CONFIRM</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Use the HINT Button</h3>
+            <p>Stuck? Click the <strong>HINT</strong> button in the top-right corner to reveal helpful clues. Use hints
+              wisely to crack the password before running out of lives.</p>
+          </div>
+          <div class="step-visual">
+            <span class="arrow-indicator">➜</span>
+            <div class="mock-btn" style="font-size: 10px;">HINT</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section">
+        <h4>💡 Pro Tips</h4>
+        <ul>
+          <li><strong>Check the username</strong> - passwords often contain numbers or patterns from usernames</li>
+          <li><strong>Look for dates</strong> - birthdays, years, and memorable dates are common password elements</li>
+          <li><strong>Use the PAUSE button</strong> - stop the timer if you need to think without pressure</li>
+          <li><strong>Press Enter</strong> - quickly submit your guess without clicking the button</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Phishing Tutorial -->
+    <div class="tutorial-content" id="phishing-content">
+      <h2 class="section-title blue">📧 Phishing Detection Tutorial</h2>
+
+      <div class="steps-container">
+        <!-- Step 1 -->
+        <div class="step-card blue">
+          <div class="step-number blue">1</div>
+          <div class="step-content">
+            <h3>Read the Emails Carefully</h3>
+            <p>Review each email card displayed on screen. Look at the sender name, subject line, and message content
+              for any suspicious signs.</p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-email-grid">
+              <div class="mock-email">📧</div>
+              <div class="mock-email">📧</div>
+              <div class="mock-email">📧</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card blue">
+          <div class="step-number blue">2</div>
+          <div class="step-content">
+            <h3>Click to Select/Deselect</h3>
+            <p>Click on email cards to select them. Selected cards will be highlighted with a glowing border. Click
+              again to deselect. You need to find the <strong>legitimate</strong> emails among the phishing attempts.
+            </p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-email-grid">
+              <div class="mock-email">📧</div>
+              <div class="mock-email selected">✓</div>
+              <div class="mock-email">📧</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card blue">
+          <div class="step-number blue">3</div>
+          <div class="step-content">
+            <h3>Confirm Your Selection</h3>
+            <p>Once you've selected all the legitimate emails, click <strong>CONFIRM SELECTION</strong> to submit your
+              answer. Correct answers will be marked as "VERIFIED".</p>
+          </div>
+          <div class="step-visual">
+            <div class="mock-btn" style="border-color: var(--blue-secondary); color: var(--blue-primary);">CONFIRM</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card blue">
+          <div class="step-number blue">4</div>
+          <div class="step-content">
+            <h3>Watch for Red Flags</h3>
+            <p>Look for common phishing indicators: urgent language ("Act now!"), spelling errors in sender names,
+              suspicious links, and requests for personal information.</p>
+          </div>
+          <div class="step-visual">
+            <span style="font-size: 30px;">⚠️</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section blue">
+        <h4>🛡️ Phishing Red Flags</h4>
+        <ul>
+          <li><strong>Urgent language</strong> - "Act fast!", "Immediate action required!" are warning signs</li>
+          <li><strong>Spelling mistakes</strong> - Legitimate companies don't misspell names like "Aygent" instead of
+            "Agent"</li>
+          <li><strong>Suspicious links</strong> - Short links like bit.ly or unfamiliar domains are risky</li>
+          <li><strong>Generic greetings</strong> - Real contacts usually know your actual name</li>
+          <li><strong>Requests for sensitive info</strong> - Legitimate sources never ask for passwords via email</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="back-btn-container">
+      <button class="back-btn" onclick="goBack()">Back to Menu</button>
+    </div>
   </div>
-  <button class="play-button" onclick="playV()">Play Video</button>
+
   <script>
-    function playV() {
-      setTimeout(function () {
-        window.location.href = 'TutorialPlayer.html';
-      }, 500)
+    function showTab(tab) {
+      // Update tab buttons
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      // Update content
+      const contents = document.querySelectorAll('.tutorial-content');
+      contents.forEach(c => c.classList.remove('active'));
+
+      if (tab === 'password') {
+        tabs[0].classList.add('active');
+        document.getElementById('password-content').classList.add('active');
+      } else {
+        tabs[1].classList.add('active');
+        document.getElementById('phishing-content').classList.add('active');
+      }
+    }
+
+    function goBack() {
+      setTimeout(() => {
+        window.location.href = 'MainMenu.html';
+      }, 200);
     }
   </script>
+
 </body>
 
 </html>
