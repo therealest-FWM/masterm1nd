@@ -583,7 +583,8 @@
           <div class="step-content">
             <h3>Click CONFIRM to Submit</h3>
             <p>Once you've entered your guess, click the <strong>CONFIRM</strong> button to submit. You can also press
-              <strong>Enter</strong> on your keyboard. Be careful - you only have 3 lives!</p>
+              <strong>Enter</strong> on your keyboard. Be careful - you only have 3 lives!
+            </p>
           </div>
           <div class="step-visual">
             <div class="mock-btn">CONFIRM</div>
@@ -725,6 +726,19 @@
       setTimeout(() => {
         window.location.href = 'MainMenu.html';
       }, 200);
+    }
+
+    // Background Music
+    let bgMusic = null;
+    if (localStorage.getItem("audioUnlocked") === "true") {
+      bgMusic = new Audio("assets/TO-3.wav");
+      bgMusic.loop = true;
+      bgMusic.volume = 0.2;
+      bgMusic.preload = "auto";
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(() => { });
+      });
     }
   </script>
 
