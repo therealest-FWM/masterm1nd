@@ -73,7 +73,10 @@
       bgMusic.loop = true;
       bgMusic.volume = 0.05;
       bgMusic.preload = "auto";
-      bgMusic.play().catch(() => { });
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 0; // Default start time
+        bgMusic.play().catch(() => { });
+      });
     }
 
     function tryA() {

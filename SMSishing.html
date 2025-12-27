@@ -762,7 +762,10 @@
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
       bgMusic.preload = "auto";
-      bgMusic.play().catch(() => { });
+      bgMusic.addEventListener("loadedmetadata", () => {
+        bgMusic.currentTime = 40; // Default start time
+        bgMusic.play().catch(() => { });
+      });
     }
 
     var livesRemaining = 2; // Started with 2 per request (or old code)
