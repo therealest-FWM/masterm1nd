@@ -294,6 +294,21 @@
       border: none;
     }
 
+    .feed-instruction {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      color: var(--hud-primary);
+      font-size: clamp(10px, 1.2vw, 14px);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      border-radius: 4px;
+      pointer-events: none;
+      text-shadow: 0 0 5px var(--hud-primary);
+      border: 1px solid rgba(57, 255, 20, 0.3);
+    }
+
     .exit-btn {
       position: absolute;
       top: 20px;
@@ -435,6 +450,8 @@
 
   <!-- Full-screen Live Feed Overlay -->
   <div id="livePanel">
+    <div class="feed-instruction">Click into the screen to enter the screen, and press "Esc" or press the button to exit
+      the feed</div>
     <button class="exit-btn" onclick="exitScreen()">EXIT FEED</button>
     <iframe src="https://itch.io/embed-upload/15934087?color=000000" allowfullscreen allow="fullscreen;">
     </iframe>
@@ -602,8 +619,11 @@
       startTimer();
     }
 
-    document.addEventListener("keypress", e => {
+    document.addEventListener("keydown", e => {
       if (e.key === "Enter") checkPassword();
+      if (e.key === "Escape" && document.getElementById("livePanel").style.display === "block") {
+        exitScreen();
+      }
     });
   </script>
 
