@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTERM1ND - Interactive Tutorial</title>
+    <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-neon: #39ff14;
+            --secondary-neon: #2adb11;
+            --error-red: #ff4444;
+            --glass-bg: rgba(0, 20, 0, 0.6);
+            --glass-border: rgba(57, 255, 20, 0.4);
+            --dark-bg: #0a0a0a;
+
+            /* Results CSS Variables */
+            --neon-green: #39ff14;
+            --neon-red: #ff003c;
+            --border-green: rgba(57, 255, 20, 0.5);
+            --border-red: rgba(255, 0, 60, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-neon);
+            overflow: hidden;
+        }
+
+        /* ============ TOP BAR ============ */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 20px;
+            background: linear-gradient(180deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.9) 100%);
+            flex-wrap: nowrap;
+            gap: 15px;
+            z-index: 100;
+            position: relative;
+        }
+
+        .top-bar .logo {
+            font-weight: 900;
+            font-size: clamp(16px, 2vw, 24px);
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        .top-bar .lives-remaining {
+            flex-grow: 1;
+            text-align: center;
+            font-size: clamp(12px, 1.5vw, 18px);
+        }
+
+        .top-bar .control-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .top-bar .control-buttons button {
+            background: transparent;
+            border: 1px solid var(--secondary-neon);
+            color: var(--primary-neon);
+            padding: 8px 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(10px, 1.2vw, 14px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            height: 24px;
+            width: clamp(200px, 30vw, 400px);
+            margin: 0 15px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            font-size: clamp(9px, 1vw, 13px);
+            padding: 4px 2px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .step-1 {
+            background: linear-gradient(to right, #213418, #4ab917);
+            color: #fff;
+        }
+
+        .step-2 {
+            background: #333;
+            color: #888;
+        }
+
+        .step-3 {
+            background: #222;
+            color: #666;
+        }
+
+        /* ============ MAIN GAME AREA ============ */
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 40px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Fullscreen Video Background */
+        .game-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        /* Dark overlay on video */
+        .game-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Content Area */
+        .center-box {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            width: 100%;
+            /* Ensure full width availability for centering */
+        }
+
+        .profile svg {
+            width: clamp(80px, 12vw, 120px);
+            height: clamp(80px, 12vw, 120px);
+            fill: var(--primary-neon);
+            filter: drop-shadow(0 0 15px var(--primary-neon));
+            margin-bottom: 30px;
+        }
+
+        .center-box h1 {
+            font-size: clamp(24px, 4vw, 42px);
+            /* Made bigger */
+            font-weight: 700;
+            margin: 10px 0;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.7);
+            color: #fff;
+            position: relative;
+            top: -20px;
+            /* Move slightly up */
+        }
+
+        /* Input Field */
+        .cyber-input {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px 25px;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(14px, 1.5vw, 20px);
+            font-weight: 700;
+            color: var(--secondary-neon);
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Confirm Button */
+        .cyber-btn {
+            background: var(--glass-bg);
+            border: 2px solid var(--secondary-neon);
+            color: var(--secondary-neon);
+            padding: 12px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(12px, 1.2vw, 18px);
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+            margin-top: 10px;
+        }
+
+        /* ============ TOUR OVERLAY ============ */
+        #tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            /* Allow clicks to pass through initially */
+        }
+
+        /* Darken background */
+        .tour-dimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+        }
+
+        /* Highlight Box (Alternative to z-index manipulation) */
+        .tour-highlight-box {
+            position: absolute;
+            border: 3px solid var(--primary-neon);
+            box-shadow: 0 0 20px var(--primary-neon), inset 0 0 20px rgba(57, 255, 20, 0.2);
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            pointer-events: none;
+            z-index: 10000;
+            display: none;
+        }
+
+        /* Instruction Card */
+        .tour-card {
+            position: absolute;
+            background: rgba(10, 20, 10, 0.95);
+            border: 2px solid var(--primary-neon);
+            padding: 20px;
+            border-radius: 10px;
+            width: 380px;
+            /* Made slightly bigger */
+            color: #fff;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            z-index: 10001;
+            transition: all 0.4s ease;
+            pointer-events: auto;
+            display: none;
+        }
+
+        /* Large Card Variant for Welcome */
+        .tour-card.large {
+            width: 500px;
+            padding: 30px;
+        }
+
+        .tour-card h3 {
+            margin-top: 0;
+            color: var(--primary-neon);
+            font-size: 22px;
+            /* Bigger title */
+            border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .tour-card p {
+            font-size: 16px;
+            /* Bigger text */
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .tour-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .tour-btn {
+            background: var(--primary-neon);
+            color: var(--dark-bg);
+            border: none;
+            padding: 8px 16px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        /* Hint Box Style */
+        .hint-box {
+            position: fixed;
+            top: 10vh;
+            right: 0;
+            width: 300px;
+            background: rgba(0, 10, 0, 0.9);
+            border: 2px solid var(--primary-neon);
+            padding: 20px;
+            color: #fff;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+
+        .hint-box.show {
+            transform: translateX(0);
+        }
+
+        /* Recap & GameOver Mock Layers (Using results.css styles) */
+        .mock-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            /* Use dark bg from results.css logic */
+
+            /* Background pattern from results.css */
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(10, 20, 10, 0.4) 0%, rgba(0, 0, 0, 1) 100%),
+                linear-gradient(0deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Failure bg override */
+        .mock-layer.failure-bg {
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(30, 0, 10, 0.4) 0%, rgba(0, 0, 0, 1) 100%),
+                linear-gradient(0deg, rgba(255, 0, 60, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 60, 0.03) 1px, transparent 1px);
+        }
+
+        /* Result Card Styles from results.css */
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 4rem 5rem;
+            text-align: center;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+            opacity: 1;
+            /* Animation removed for simplicity in tutorial */
+            transform: translateY(0);
+        }
+
+        .success-theme {
+            border: 1px solid var(--border-green);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.05), inset 0 0 20px rgba(57, 255, 20, 0.05);
+        }
+
+        .success-theme h1 {
+            color: var(--neon-green);
+            text-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
+            margin: 0 0 0.5rem 0;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 6px;
+        }
+
+        .success-theme h2 {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 0 3rem 0;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .success-theme .score {
+            color: #ffe600;
+            text-shadow: 0 0 15px rgba(255, 230, 0, 0.6);
+        }
+
+        .failure-theme {
+            border: 1px solid var(--border-red);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.05), inset 0 0 20px rgba(255, 0, 60, 0.05);
+        }
+
+        .failure-theme h1 {
+            color: var(--neon-red);
+            text-shadow: 0 0 25px rgba(255, 0, 60, 0.6);
+            margin: 0 0 0.5rem 0;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 6px;
+        }
+
+        .failure-theme h2 {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0 0 3rem 0;
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .lesson-box {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-left: 2px solid;
+            text-align: left;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+        }
+
+        .success-theme .lesson-box {
+            border-color: var(--neon-green);
+        }
+
+        .failure-theme .lesson-box {
+            border-color: var(--neon-red);
+        }
+
+        .lesson-box p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3.5rem;
+        }
+
+        /* Reusing cyber-btn but ensuring styles match results.css variants */
+        .btn-green {
+            color: var(--neon-green);
+            border-color: var(--border-green);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+            background: transparent;
+            /* Override previous cyber-btn background */
+        }
+
+        .btn-green:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-green);
+        }
+
+        .btn-red {
+            color: var(--neon-red);
+            border-color: var(--border-red);
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+            background: transparent;
+        }
+
+        .btn-red:hover {
+            background: var(--neon-red);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-red);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- GAME LAYER -->
+    <div id="game-layer">
+        <div class="top-bar" id="top-bar">
+            <div class="logo">MASTERM1ND</div>
+            <div class="progress-container" id="tour-progress">
+                <div class="progress-step step-1">EASY</div>
+                <div class="progress-step step-2">INTERMEDIATE</div>
+                <div class="progress-step step-3">WORLD CLASS</div>
+            </div>
+            <div class="lives-remaining" id="tour-lives">Lives Remaining: 3</div>
+            <div class="control-buttons">
+                <button class="timer" id="tour-timer">00:00:15</button>
+                <button id="tour-pause">PAUSE</button>
+                <div id="hint-wrapper" style="display:inline-block;"><button id="tour-hint">HINT</button></div>
+                <button id="tour-quit">QUIT</button>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <video autoplay loop muted playsinline id="bg-video">
+                <source src="assets/Pass1BG_4K.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <div class="center-box" id="tour-center-box">
+                <div class="profile" id="tour-profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                    </svg>
+                </div>
+
+                <h1 id="welcome-msg">Welcome Back: User</h1>
+                <h1 id="instr-msg">Please enter the password "tutorial"</h1>
+
+                <input type="text" id="passwordInput" class="cyber-input" placeholder="Type 'tutorial'">
+
+                <br>
+                <button class="cyber-btn" id="tour-confirm" onclick="attemptLogin()">Confirm</button>
+            </div>
+
+            <div class="hint-box" id="hint-popup">
+                <h4>HINT:</h4>
+                <p>Just type what the tutorial tells you!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECAP LAYER (Updated to match RecapPassL1.html) -->
+    <div id="recap-layer" class="mock-layer">
+        <div class="result-card success-theme">
+            <h1>Account Hacked!</h1>
+            <h2>System Access Granted</h2>
+
+            <div class="stats-grid" id="recap-stats-group">
+                <div class="stat-item">
+                    <span class="stat-value" id="recap-time">Time: 15.0s</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value score" id="recap-stars">★★★</span>
+                </div>
+            </div>
+
+            <div class="lesson-box">
+                <p>Congratulations. You have successfully navigated the tutorial simulation. You are now ready for field
+                    operations.</p>
+            </div>
+
+            <div class="action-buttons" id="recap-buttons">
+                <button type="button" class="cyber-btn btn-green">Retry</button>
+                <button type="button" class="cyber-btn btn-green">Continue</button>
+                <button type="button" class="cyber-btn btn-green" onclick="finishTutorial()">Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME OVER LAYER (Updated to match GameOverPassL2.html) -->
+    <div id="gameover-layer" class="mock-layer failure-bg">
+        <div class="result-card failure-theme" id="gameover-card">
+            <h1>Game Over</h1>
+            <h2>Simulation Failed</h2>
+
+            <div class="lesson-box"
+                style="border-left-color: var(--neon-red); background: linear-gradient(90deg, rgba(255,0,60,0.05) 0%, transparent 100%);">
+                <p style="color: #ffb3b3; margin: 0;">The system has detected unauthorized activity. Review your
+                    strategy and attempt the breach again.</p>
+            </div>
+
+            <div class="action-buttons" id="gameover-buttons">
+                <button type="button" class="cyber-btn btn-red">Try Again</button>
+                <button type="button" class="cyber-btn btn-red" onclick="finishTutorial()">Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOUR OVERLAY UI -->
+    <div id="tour-overlay">
+        <div class="tour-highlight-box" id="highlight-box"></div>
+        <div class="tour-card" id="tour-card">
+            <h3 id="step-title">Title</h3>
+            <p id="step-desc">Description goes here.</p>
+            <div class="tour-controls">
+                <button class="tour-btn" id="next-btn" onclick="nextStep()">NEXT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tour Data
+        const steps = [
+            {
+                target: "#game-layer",
+                title: "Welcome Agent",
+                desc: "This is a guided simulation to familiarize you with the hacking interface. Your goal is to bypass security measures to progress.",
+                position: "center",
+                action: null
+            },
+            {
+                target: "#top-bar",
+                title: "Heads-Up Display",
+                desc: "The top bar contains all your vital mission stats and controls.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#tour-progress",
+                title: "1. Progress Bar",
+                desc: "This indicates your current level.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#tour-lives",
+                title: "2. Lives Remaining",
+                desc: "You have limited attempts per level. Wrong answers reduce your lives. Reach zero, and it's Game Over.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#tour-timer",
+                title: "3. Timer",
+                desc: "Speed is key. Faster completions award more stars and higher rankings.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#tour-pause",
+                title: "4. Pause",
+                desc: "Need a moment? Pause the simulation to adjust settings or catch your breath.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#hint-wrapper", // Targeted wrapper to ensure better positioning
+                title: "5. Hint System",
+                desc: "Stuck? Click here for a clue.",
+                position: "left", // CHANGED to left
+                action: () => {
+                    document.getElementById('hint-popup').classList.add('show');
+                    setTimeout(() => document.getElementById('hint-popup').classList.remove('show'), 3000);
+                }
+            },
+            {
+                target: "#tour-quit",
+                title: "6. Abort Mission",
+                desc: "Click 'QUIT' to return to the Main Menu immediately.",
+                position: "bottom",
+                action: null
+            },
+            {
+                target: "#tour-center-box",
+                title: "7. The Objective",
+                desc: "This is your main workspace. Read the prompt carefully. Here, you need to find the password.",
+                position: "right",
+                action: null
+            },
+            {
+                target: "#passwordInput",
+                title: "Input Terminal",
+                desc: "Type your answer here. For this tutorial, we've pre-filled the answer or you can type 'tutorial'.",
+                position: "top",
+                action: () => {
+                    document.getElementById('passwordInput').focus();
+                    document.getElementById('passwordInput').value = "tutorial";
+                }
+            },
+            {
+                target: "#tour-confirm",
+                title: "8. Execute",
+                desc: "Click Confirm to submit your answer. Let's solve this level now.",
+                position: "top",
+                action: () => {
+                    const btn = document.getElementById('tour-confirm');
+                    btn.style.boxShadow = "0 0 30px #ffffff";
+                    // Only show visual click effect, real transition happens via nextStep
+                    setTimeout(() => btn.style.transform = "scale(0.95)", 100);
+                    setTimeout(() => btn.style.transform = "scale(1)", 300);
+                }
+            },
+            // Switch to Recap
+            {
+                target: "#recap-stats-group", // Highlighting both timer and stars
+                title: "9. Mission Report",
+                desc: "Upon success, you'll see your performance stats. Time taken and Stars earned.",
+                position: "left", // CHANGED to left
+                waitForLayer: "recap-layer"
+            },
+            {
+                target: ".lesson-box",
+                title: "10. De-briefing",
+                desc: "Important context or story information will appear here. Read it to understand the bigger picture.",
+                position: "top",
+                waitForLayer: "recap-layer"
+            },
+            {
+                target: "#recap-buttons",
+                title: "11. Next Moves",
+                desc: "Choose to Retry for a better score, proceed to the Next Level, or return to Menu.",
+                position: "top",
+                waitForLayer: "recap-layer"
+            },
+            // Switch to Game Over (Simulation)
+            {
+                target: "#gameover-card",
+                title: "12. Failure Condition",
+                desc: "If you fail (run out of lives), you'll see this screen.",
+                position: "bottom", // CHANGED to bottom
+                waitForLayer: "gameover-layer",
+                action: () => {
+                    // Ensure Game Over layer uses the correct failure bg class
+                    document.getElementById('gameover-layer').classList.add('failure-bg');
+                }
+            },
+            {
+                target: "#gameover-buttons",
+                title: "Try Again",
+                desc: "You can retry immediately or quit. Don't give up, agent.",
+                position: "top",
+                waitForLayer: "gameover-layer"
+            },
+            {
+                target: "#gameover-buttons",
+                title: "Tutorial Complete",
+                desc: "You are now ready. Redirecting to Main Menu...",
+                position: "center",
+                waitForLayer: "gameover-layer",
+                action: () => {
+                    setTimeout(finishTutorial, 3000);
+                }
+            }
+        ];
+
+        let currentStep = 0;
+
+        function updateTour() {
+            if (currentStep >= steps.length) {
+                finishTutorial();
+                return;
+            }
+
+            const step = steps[currentStep];
+
+            // Handle Layer Switches
+            if (step.waitForLayer) {
+                // Hide all layers
+                document.getElementById('game-layer').style.display = 'none';
+                document.querySelectorAll('.mock-layer').forEach(l => l.style.display = 'none');
+
+                // Show target layer
+                document.getElementById(step.waitForLayer).style.display = 'flex';
+            }
+
+            // Execute custom action if any
+            if (step.action) {
+                step.action();
+            }
+
+            // Find target element
+            const targetEl = document.querySelector(step.target);
+            const highlightBox = document.getElementById('highlight-box');
+            const tourCard = document.getElementById('tour-card');
+
+            if (targetEl) {
+                const rect = targetEl.getBoundingClientRect();
+
+                // Position Highlight Box
+                highlightBox.style.display = 'block';
+                highlightBox.style.width = rect.width + 10 + 'px';
+                highlightBox.style.height = rect.height + 10 + 'px';
+                highlightBox.style.top = rect.top - 5 + 'px';
+                highlightBox.style.left = rect.left - 5 + 'px';
+
+                // Position Tooltip Card
+                tourCard.style.display = 'block';
+                tourCard.classList.toggle('large', currentStep === 0);
+                document.getElementById('step-title').innerText = step.title;
+                document.getElementById('step-desc').innerText = step.desc;
+
+                // Simple positioning logic
+                let cardTop = 0;
+                let cardLeft = 0;
+                const cardMargin = 20;
+                const cardWidth = currentStep === 0 ? 500 : 380;
+
+                if (step.target === "#hint-wrapper") {
+                    // Specific alignment for Hint System next to the Popup
+                    cardTop = window.innerHeight * 0.1; // Align with 10vh of hint-popup
+                    cardLeft = window.innerWidth - (300 + cardWidth + 40); // 300 is hint-popup width
+                } else if (step.position === 'bottom') {
+                    cardTop = rect.bottom + cardMargin;
+                    cardLeft = rect.left + rect.width / 2 - cardWidth / 2;
+                } else if (step.position === 'top') {
+                    cardTop = rect.top - 200; // approximated height of card if above
+                    if (cardTop < 20) cardTop = rect.bottom + 20;
+                    cardLeft = rect.left + rect.width / 2 - cardWidth / 2;
+                } else if (step.position === 'right') {
+                    cardTop = rect.top;
+                    cardLeft = rect.right + cardMargin;
+                } else if (step.position === 'left') {
+                    cardTop = rect.top;
+                    cardLeft = rect.left - (cardWidth + 20);
+                } else {
+                    // Center
+                    cardTop = window.innerHeight / 2 - 150; // Moved higher
+                    cardLeft = window.innerWidth / 2 - cardWidth / 2;
+                }
+
+                // Boundary checks
+                if (cardLeft < 10) cardLeft = 10;
+                if (cardLeft + cardWidth > window.innerWidth) cardLeft = window.innerWidth - (cardWidth + 10);
+                if (cardTop < 10) cardTop = 10;
+
+                if (step.position === 'center') {
+                    cardTop = window.innerHeight / 4; // Moved much higher
+                    cardLeft = window.innerWidth / 2 - cardWidth / 2;
+                    highlightBox.style.display = 'none'; // Hide highlight for general steps
+                }
+
+                tourCard.style.top = cardTop + 'px';
+                tourCard.style.left = cardLeft + 'px';
+
+            } else {
+                console.warn("Target not found: " + step.target);
+            }
+        }
+
+        function nextStep() {
+            currentStep++;
+            updateTour();
+        }
+
+        // Mock Game Functions
+        function attemptLogin() {
+            // Visualize success
+            const input = document.getElementById('passwordInput');
+            input.style.borderColor = "#39ff14";
+            input.style.boxShadow = "0 0 20px #39ff14";
+            // No alert as requested
+        }
+
+        function finishTutorial() {
+            window.location.href = 'MainMenu.html';
+        }
+
+        // Initialize
+        window.onload = () => {
+            updateTour();
+        };
+
+    </script>
+</body>
+
+</html>
