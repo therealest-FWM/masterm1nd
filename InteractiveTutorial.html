@@ -108,20 +108,12 @@
             white-space: nowrap;
         }
 
-        .step-1 {
-            background: linear-gradient(to right, #213418, #4ab917);
-            color: #fff;
+        .step-tutorial {
+            background: var(--primary-yellow);
+            color: #000;
         }
 
-        .step-2 {
-            background: #333;
-            color: #888;
-        }
 
-        .step-3 {
-            background: #222;
-            color: #666;
-        }
 
         /* ============ MAIN GAME AREA ============ */
         .game-container {
@@ -533,10 +525,8 @@
     <div id="game-layer">
         <div class="top-bar" id="top-bar">
             <div class="logo">MASTERM1ND</div>
-            <div class="progress-container" id="tour-progress">
-                <div class="progress-step step-1">AMATEUR</div>
-                <div class="progress-step step-2">INTERMEDIATE</div>
-                <div class="progress-step step-3">WORLD CLASS</div>
+            <div class="progress-container" id="tour-progress" style="border-color: var(--primary-yellow);">
+                <div class="progress-step step-tutorial">TUTORIAL</div>
             </div>
             <div class="lives-remaining" id="tour-lives">Lives Remaining: 3</div>
             <div class="control-buttons">
