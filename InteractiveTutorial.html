@@ -15,6 +15,9 @@
             --glass-bg: rgba(0, 20, 0, 0.6);
             --glass-border: rgba(57, 255, 20, 0.4);
             --dark-bg: #0a0a0a;
+            --primary-yellow: #ffff00;
+            --secondary-yellow: #dada00;
+            --yellow-shadow: rgba(255, 255, 0, 0.6);
 
             /* Results CSS Variables */
             --neon-green: #39ff14;
@@ -174,8 +177,8 @@
         .profile svg {
             width: clamp(80px, 12vw, 120px);
             height: clamp(80px, 12vw, 120px);
-            fill: var(--primary-neon);
-            filter: drop-shadow(0 0 15px var(--primary-neon));
+            fill: var(--primary-yellow);
+            filter: drop-shadow(0 0 15px var(--primary-yellow));
             margin-bottom: 30px;
         }
 
@@ -184,7 +187,7 @@
             /* Made bigger */
             font-weight: 700;
             margin: 10px 0;
-            text-shadow: 0 0 15px rgba(57, 255, 20, 0.7);
+            text-shadow: 0 0 15px var(--yellow-shadow);
             color: #fff;
             position: relative;
             top: -20px;
@@ -198,12 +201,12 @@
             padding: 15px 25px;
             margin: 20px 0;
             background: rgba(255, 255, 255, 0.95);
-            border: 2px solid var(--glass-border);
+            border: 2px solid var(--primary-yellow);
             border-radius: 30px;
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(14px, 1.5vw, 20px);
             font-weight: 700;
-            color: var(--secondary-neon);
+            color: var(--secondary-yellow);
             text-align: center;
             outline: none;
             transition: all 0.3s ease;
@@ -211,9 +214,9 @@
 
         /* Confirm Button */
         .cyber-btn {
-            background: var(--glass-bg);
-            border: 2px solid var(--secondary-neon);
-            color: var(--secondary-neon);
+            background: rgba(20, 20, 0, 0.6);
+            border: 2px solid var(--secondary-yellow);
+            color: var(--secondary-yellow);
             padding: 12px 40px;
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(12px, 1.2vw, 18px);
@@ -531,7 +534,7 @@
         <div class="top-bar" id="top-bar">
             <div class="logo">MASTERM1ND</div>
             <div class="progress-container" id="tour-progress">
-                <div class="progress-step step-1">EASY</div>
+                <div class="progress-step step-1">AMATEUR</div>
                 <div class="progress-step step-2">INTERMEDIATE</div>
                 <div class="progress-step step-3">WORLD CLASS</div>
             </div>
@@ -546,7 +549,7 @@
 
         <div class="game-container">
             <video autoplay loop muted playsinline id="bg-video">
-                <source src="assets/Pass1BG_4K.mp4" type="video/mp4">
+                <source src="assets/tut.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
 
@@ -750,10 +753,10 @@
             },
             // Switch to Game Over (Simulation)
             {
-                target: "#gameover-card",
+                target: "#gameover-buttons",
                 title: "12. Failure Condition",
                 desc: "If you fail (run out of lives), you'll see this screen.",
-                position: "bottom", // CHANGED to bottom
+                position: "top",
                 waitForLayer: "gameover-layer",
                 action: () => {
                     // Ensure Game Over layer uses the correct failure bg class
@@ -874,6 +877,10 @@
         }
 
         function nextStep() {
+            if (clickSFX) {
+                clickSFX.currentTime = 0;
+                clickSFX.play().catch(() => { });
+            }
             currentStep++;
             updateTour();
         }
@@ -882,8 +889,8 @@
         function attemptLogin() {
             // Visualize success
             const input = document.getElementById('passwordInput');
-            input.style.borderColor = "#39ff14";
-            input.style.boxShadow = "0 0 20px #39ff14";
+            input.style.borderColor = "var(--primary-yellow)";
+            input.style.boxShadow = "0 0 20px var(--primary-yellow)";
             // No alert as requested
         }
 
@@ -895,6 +902,20 @@
         window.onload = () => {
             updateTour();
         };
+        // Background Music
+        let bgMusic = null;
+        const clickSFX = new Audio("assets/correct-choice-43861-(popup).mp3");
+
+        if (localStorage.getItem("audioUnlocked") === "true") {
+            bgMusic = new Audio("assets/TO-3.wav");
+            bgMusic.loop = true;
+            bgMusic.volume = 0.2;
+            bgMusic.preload = "auto";
+            bgMusic.addEventListener("loadedmetadata", () => {
+                bgMusic.currentTime = 0;
+                bgMusic.play().catch(() => { });
+            });
+        }
 
     </script>
 </body>
