@@ -82,14 +82,19 @@
       }
 
       if (scoreDisplay) {
+        let stars = 0;
         // Allowing more time for 3 stars because of voice clips (e.g., 40s instead of 20s)
         if (totalTimeInSeconds <= 90) {
           scoreDisplay.textContent = "★★★";
+          stars = 3;
         } else if (totalTimeInSeconds <= 120) {
           scoreDisplay.textContent = "★★☆";
+          stars = 2;
         } else {
           scoreDisplay.textContent = "★☆☆";
+          stars = 1;
         }
+        sessionStorage.setItem('stats_phish_vishing', JSON.stringify({ stars, time: totalTimeInSeconds }));
       }
     };
     /*****************************

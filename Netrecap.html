@@ -96,13 +96,18 @@
         }
 
         if (z) {
+          let stars = 0;
           if (livesRemainingNetworks === 3 && totalTimeInSeconds10 <= 45) {
             z.textContent = "★★★";
+            stars = 3;
           } else if (livesRemainingNetworks >= 2 && totalTimeInSeconds10 <= 90) {
             z.textContent = "★★☆";
+            stars = 2;
           } else {
             z.textContent = "★☆☆";
+            stars = 1;
           }
+          sessionStorage.setItem('stats_nets', JSON.stringify({ stars, time: totalTimeInSeconds10 }));
         }
       } else {
         if (y) {

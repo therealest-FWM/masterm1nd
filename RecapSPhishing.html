@@ -80,13 +80,18 @@
       }
 
       if (scoreDisplay) {
+        let stars = 0;
         if (totalTimeInSeconds4 <= 15) {
           scoreDisplay.textContent = "★★★";
+          stars = 3;
         } else if (totalTimeInSeconds4 <= 30) {
           scoreDisplay.textContent = "★★☆";
+          stars = 2;
         } else {
           scoreDisplay.textContent = "★☆☆";
+          stars = 1;
         }
+        sessionStorage.setItem('stats_phish_spear', JSON.stringify({ stars, time: totalTimeInSeconds4 }));
       }
     };
     /*****************************

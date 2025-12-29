@@ -149,23 +149,7 @@
       transition: 0.3s;
     }
 
-    .level-number {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      background: var(--primary-neon);
-      color: black;
-      font-weight: 900;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
-      font-size: 1.1rem;
-      z-index: 5;
-      box-shadow: 0 0 10px var(--primary-neon);
-    }
+
 
     /* States */
     .level-card.unlocked {
@@ -228,6 +212,38 @@
       filter: grayscale(1);
       cursor: not-allowed;
       opacity: 0.5;
+    }
+
+    /* Stats Display */
+    .level-stats {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(57, 255, 20, 0.2);
+      width: 100%;
+    }
+
+    .stat-stars {
+      color: var(--primary-neon);
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px var(--primary-neon);
+    }
+
+    .stat-time {
+      color: #fff;
+      font-size: 0.8rem;
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-time::before {
+      content: '⏱';
+      font-size: 0.9rem;
     }
 
     /* --- Animation Keyframes --- */
@@ -350,14 +366,28 @@
         const card = document.createElement('div');
         card.className = `level-card ${isUnlocked ? 'unlocked' : 'locked'}`;
 
-        // Image source depends on lock state
-        // Note: user assets usually have different names for locked state
-        // For safety, if lockedImg undefined, use img (but filter handles grayscale)
         const imgSrc = (isUnlocked || !lvl.lockedImg) ? lvl.img : lvl.lockedImg;
+
+        // Fetch stats
+        let statsHTML = '';
+        if (isUnlocked) {
+          const stats = getLevelGroupStats(lvl.id);
+          if (stats) {
+            statsHTML = `
+              <div class="level-stats">
+                <div class="stat-stars">
+                  ${'★'.repeat(Math.round(stats.avgStars))}${'☆'.repeat(3 - Math.round(stats.avgStars))}
+                </div>
+                <div class="stat-time">${formatTime(stats.avgTime)}</div>
+              </div>
+            `;
+          }
+        }
 
         card.innerHTML = `
                     <img src="${imgSrc}" alt="Level ${lvl.level}">
-                    <div style="font-size: 0.8rem; color: #fff; margin-top: 5px;">${isUnlocked ? 'UNLOCKED' : 'LOCKED'}</div>
+                    <div style="font-size: 0.8rem; color: #fff; margin-top: 5px; font-weight: bold;">${isUnlocked ? 'UNLOCKED' : 'LOCKED'}</div>
+                    ${statsHTML}
                 `;
 
         if (isUnlocked) {
@@ -366,6 +396,49 @@
 
         container.appendChild(card);
       });
+    }
+
+    function getLevelGroupStats(groupId) {
+      let missions = [];
+      if (groupId === 'pass') {
+        missions = ['stats_pass_l1', 'stats_pass_l2'];
+      } else if (groupId === 'phish') {
+        missions = ['stats_phish_email', 'stats_phish_spear', 'stats_phish_sms', 'stats_phish_vishing'];
+      } else if (groupId === 'nets') {
+        missions = ['stats_nets'];
+      } else if (groupId === 'chrg') {
+        missions = ['stats_ports'];
+      }
+
+      let totalStars = 0;
+      let totalTime = 0;
+      let completedCount = 0;
+
+      missions.forEach(key => {
+        const data = sessionStorage.getItem(key);
+        if (data) {
+          const parsed = JSON.parse(data);
+          totalStars += parsed.stars;
+          totalTime += parsed.time;
+          completedCount++;
+        }
+      });
+
+      if (completedCount === 0) return null;
+
+      return {
+        avgStars: totalStars / completedCount,
+        avgTime: totalTime / completedCount
+      };
+    }
+
+    function formatTime(seconds) {
+      if (seconds < 60) {
+        return `${Math.round(seconds)}s`;
+      }
+      const m = Math.floor(seconds / 60);
+      const s = Math.round(seconds % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}m`;
     }
 
     function selectLevel(file, cardElement) {
