@@ -305,7 +305,18 @@
 
     window.addEventListener('resize', resize);
     window.onload = initParticles;
+        setTimeout(() => {
+      const preloadVideo = document.createElement('video');
+      preloadVideo.src = "assets/OpeningCS.mp4";
+      preloadVideo.preload = "auto";
+      preloadVideo.muted = true;
+      preloadVideo.playsInline = true;
+      preloadVideo.style.display = "none";
+      document.body.appendChild(preloadVideo);
+    }, 2000); // Wait 2 seconds before preloading
   </script>
+  
 </body>
+
 
 </html>
