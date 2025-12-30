@@ -1071,23 +1071,38 @@
     }
 
     /* Hint Box */
-    .hint-box {
+    .hint-box,
+    .left-hint-box {
       position: fixed;
       top: 80px;
-      right: -400px;
-      padding: 20px;
-      width: 300px;
-      transition: right 0.4s;
+      width: 400px;
+      transition: all 0.4s;
       z-index: 1500;
-      border: 1px solid var(--hud-primary);
-      box-shadow: 0 0 20px var(--hud-glow);
+      border: 3px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
       color: var(--hud-primary);
-      background: #000;
-      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.95);
+      border-radius: 8px;
+      padding: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .hint-box {
+      right: -450px;
     }
 
     .hint-box.visible {
       right: 20px;
+    }
+
+    .left-hint-box {
+      left: -450px;
+    }
+
+    .left-hint-box.visible {
+      left: 20px;
     }
 
     /* ============ RESPONSIVE ============ */
@@ -1438,6 +1453,11 @@
   </div>
 
   <!-- HINT BOX -->
+  <div class="left-hint-box" id="leftHintBox">
+    WHAT TO DO: Infiltrate the network. Research available Wi-Fi connections and identify a way to gain access to the
+    data traffic.
+  </div>
+
   <div class="hint-box" id="hintBox">
     Connect to the free MTX Mall network and look for the target's name in the text messages.
   </div>
@@ -1913,10 +1933,13 @@
 
     function showHint() {
       playSFX(SFX.popup);
-      document.getElementById('hintBox').classList.toggle('visible');
-      setTimeout(() => {
-        document.getElementById('hintBox').classList.remove('visible');
-      }, 5000);
+      const hb = document.getElementById('hintBox');
+      hb.classList.toggle('visible');
+      if (hb.classList.contains('visible')) {
+        setTimeout(() => {
+          hb.classList.remove('visible');
+        }, 10000);
+      }
     }
 
     function quitToMainMenu() {
@@ -1940,9 +1963,13 @@
       // Set initial progress bar color
       document.getElementById('progress-indicator').classList.add('red-active');
 
-      setTimeout(() => {
-        showHint();
-      }, 5000);
+      // Show "What to do" pop-up
+      const lh = document.getElementById('leftHintBox');
+      if (lh) {
+        playSFX(SFX.popup);
+        lh.classList.add('visible');
+        setTimeout(() => lh.classList.remove("visible"), 10000);
+      }
     });
   </script>
 

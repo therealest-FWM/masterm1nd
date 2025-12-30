@@ -539,20 +539,23 @@
 
     .hint-box,
     .left-hint-box {
-      border: 1px solid var(--hud-primary);
-      box-shadow: 0 0 20px var(--hud-glow);
+      border: 3px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
       color: var(--hud-primary);
-      background: #000;
+      background: rgba(0, 0, 0, 0.95);
       position: fixed;
-      padding: 20px;
-      width: 300px;
+      padding: 30px;
+      width: 380px;
       z-index: 1500;
       transition: all 0.4s;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
     }
 
     .hint-box {
       top: 80px;
-      right: -400px;
+      right: -450px;
     }
 
     .hint-box.visible {
@@ -561,7 +564,7 @@
 
     .left-hint-box {
       top: 80px;
-      left: -400px;
+      left: -450px;
     }
 
     .left-hint-box.visible {
@@ -581,7 +584,7 @@
       <div class="progress-step step-4">EMAIL</div>
     </div>
     <div class="loader"></div>
-    <div class="lives-remaining">Lives Remaining: 3</div>
+    <div class="lives-remaining">Lives Remaining: 2</div>
     <div class="control-buttons">
       <button class="timer">00:00:00</button>
       <button onclick="Pause()">PAUSE</button>
@@ -712,7 +715,8 @@
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    Review senders carefully. Only trust established contacts like "Agent M."
+    WHAT TO DO: Select the emails that appear legitimate. Be careful—modern phishing attempts are often disguised as
+    trusted contacts like "Agent M."
   </div>
 
   <div class="hint-box" id="hintBox">
@@ -753,7 +757,7 @@
       });
     }
 
-    var livesRemaining = 3; // Increased to 3 per user request
+    var livesRemaining = 2; // Reduced to 2 per user request
     var timer4;
     var totalMilliseconds4 = 0;
     var selectedIds = [];
@@ -785,7 +789,7 @@
       playSFX(SFX.popup);
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 8000);
+      setTimeout(() => lh.classList.remove("visible"), 10000);
 
       // Initialize music toggle state
       if (bgMusic) {

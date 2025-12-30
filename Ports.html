@@ -300,13 +300,15 @@
       left: 20px;
       z-index: 1001;
       color: var(--hud-primary);
-      font-size: clamp(10px, 1.2vw, 14px);
-      background: rgba(0, 0, 0, 0.7);
-      padding: 8px 12px;
-      border-radius: 4px;
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 15px 25px;
+      border-radius: 8px;
       pointer-events: none;
-      text-shadow: 0 0 5px var(--hud-primary);
-      border: 1px solid rgba(57, 255, 20, 0.3);
+      text-shadow: 0 0 10px var(--hud-primary);
+      border: 2px solid var(--hud-primary);
+      box-shadow: 0 0 20px var(--hud-glow);
     }
 
     .exit-btn {
@@ -331,24 +333,39 @@
       box-shadow: 0 0 20px var(--primary-neon);
     }
 
-    /* ============ HINT BOX ============ */
-    .hint-box {
+    /* ============ HINT BOXES ============ */
+    .hint-box,
+    .left-hint-box {
       position: fixed;
       top: 80px;
-      right: -400px;
-      width: 320px;
-      background: var(--dark-bg);
-      border: 2px solid var(--hud-primary);
-      color: var(--hud-primary);
-      padding: 20px;
+      width: 400px;
+      transition: all 0.4s ease;
+      z-index: 1500;
+      background: rgba(10, 5, 0, 0.95);
+      border: 3px solid var(--primary-neon);
+      color: var(--primary-neon);
+      padding: 30px;
       border-radius: 8px;
-      transition: right 0.4s ease;
-      z-index: 500;
-      box-shadow: 0 0 20px rgba(255, 165, 0, 0.2);
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+    }
+
+    .hint-box {
+      right: -450px;
     }
 
     .hint-box.visible {
       right: 20px;
+    }
+
+    .left-hint-box {
+      left: -450px;
+    }
+
+    .left-hint-box.visible {
+      left: 20px;
     }
 
     /* ============ PAUSE MENU ============ */
@@ -518,15 +535,24 @@
 
   <!-- Full-screen Live Feed Overlay -->
   <div id="livePanel">
-    <div class="feed-instruction">Click into the screen to enter the screen, and press "Esc" or press the button to exit
-      the feed</div>
+    <div class="feed-instruction">
+      [MOVEMENT INSTRUCTIONS]<br>
+      1. Click into the screen to start moving.<br>
+      2. Use WASD or ARROW KEYS to move.<br>
+      3. Press ESC or the EXIT button to leave the feed.
+    </div>
     <button class="exit-btn" onclick="exitScreen()">EXIT FEED</button>
     <iframe src="https://itch.io/embed-upload/15934087?color=000000" allowfullscreen allow="fullscreen;">
     </iframe>
   </div>
 
+  <div class="left-hint-box" id="leftHintBox">
+    WHAT TO DO: Hack into the secure port system. Use the Live Feed to explore the area and find the hidden keycode. Pay
+    attention to your surroundings!
+  </div>
+
   <div class="hint-box" id="hintBox">
-    Access the live feed to find the keycode
+    Access the live feed to find the keycode. Use WASD to navigate.
   </div>
 
   <!-- Pause Menu Overlay -->
@@ -649,7 +675,15 @@
       }, 100);
     }
 
-    window.onload = startTimer;
+    window.onload = function () {
+      startTimer();
+      const lh = document.getElementById("leftHintBox");
+      if (lh) {
+        playSFX(SFX.popup);
+        lh.classList.add("visible");
+        setTimeout(() => lh.classList.remove("visible"), 10000);
+      }
+    };
 
     function stopTimer() {
       clearInterval(timer);
@@ -675,8 +709,12 @@
      *  MISC
      *****************************/
     function showHint() {
+      playSFX(SFX.popup);
       const hint = document.getElementById("hintBox");
       hint.classList.toggle("visible");
+      if (hint.classList.contains("visible")) {
+        setTimeout(() => hint.classList.remove("visible"), 10000);
+      }
     }
 
     function quitToMainMenu() {
