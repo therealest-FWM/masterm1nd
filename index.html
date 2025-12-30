@@ -239,10 +239,10 @@
       const unlockSound = new Audio("assets/silence.mp3");
       unlockSound.play().then(() => {
         localStorage.setItem("audioUnlocked", "true");
-        window.location.href = 'MainMenu/MainMenu.html';
+        window.location.href = 'MainMenu.html';
       }).catch(() => {
         localStorage.setItem("audioUnlocked", "true");
-        window.location.href = 'MainMenu/MainMenu.html';
+        window.location.href = 'MainMenu.html';
       });
     }
 
