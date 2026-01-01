@@ -533,7 +533,7 @@
                 <button class="timer" id="tour-timer">00:00:15</button>
                 <button id="tour-pause">PAUSE</button>
                 <div id="hint-wrapper" style="display:inline-block;"><button id="tour-hint">HINT</button></div>
-                <button id="tour-quit">QUIT</button>
+                <button id="tour-quit" onclick="finishTutorial()">QUIT</button>
             </div>
         </div>
 
@@ -632,7 +632,7 @@
         const steps = [
             {
                 target: "#game-layer",
-                title: "Welcome Agent",
+                title: "Welcome Operative",
                 desc: "This is a guided simulation to familiarize you with the hacking interface. Your goal is to bypass security measures to progress.",
                 position: "center",
                 action: null
@@ -685,7 +685,7 @@
             {
                 target: "#tour-quit",
                 title: "6. Abort Mission",
-                desc: "Click 'QUIT' to return to the Main Menu immediately.",
+                desc: "Click 'QUIT' to return to the Level Select Menu immediately.",
                 position: "bottom",
                 action: null
             },
@@ -737,7 +737,7 @@
             {
                 target: "#recap-buttons",
                 title: "11. Next Moves",
-                desc: "Choose to Retry for a better score, proceed to the Next Level, or return to Menu.",
+                desc: "You can choose to Retry for a better score, proceed to the Next Level, or return to the Level Select Menu.",
                 position: "top",
                 waitForLayer: "recap-layer"
             },
@@ -755,8 +755,8 @@
             },
             {
                 target: "#gameover-buttons",
-                title: "Try Again",
-                desc: "You can retry immediately or quit. Don't give up, agent.",
+                title: "Failure Options",
+                desc: "You can retry immediately or quit. Don't give up, Operative.",
                 position: "top",
                 waitForLayer: "gameover-layer"
             },
@@ -767,7 +767,7 @@
                 position: "center",
                 waitForLayer: "gameover-layer",
                 action: () => {
-                    setTimeout(finishTutorial, 3000);
+                    setTimeout(finishTutorial, 5000);
                 }
             }
         ];
@@ -791,6 +791,9 @@
                 // Show target layer
                 document.getElementById(step.waitForLayer).style.display = 'flex';
             }
+
+            // Play Step Audio
+            playTVO(currentStep + 1);
 
             // Execute custom action if any
             if (step.action) {
@@ -867,10 +870,6 @@
         }
 
         function nextStep() {
-            if (clickSFX) {
-                clickSFX.currentTime = 0;
-                clickSFX.play().catch(() => { });
-            }
             currentStep++;
             updateTour();
         }
@@ -885,16 +884,38 @@
         }
 
         function finishTutorial() {
-            window.location.href = 'MainMenu.html';
+            window.location.href = 'LevelSelect.html';
         }
 
         // Initialize
         window.onload = () => {
             updateTour();
         };
-        // Background Music
-        let bgMusic = null;
-        const clickSFX = new Audio("assets/correct-choice-43861-(popup).mp3");
+        // TVO Sequence
+        const tvoAudios = [];
+        for (let i = 1; i <= 17; i++) {
+            const audio = new Audio(`assets/TVO(${i}).mp3`);
+            audio.volume = 0.8;
+            tvoAudios.push(audio);
+        }
+
+        let currentTVO = null;
+
+        function playTVO(index) {
+            if (localStorage.getItem("audioUnlocked") !== "true") return;
+
+            // Stop previous
+            if (currentTVO) {
+                currentTVO.pause();
+                currentTVO.currentTime = 0;
+            }
+
+            const audio = tvoAudios[index - 1];
+            if (audio) {
+                currentTVO = audio;
+                audio.play().catch(e => console.warn("Audio playback blocked or failed:", e));
+            }
+        }
 
         if (localStorage.getItem("audioUnlocked") === "true") {
             bgMusic = new Audio("assets/TO-3.wav");

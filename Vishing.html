@@ -418,8 +418,8 @@
       display: inline-flex;
       align-items: center;
       padding: 15px 40px;
-      font-family: Arial, sans-serif;
-      font-size: clamp(16px, 2vw, 24px);
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 2vw, 20px);
       font-weight: 700;
       color: #000;
       background: var(--hud-primary);
@@ -431,8 +431,22 @@
     }
 
     .pause-menu .cta:hover {
-      box-shadow: 6px 6px 0 #1a5f0c;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
       transform: skewX(-10deg) scale(1.05);
+    }
+
+    .pause-menu .cta .span {
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second {
+      margin-left: 20px;
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second svg {
+      width: 30px;
+      height: auto;
     }
 
     /* Music Toggle */
@@ -624,18 +638,22 @@
     <div class="pause-menu">
       <h1>Game Paused</h1>
       <button type="button" class="cta" onclick="resume()">
-        <span style="transform: skewX(10deg); margin-right:10px;">Resume</span>
-        <svg width="30px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg"
-          style="transform: skewX(10deg);">
-          <g stroke="none" stroke-width="1" fill="#000" fill-rule="evenodd">
-            <path
-              d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z" />
-            <path
-              d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z" />
-            <path
-              d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z" />
-          </g>
-        </svg>
+        <span class="span">Resume</span>
+        <span class="second">
+          <svg width="40px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <path
+                d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z"
+                fill="#000" />
+            </g>
+          </svg>
+        </span>
       </button>
 
       <div class="music-control">
@@ -679,8 +697,8 @@
      *  BACKGROUND MUSIC WITH DUCKING
      *****************************/
     let bgMusic = null;
-    const NORMAL_VOLUME = 0.2;
-    const DUCKED_VOLUME = 0.05;
+    const NORMAL_VOLUME = 0.05;
+    const DUCKED_VOLUME = 0.0;
 
     if (localStorage.getItem("audioUnlocked") === "true") {
       bgMusic = new Audio("assets/02-Lufus-EmergencyMeeting.mp3"); // Vishing theme
@@ -695,18 +713,30 @@
       });
     }
 
-    // Duck music when voice clips play
+    // Duck music when voice clips play and mutually exclude others
     function setupAudioDucking() {
       const audioElements = document.querySelectorAll('audio');
       audioElements.forEach(audio => {
         audio.addEventListener('play', () => {
           if (bgMusic) bgMusic.volume = DUCKED_VOLUME;
+
+          // Stop others
+          audioElements.forEach(other => {
+            if (other !== audio) {
+              other.pause();
+              other.currentTime = 0;
+            }
+          });
         });
         audio.addEventListener('pause', () => {
-          if (bgMusic) bgMusic.volume = NORMAL_VOLUME;
+          // Only restore volume if NO other audio is playing
+          const anyPlaying = Array.from(audioElements).some(a => !a.paused);
+          if (bgMusic && !anyPlaying) bgMusic.volume = NORMAL_VOLUME;
         });
         audio.addEventListener('ended', () => {
-          if (bgMusic) bgMusic.volume = NORMAL_VOLUME;
+          // Only restore volume if NO other audio is playing (unlikely on ended, but safe)
+          const anyPlaying = Array.from(audioElements).some(a => !a.paused);
+          if (bgMusic && !anyPlaying) bgMusic.volume = NORMAL_VOLUME;
         });
       });
     }
@@ -741,7 +771,7 @@
       setupAudioDucking(); // Initialize ducking listeners
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 8000);
+      setTimeout(() => lh.classList.remove("visible"), 11000);
     };
 
     function showHint() {
@@ -826,6 +856,7 @@
         msg.textContent = "CORRECT. SYNTHETIC AUDIO DETECTED.";
         setTimeout(() => window.location.href = "RecapVishing.html", 1500);
       } else {
+        if (livesRemaining <= 0) return;
         playSFX(SFX.wrong);
         livesRemaining--;
         document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;

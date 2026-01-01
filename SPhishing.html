@@ -467,9 +467,8 @@
       display: inline-flex;
       align-items: center;
       padding: 15px 40px;
-      font-family: Arial, sans-serif;
-      /* Fixes font per request */
-      font-size: clamp(16px, 2vw, 24px);
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 2vw, 20px);
       font-weight: 700;
       color: #000;
       background: var(--hud-primary);
@@ -478,12 +477,25 @@
       transition: all 0.3s ease;
       transform: skewX(-10deg);
       box-shadow: 4px 4px 0 #000;
-      /* Distinct black shadow */
     }
 
     .pause-menu .cta:hover {
-      box-shadow: 6px 6px 0 #1a5f0c;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
       transform: skewX(-10deg) scale(1.05);
+    }
+
+    .pause-menu .cta .span {
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second {
+      margin-left: 20px;
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second svg {
+      width: 30px;
+      height: auto;
     }
 
     .pause-menu .cta .span {
@@ -574,11 +586,11 @@
       justify-content: center;
       gap: 15px;
       font-family: 'Orbitron', sans-serif;
-      color: var(--primary-neon);
+      color: var(--hud-primary);
       background: rgba(0, 0, 0, 0.4);
       padding: 10px 20px;
       border-radius: 8px;
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--hud-primary);
     }
 
     .switch {
@@ -603,7 +615,7 @@
       bottom: 0;
       background-color: #333;
       transition: .4s;
-      border: 1px solid var(--primary-neon);
+      border: 1px solid var(--hud-primary);
     }
 
     .slider:before {
@@ -613,9 +625,9 @@
       width: 16px;
       left: 4px;
       bottom: 3px;
-      background-color: var(--primary-neon);
+      background-color: var(--hud-primary);
       transition: .4s;
-      box-shadow: 0 0 10px var(--primary-neon);
+      box-shadow: 0 0 10px var(--hud-primary);
     }
 
     input:checked+.slider {
@@ -827,7 +839,7 @@ Agent M
       playSFX(SFX.popup);
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 8000);
+      setTimeout(() => lh.classList.remove("visible"), 11000);
     };
 
     function showHint() {
@@ -893,6 +905,7 @@ Agent M
         msg.textContent = "CORRECT. ACCESS GRANTED.";
         setTimeout(() => window.location.href = "RecapSPhishing.html", 1500);
       } else {
+        if (livesRemaining <= 0) return;
         playSFX(SFX.wrong);
         livesRemaining--;
         document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;

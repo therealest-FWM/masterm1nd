@@ -520,8 +520,8 @@
       display: inline-flex;
       align-items: center;
       padding: 15px 40px;
-      font-family: Arial, sans-serif;
-      font-size: clamp(16px, 2vw, 24px);
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 2vw, 20px);
       font-weight: 700;
       color: #000;
       background: var(--hud-primary);
@@ -533,8 +533,22 @@
     }
 
     .pause-menu .cta:hover {
-      box-shadow: 6px 6px 0 #1a5f0c;
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
       transform: skewX(-10deg) scale(1.05);
+    }
+
+    .pause-menu .cta .span {
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second {
+      margin-left: 20px;
+      transform: skewX(10deg);
+    }
+
+    .pause-menu .cta .second svg {
+      width: 30px;
+      height: auto;
     }
 
     .hint-box,
@@ -566,6 +580,74 @@
 
     .left-hint-box.visible {
       left: 20px;
+    }
+
+    /* Music Toggle */
+    .music-control {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--hud-primary);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--hud-primary);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #333;
+      transition: .4s;
+      border: 1px solid var(--hud-primary);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 3px;
+      background-color: var(--hud-primary);
+      transition: .4s;
+      box-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    input:checked+.slider {
+      background-color: rgba(57, 255, 20, 0.2);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(24px);
+    }
+
+    .slider.round {
+      border-radius: 24px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -687,18 +769,22 @@
     <div class="pause-menu">
       <h1>Game Paused</h1>
       <button type="button" class="cta" onclick="resume()">
-        <span style="transform: skewX(10deg); margin-right:10px;">Resume</span>
-        <svg width="30px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg"
-          style="transform: skewX(10deg);">
-          <g stroke="none" stroke-width="1" fill="#000" fill-rule="evenodd">
-            <path
-              d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z" />
-            <path
-              d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z" />
-            <path
-              d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z" />
-          </g>
-        </svg>
+        <span class="span">Resume</span>
+        <span class="second">
+          <svg width="40px" height="20px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <path
+                d="M40.15,3.89 L43.97,0.14 C44.17,-0.05 44.48,-0.05 44.68,0.14 L65.69,20.78 C66.09,21.17 66.09,21.81 65.70,22.20 L44.68,42.86 C44.48,43.05 44.17,43.05 43.98,42.86 L40.15,39.11 C39.96,38.91 39.95,38.60 40.15,38.40 L56.99,21.86 C57.19,21.66 57.19,21.35 57.00,21.15 L40.15,4.61 C39.96,4.41 39.95,4.10 40.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M20.15,3.89 L23.97,0.14 C24.17,-0.05 24.48,-0.05 24.68,0.14 L45.69,20.78 C46.09,21.17 46.09,21.81 45.70,22.20 L24.68,42.86 C24.48,43.05 24.17,43.05 23.98,42.86 L20.15,39.11 C19.96,38.91 19.95,38.60 20.15,38.40 L36.99,21.86 C37.19,21.66 37.19,21.35 37.00,21.15 L20.15,4.61 C19.96,4.41 19.95,4.10 20.15,3.90 Z"
+                fill="#000" />
+              <path
+                d="M0.15,3.89 L3.97,0.14 C4.17,-0.05 4.48,-0.05 4.68,0.14 L25.69,20.78 C26.09,21.17 26.09,21.81 25.70,22.20 L4.68,42.86 C4.48,43.05 4.17,43.05 3.98,42.86 L0.15,39.11 C-0.04,38.91 -0.05,38.60 0.15,38.40 L16.99,21.86 C17.19,21.66 17.19,21.35 17.00,21.15 L0.15,4.61 C-0.04,4.41 -0.05,4.10 0.15,3.90 Z"
+                fill="#000" />
+            </g>
+          </svg>
+        </span>
       </button>
 
       <div class="music-control">
@@ -712,7 +798,7 @@
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    Review senders carefully. Only trust established contacts like "Agent M."
+    Identify the 2 legitimate emails from "Agent M" to proceed.
   </div>
 
   <div class="hint-box" id="hintBox">
@@ -785,7 +871,7 @@
       playSFX(SFX.popup);
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 8000);
+      setTimeout(() => lh.classList.remove("visible"), 11000);
 
       // Initialize music toggle state
       if (bgMusic) {
@@ -867,14 +953,18 @@
 
     function confirm() {
       const msg = document.getElementById("resultMessage");
-
-      // Total correct needed
       const totalNeeded = 2;
-      const alreadyFound = correctIdsLocked.length;
 
-      // Must select defined number of expected items: (Total - Already Found)
-      if (selectedIds.length !== (totalNeeded - alreadyFound)) {
-        msg.innerText = "PLEASE SELECT " + (totalNeeded - alreadyFound) + " EMAIL(S).";
+      // Allow confirming with 1 or 2 selections, but not 0
+      if (selectedIds.length === 0) {
+        msg.innerText = "PLEASE SELECT AT LEAST ONE EMAIL.";
+        return;
+      }
+
+      // Also prevent selecting more than needed (though UI prevents it, good to check)
+      const remaining = totalNeeded - correctIdsLocked.length;
+      if (selectedIds.length > remaining) {
+        msg.innerText = "TOO MANY SELECTED.";
         return;
       }
 
@@ -882,7 +972,6 @@
       const currentSelectionAreCorrect = selectedIds.every(id => CORRECT_ANSWERS.includes(id));
 
       if (currentSelectionAreCorrect) {
-        // Win or Partial Win?
         // Add current selection to locked
         correctIdsLocked = [...correctIdsLocked, ...selectedIds];
         selectedIds.forEach(id => {
@@ -900,23 +989,22 @@
           msg.textContent = "CORRECT. SECURE COMMUNICATIONS CONFIRMED.";
           setTimeout(() => window.location.href = "RecapEmail.html", 1500);
         } else {
-          // Should not happen if we FORCE user to select all remaining, but keeping logic robust
-          // Partial win?
+          // PARTIAL SUCCESS
+          playSFX(SFX.popup);
+          msg.className = "result-message partial";
+          msg.textContent = "CORRECT. FIND THE REMAINING ONE.";
         }
 
       } else {
+        if (livesRemaining <= 0) return;
         // Incorrect selection logic
-        // Check if ANY of them were correct to lock them?
-        // User Requirement: "if the player only select one real one... one of them was correct... locked in... losing a life... option to be locked in"
-        // This implies we check intersection.
-
         const correctInSelection = selectedIds.filter(id => CORRECT_ANSWERS.includes(id));
         const wrongInSelection = selectedIds.filter(id => !CORRECT_ANSWERS.includes(id));
 
         livesRemaining--;
         document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
 
-        if (livesRemaining === 0) {
+        if (livesRemaining <= 0) {
           playSFX(SFX.gameOver);
           stopTimer();
           window.location.href = "GameOverEmail.html";
@@ -925,7 +1013,7 @@
 
         if (correctInSelection.length > 0) {
           // PARTIAL CORRECT
-          playSFX(SFX.popup); // or some mixed sound
+          playSFX(SFX.popup);
           msg.className = "result-message partial";
           msg.textContent = "ONE CORRECT IDENTIFIED. LIFE LOST. WRONG CHOICE LOCKED.";
 
