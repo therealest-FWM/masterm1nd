@@ -18,13 +18,18 @@ window.onload = function () {
         }
 
         if (z) {
+            let stars = 0;
             if (totalTimeInSecondsPorts <= 50) {
                 z.textContent = "Score: ★★★";
+                stars = 3;
             } else if (totalTimeInSecondsPorts <= 80) {
                 z.textContent = "Score: ★★☆";
+                stars = 2;
             } else {
                 z.textContent = "Score: ★☆☆";
+                stars = 1;
             }
+            sessionStorage.setItem('stats_ports', JSON.stringify({ stars, time: totalTimeInSecondsPorts }));
         }
     } else {
         if (y) {

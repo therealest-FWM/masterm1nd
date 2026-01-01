@@ -85,13 +85,18 @@
       }
 
       if (scoreDisplay) {
+        let stars = 0;
         if (livesLeft === 2 && totalTimeInSeconds <= 20) {
           scoreDisplay.textContent = "★★★";
+          stars = 3;
         } else if (livesLeft >= 1 && totalTimeInSeconds <= 40) {
           scoreDisplay.textContent = "★★☆";
+          stars = 2;
         } else {
           scoreDisplay.textContent = "★☆☆";
+          stars = 1;
         }
+        sessionStorage.setItem('stats_phish_sms', JSON.stringify({ stars, time: totalTimeInSeconds }));
       }
     };
     /*****************************

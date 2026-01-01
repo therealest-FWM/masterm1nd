@@ -82,13 +82,18 @@
       }
 
       if (z) {
+        let stars = 0;
         if (totalTimeInSeconds2 <= 40) {
           z.textContent = "★★★";
+          stars = 3;
         } else if (totalTimeInSeconds2 <= 70) {
           z.textContent = "★★☆";
+          stars = 2;
         } else {
           z.textContent = "★☆☆";
+          stars = 1;
         }
+        sessionStorage.setItem('stats_pass_l2', JSON.stringify({ stars, time: totalTimeInSeconds2 }));
       }
     };
 

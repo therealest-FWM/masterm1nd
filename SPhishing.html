@@ -514,23 +514,25 @@
       height: auto;
     }
 
-    /* Hint Boxes separate definition now */
     .hint-box,
     .left-hint-box {
-      border: 1px solid var(--hud-primary);
-      box-shadow: 0 0 20px var(--hud-glow);
+      border: 3px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
       color: var(--hud-primary);
-      background: #000;
+      background: rgba(0, 0, 0, 0.95);
+      position: fixed;
+      padding: 30px;
+      width: 400px;
+      z-index: 1500;
+      transition: all 0.4s;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
     }
 
     .hint-box {
-      position: fixed;
       top: 80px;
-      right: -400px;
-      padding: 20px;
-      width: 300px;
-      transition: right 0.4s;
-      z-index: 1500;
+      right: -450px;
     }
 
     .hint-box.visible {
@@ -538,13 +540,8 @@
     }
 
     .left-hint-box {
-      position: fixed;
       top: 80px;
-      left: -400px;
-      padding: 20px;
-      width: 300px;
-      transition: left 0.4s;
-      z-index: 1500;
+      left: -450px;
     }
 
     .left-hint-box.visible {
@@ -767,8 +764,8 @@ Agent M
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    Try to choose the legitimate message. Look for signs of phishing such as suspicious sender addresses, urgent
-    language, and unusual links.
+    WHAT TO DO: Identify the legitimate communication. Analyze the details closely—phishing attempts often use subtle
+    errors in tone or platform.
   </div>
 
   <div class="hint-box" id="hintBox">
@@ -839,7 +836,7 @@ Agent M
       playSFX(SFX.popup);
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 11000);
+      setTimeout(() => lh.classList.remove("visible"), 10000);
     };
 
     function showHint() {

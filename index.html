@@ -236,12 +236,14 @@
 
   <script>
     function startGame() {
-      const gameOverSound = new Audio("assets/27.wav");
-      localStorage.setItem("audioUnlocked", "true");
-      gameOverSound.play().catch(() => { });
-      setTimeout(() => {
+      const unlockSound = new Audio("assets/silence.mp3");
+      unlockSound.play().then(() => {
+        localStorage.setItem("audioUnlocked", "true");
         window.location.href = 'MainMenu.html';
-      }, 600);
+      }).catch(() => {
+        localStorage.setItem("audioUnlocked", "true");
+        window.location.href = 'MainMenu.html';
+      });
     }
 
     // --- Particle System ---
@@ -305,7 +307,18 @@
 
     window.addEventListener('resize', resize);
     window.onload = initParticles;
+    setTimeout(() => {
+      const preloadVideo = document.createElement('video');
+      preloadVideo.src = "assets/OpeningCS.mp4";
+      preloadVideo.preload = "auto";
+      preloadVideo.muted = true;
+      preloadVideo.playsInline = true;
+      preloadVideo.style.display = "none";
+      document.body.appendChild(preloadVideo);
+    }, 2000); // Wait 2 seconds before preloading
   </script>
+
 </body>
+
 
 </html>

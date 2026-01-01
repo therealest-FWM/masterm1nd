@@ -87,14 +87,19 @@
       }
 
       if (scoreDisplay) {
+        let stars = 0;
         // Stars based on lives remaining (3 lives total)
         if (livesLeft === 3) {
           scoreDisplay.textContent = "★★★";
+          stars = 3;
         } else if (livesLeft === 2) {
           scoreDisplay.textContent = "★★☆";
+          stars = 2;
         } else {
           scoreDisplay.textContent = "★☆☆";
+          stars = 1;
         }
+        sessionStorage.setItem('stats_phish_email', JSON.stringify({ stars, time: totalTimeInSeconds }));
       }
     };
     /*****************************
