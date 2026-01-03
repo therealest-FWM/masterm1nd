@@ -647,7 +647,7 @@
             {
                 target: "#tour-progress",
                 title: "1. Progress Bar",
-                desc: "This indicates your current level.",
+                desc: "This indicates the current level.",
                 position: "bottom",
                 action: null
             },
@@ -701,6 +701,7 @@
                 title: "Input Terminal",
                 desc: "Type your answer here. For this tutorial, we've pre-filled the answer or you can type 'tutorial'.",
                 position: "top",
+                yOffset: -60,
                 action: () => {
                     document.getElementById('passwordInput').focus();
                     document.getElementById('passwordInput').value = "tutorial";
@@ -711,6 +712,8 @@
                 title: "8. Execute",
                 desc: "Click Confirm to submit your answer. Let's solve this level now.",
                 position: "top",
+                hideNext: true,
+                yOffset: -30,
                 action: () => {
                     const btn = document.getElementById('tour-confirm');
                     btn.style.boxShadow = "0 0 30px #ffffff";
@@ -732,6 +735,7 @@
                 title: "10. De-briefing",
                 desc: "Important context or story information will appear here. Read it to understand the bigger picture.",
                 position: "top",
+                yOffset: -30,
                 waitForLayer: "recap-layer"
             },
             {
@@ -739,14 +743,15 @@
                 title: "11. Next Moves",
                 desc: "You can choose to Retry for a better score, proceed to the Next Level, or return to the Level Select Menu.",
                 position: "top",
+                yOffset: -30,
                 waitForLayer: "recap-layer"
             },
             // Switch to Game Over (Simulation)
             {
-                target: "#gameover-buttons",
+                target: "#gameover-card",
                 title: "12. Failure Condition",
                 desc: "If you fail (run out of lives), you'll see this screen.",
-                position: "top",
+                position: "right",
                 waitForLayer: "gameover-layer",
                 action: () => {
                     // Ensure Game Over layer uses the correct failure bg class
@@ -763,18 +768,15 @@
             {
                 target: "#gameover-buttons",
                 title: "Tutorial Complete",
-                desc: "You are now ready. Redirecting to Main Menu...",
+                desc: "You are now ready. Click below to return to the Main Menu.",
                 position: "center",
-                waitForLayer: "gameover-layer",
-                action: () => {
-                    setTimeout(finishTutorial, 5000);
-                }
+                waitForLayer: "gameover-layer"
             }
         ];
 
         let currentStep = 0;
 
-        function updateTour() {
+        function updateTour(isResize = false) {
             if (currentStep >= steps.length) {
                 finishTutorial();
                 return;
@@ -792,13 +794,28 @@
                 document.getElementById(step.waitForLayer).style.display = 'flex';
             }
 
-            // Play Step Audio
-            playTVO(currentStep + 1);
+            // Play Step Audio (Only if not resizing)
+            if (!isResize) {
+                playTVO(currentStep + 1);
+            }
 
             // Execute custom action if any
-            if (step.action) {
+            if (step.action && !isResize) { // Prevent re-running actions on resize if desired, though some might be needed. 
+                // For now, let's keep actions running only on step change to be safe, 
+                // BUT some actions set focus or value, so maybe we SHOULD run them?
+                // The user only complained about VOICE OVER. 
+                // Let's stick to restricting only the audio for now as requested.
+                step.action();
+            } else if (step.action && isResize) {
+                // specific check if needed, but for now leaving action execution potentially on resize 
+                // might be safer for state consistency, OR safer to skip.
+                // The prompt specifically said "it doesn't affect the voice-over to start again".
+                // Let's just wrap the audio.
+                // Actually, re-running actions like "set value to 'tutorial'" or "focus" is harmless or good on resize.
+                // Re-running "scale(0.95)" animation is weird but okay.
                 step.action();
             }
+
 
             // Find target element
             const targetEl = document.querySelector(step.target);
@@ -861,8 +878,25 @@
                     highlightBox.style.display = 'none'; // Hide highlight for general steps
                 }
 
+                if (step.yOffset) {
+                    cardTop += step.yOffset;
+                }
+
                 tourCard.style.top = cardTop + 'px';
                 tourCard.style.left = cardLeft + 'px';
+
+                // Handle Next Button Visibility and Text
+                const nextBtn = document.getElementById('next-btn');
+                if (step.hideNext) {
+                    nextBtn.style.display = 'none';
+                } else {
+                    nextBtn.style.display = 'inline-block';
+                    if (currentStep === steps.length - 1) {
+                        nextBtn.innerText = "EXIT TUTORIAL";
+                    } else {
+                        nextBtn.innerText = "NEXT";
+                    }
+                }
 
             } else {
                 console.warn("Target not found: " + step.target);
@@ -880,7 +914,13 @@
             const input = document.getElementById('passwordInput');
             input.style.borderColor = "var(--primary-yellow)";
             input.style.boxShadow = "0 0 20px var(--primary-yellow)";
-            // No alert as requested
+
+            // Advance to next step
+            if (currentStep === 10) { // Assuming step 10 is the Execute step
+                setTimeout(() => {
+                    nextStep();
+                }, 300);
+            }
         }
 
         function finishTutorial() {
@@ -927,6 +967,11 @@
                 bgMusic.play().catch(() => { });
             });
         }
+
+        // Handle Resize to keep tour elements aligned
+        window.addEventListener('resize', () => {
+            updateTour(true);
+        });
 
     </script>
 </body>
