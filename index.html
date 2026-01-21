@@ -46,9 +46,16 @@
       background-size: cover;
       background-position: center;
       filter: brightness(0);
+      /* Animation starts after welcome */
+      opacity: 0;
+      transition: opacity 2s ease-out;
+    }
+
+    .bg-layer.active {
+      opacity: 1;
       animation:
-        bg-fade-in 4s ease-out forwards,
-        bg-pulse 10s ease-in-out infinite alternate 4s;
+        bg-pulse 10s ease-in-out infinite alternate 0s;
+      /* Pulse starts immediately once active */
     }
 
     .bg-overlay {
@@ -93,6 +100,13 @@
       width: 100%;
       max-width: 90vw;
       padding: 20px;
+      opacity: 0;
+      /* Hidden initially */
+      transition: opacity 1.5s ease-out;
+    }
+
+    .splash-container.visible {
+      opacity: 1;
     }
 
     .neon-title {
@@ -108,14 +122,13 @@
       letter-spacing: 0.15em;
       font-weight: 900;
       opacity: 0;
+      /* Animation controlled by class */
+    }
+
+    .splash-container.visible .neon-title {
       animation:
-        title-fade-in 2.5s ease-out forwards 1s,
-        title-flicker 4s infinite 3.5s;
-      text-transform: uppercase;
-      transform: skewX(-10deg);
-      /* Slightly more skew for cyber look */
-      width: 100%;
-      display: block;
+        title-fade-in 2.5s ease-out forwards 0.5s,
+        title-flicker 4s infinite 3s;
     }
 
     .start-button {
@@ -135,7 +148,10 @@
       letter-spacing: 4px;
       backdrop-filter: blur(5px);
       box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
-      animation: button-appear 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 4s;
+    }
+
+    .splash-container.visible .start-button {
+      animation: button-appear 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.5s;
     }
 
     .start-button:hover {
@@ -148,6 +164,89 @@
 
     .start-button:active {
       transform: scale(0.98);
+    }
+
+    /* --- Welcome Overlay --- */
+    #welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
+    }
+
+    #welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-text {
+      color: var(--primary-neon);
+      font-size: clamp(24px, 5vw, 60px);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 15px var(--primary-neon);
+      opacity: 0;
+      animation: welcome-fade-in 1.5s ease-out forwards 0.5s;
+      text-align: center;
+    }
+
+    .enter-text {
+      color: #fff;
+      font-size: clamp(14px, 2vw, 20px);
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 10px 20px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      opacity: 0;
+      text-align: center;
+      line-height: 1.6;
+      animation: welcome-fade-in 1.5s ease-out forwards 1.5s;
+    }
+
+    .click-hint {
+      margin-top: 30px;
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.7);
+      animation: welcome-fade-in 1.5s ease-out forwards 2s, blink-text 2s infinite 3.5s;
+      opacity: 0;
+    }
+
+    .enter-text:hover {
+      text-shadow: 0 0 10px #fff;
+    }
+
+    @keyframes welcome-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes blink-text {
+
+      0%,
+      100% {
+        opacity: 0.7;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
     }
 
     @keyframes bg-fade-in {
@@ -224,23 +323,48 @@
 </head>
 
 <body>
-  <div class="bg-layer"></div>
+  <!-- Welcome Overlay -->
+  <div id="welcome-overlay" onclick="enterSite()">
+    <div class="welcome-text">WELCOME OPERATIVE</div>
+    <div class="enter-text">FOR THE FULL EXPERIENCE,<br>PLAY IN FULL SCREEN</div>
+    <div class="click-hint">[ CLICK TO START ]</div>
+  </div>
+
+  <div class="bg-layer" id="bgLayer"></div>
   <div class="bg-overlay"></div>
   <div class="scanline"></div>
   <canvas id="particles"></canvas>
 
-  <div class="splash-container">
+  <div class="splash-container" id="splashContainer">
     <div class="neon-title">MASTERM1ND</div>
     <button class="start-button" onclick="startGame()">Start Game</button>
   </div>
 
   <script>
+    function enterSite() {
+      // Attempt full screen
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => {
+          console.log("Fullscreen request failed", err);
+        });
+      }
+
+      // Hide welcome overlay
+      document.getElementById('welcome-overlay').classList.add('hidden');
+
+      // Show main content
+      document.getElementById('bgLayer').classList.add('active');
+      document.getElementById('splashContainer').classList.add('visible');
+    }
+
     function startGame() {
       const unlockSound = new Audio("assets/silence.mp3");
       unlockSound.play().then(() => {
         localStorage.setItem("audioUnlocked", "true");
         window.location.href = 'MainMenu.html';
       }).catch(() => {
+        // Even if silent playback fails (unlikely if clicked), we proceed
         localStorage.setItem("audioUnlocked", "true");
         window.location.href = 'MainMenu.html';
       });
@@ -314,11 +438,13 @@
       preloadVideo.muted = true;
       preloadVideo.playsInline = true;
       preloadVideo.style.display = "none";
-      document.body.appendChild(preloadVideo);
+      try {
+        document.body.appendChild(preloadVideo);
+      } catch (e) {
+        console.log("Preload video append failed", e);
+      }
     }, 2000); // Wait 2 seconds before preloading
   </script>
-
 </body>
-
 
 </html>

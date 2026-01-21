@@ -7,6 +7,70 @@
   <title>Level Recap</title>
   <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link rel="stylesheet" href="results.css">
+  <style>
+    /* Phishing Recap Specific Overrides */
+    .result-card {
+      padding: 2.5rem 3rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 85%;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stats-grid {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      gap: 3rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+    }
+
+    .lesson-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+    }
+
+    .lesson-box p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    .action-buttons {
+      margin-top: 2rem;
+      gap: 1.5rem;
+    }
+
+    .cyber-btn {
+      padding: 12px 30px;
+      font-size: 0.9rem;
+    }
+
+    /* Scrollbar styling for aesthetic */
+    .result-card::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .result-card::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .result-card::-webkit-scrollbar-thumb {
+      background: var(--neon-green);
+      border-radius: 4px;
+    }
+  </style>
   <script src="./Recap.js"></script>
 </head>
 

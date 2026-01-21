@@ -84,10 +84,16 @@
 
       if (z) {
         let stars = 0;
-        if (totalTimeInSeconds <= 30) {
+        const lives = parseInt(localStorage.getItem('p1_lives') || '3');
+
+        // Logic: 3 Stars = 3 Lives & Time <= 30s
+        // 2 Stars = >= 2 Lives & Time <= 60s
+        // 1 Star = 1 Life or Time > 60s
+
+        if (lives === 3 && totalTimeInSeconds <= 40) {
           z.textContent = "★★★";
           stars = 3;
-        } else if (totalTimeInSeconds <= 60) {
+        } else if (lives >= 2 && totalTimeInSeconds <= 80) {
           z.textContent = "★★☆";
           stars = 2;
         } else {

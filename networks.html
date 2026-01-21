@@ -1445,8 +1445,15 @@
               <div class="message sent">no boss</div>
               <div class="message received">Good. Send me the data.</div>
               <div class="message sent attachment-container">
-                data.docx
-                <span class="attachment-icon">📎</span>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="background:#fff; border-radius:4px; padding:5px;">
+                    <span style="font-size:24px;">📄</span>
+                  </div>
+                  <div>
+                    <div style="font-weight:bold; font-size:14px;">data.docx</div>
+                    <div style="font-size:10px; opacity:0.8;">1.2 MB</div>
+                  </div>
+                </div>
               </div>
               <div class="message received">Thanks, received.</div>
               <div class="message received">Good work Larry.</div>
@@ -1718,9 +1725,16 @@
       playSFX(SFX.popup);
 
       setTimeout(() => {
+        popup.innerHTML = "CONNECTED";
+        popup.style.borderColor = "var(--hud-primary)";
+        popup.style.color = "var(--hud-primary)";
+        playSFX(SFX.correct);
+      }, 2000);
+
+      setTimeout(() => {
         popup.classList.remove('active');
         goToPage(2);
-      }, 2000);
+      }, 3500);
     }
 
     // Chat animation
@@ -1746,7 +1760,18 @@
           var msgDiv = document.createElement('div');
           if (msg.isAttachment) {
             msgDiv.className = 'message ' + msg.type + ' attachment-container';
-            msgDiv.innerHTML = msg.text + '<span class="attachment-icon">📎</span>';
+            // Use standard Word icon if possible, or a styled separate block
+            msgDiv.innerHTML = `
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="background:#fff; border-radius:4px; padding:5px;">
+                  <span style="font-size:24px;">📄</span>
+                </div>
+                <div>
+                  <div style="font-weight:bold; font-size:14px;">data.docx</div>
+                  <div style="font-size:10px; opacity:0.8;">1.2 MB</div>
+                </div>
+              </div>
+            `;
           } else {
             msgDiv.className = 'message ' + msg.type;
             msgDiv.textContent = msg.text;
@@ -1758,8 +1783,9 @@
           setTimeout(addNextMessage, 1500);
         } else {
           setTimeout(() => {
-            document.getElementById('mall-overlay').classList.add('active');
-            createMallDevices();
+            setTimeout(() => {
+              showBreachAlert();
+            }, 2000);
           }, 2000);
         }
       }
@@ -2035,17 +2061,57 @@
       } else {
         // Wrong key - only penalize if it's one of the potential QTE keys to avoid accidental triggers
         if (qteKeys.indexOf(pressedKey) !== -1) {
-          handleQteFail('WRONG KEY!');
         }
       }
     });
 
     // Hacking animation with combined data extraction
+    function showBreachAlert() {
+      // Create a temporary overlay for the alert if one doesn't exist, or re-use QTE overlay but styled differently
+      // Using a dedicated full screen overlay for the alert to ensure it takes focus
+
+      const alertOverlay = document.createElement('div');
+      alertOverlay.style.position = 'fixed';
+      alertOverlay.style.top = '0';
+      alertOverlay.style.left = '0';
+      alertOverlay.style.width = '100%';
+      alertOverlay.style.height = '100%';
+      alertOverlay.style.backgroundColor = 'rgba(0,0,0,0.95)';
+      alertOverlay.style.zIndex = '3000';
+      alertOverlay.style.display = 'flex';
+      alertOverlay.style.justifyContent = 'center';
+      alertOverlay.style.alignItems = 'center';
+      alertOverlay.style.flexDirection = 'column';
+      alertOverlay.innerHTML = `
+        <h1 style="color: #ff0000; font-size: 36px; text-shadow: 0 0 20px #ff0000; text-align: center;">INITIATING BREACH SEQUENCE...</h1>
+        <h2 style="color: #fff; font-size: 24px; margin-top: 20px;">PREPARE TO INTERCEPT</h2>
+      `;
+      document.body.appendChild(alertOverlay);
+
+      // Removed SFX as requested
+      // playSFX(SFX.gameOver); 
+
+      setTimeout(() => {
+        // Show Mall Overlay AFTER Alert
+        alertOverlay.remove();
+        document.getElementById('mall-overlay').classList.add('active');
+        createMallDevices();
+      }, 3000);
+    }
+
+    // Hacking animation with combined data extraction
     function startHackingAnimation() {
-      var delays = [0, 500, 1000, 1500];
+      // 1. Instant/Fast for Photos
+      setTimeout(() => {
+        document.getElementById('progress1').style.width = '100%';
+        playSFX(SFX.popup);
+      }, 100);
+
+      // 2. Others sequentially
+      var delays = [500, 1000, 1500]; // for 2, 3, 4
       delays.forEach((delay, index) => {
         setTimeout(() => {
-          document.getElementById('progress' + (index + 1)).style.width = '100%';
+          document.getElementById('progress' + (index + 2)).style.width = '100%';
           playSFX(SFX.popup);
         }, delay);
       });
@@ -2055,7 +2121,7 @@
         playSFX(SFX.correct);
         document.getElementById('data-complete-title').classList.add('show');
         document.getElementById('confirm-btn').style.display = 'inline-block';
-      }, 3500);
+      }, 2500);
     }
 
     // Game controls
