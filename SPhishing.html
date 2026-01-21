@@ -764,14 +764,12 @@ Agent M
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    WHAT TO DO: Identify the legitimate communication. Analyze the details closely—phishing attempts often use subtle
-    errors in tone or platform.
+    WHAT TO DO: Identify the legitimate communication. Real contacts follow established protocols; look for anything
+    that breaks routine.
   </div>
 
   <div class="hint-box" id="hintBox">
-    Be wary of unexpected requests, especially those asking for sensitive information or to follow links outside
-    established secure channels. Genuine communications will follow known protocols and not request sensitive
-    information.
+    Real contacts don’t suddenly change how they operate.
   </div>
 
   <script>
@@ -839,9 +837,21 @@ Agent M
       setTimeout(() => lh.classList.remove("visible"), 10000);
     };
 
+    const spearPhishingHints = [
+      "Real contacts don’t suddenly change how they operate.",
+      "Familiar names can still carry unfamiliar requests.",
+      "Urgency is often used to bypass routine, not improve it."
+    ];
+    let hintIndex = 0;
+
     function showHint() {
       playSFX(SFX.popup);
-      document.getElementById("hintBox").classList.toggle("visible");
+      const hintBox = document.getElementById("hintBox");
+      hintBox.textContent = spearPhishingHints[hintIndex % spearPhishingHints.length];
+      hintBox.classList.toggle("visible");
+      if (hintBox.classList.contains("visible")) {
+        hintIndex++;
+      }
     }
 
     function toggleMusic() {
@@ -889,18 +899,69 @@ Agent M
       window.location.href = "LevelSelect.html";
     }
 
+    // Multi-round system
+    let currentRound = 0;
+    const rounds = [
+      {
+        question: "Choose the legitimate message",
+        realSubject: "Subject: Project MASTERM1ND Progress Update",
+        realBody: "Operative Simon,\n\nYour progress on Project MASTERM1ND is crucial. Please submit your findings via our encrypted system, accessible through the secure VPN provided. Remember to verify transmissions with a secure call to my direct line, as per protocol.\n\nYour efforts are vital for our success against KA.OS. Stay vigilant.\n\nAgent M",
+        fakeSubject: "Subject: Immediate Action Required: Project Update",
+        fakeBody: "Simon,\n\nUrgent: We need an update on your KA.OS research. Please upload your data to RealGov.com/secure-upload for quick analysis. Ensure you include your mission passphrase for verification.\n\nPrompt action is needed.\n\nAgent M\n\n[Notice: This email is for the recipient only. Do not share link or passphrase.]",
+        correctAnswer: "real"
+      },
+      {
+        question: "Choose the legitimate message",
+        realSubject: "Subject: Urgent: Relay Error",
+        realBody: "Simon, this is Agent M. Our secure relay is temporarily down. Text the recovered login data directly so we can keep momentum.",
+        fakeSubject: "Subject: Credential Verification",
+        fakeBody: "Simon, we’ve cross-referenced your last pull with KA.OS activity. Send the credential hashes through the secure channel we used yesterday. Same protocol. Don’t delay.",
+        correctAnswer: "fake"
+      },
+      {
+        question: "Choose the legitimate message",
+        realSubject: "Subject: Account Metadata",
+        realBody: "Good work so far. I need the account metadata you recovered—usernames only, no passwords. Upload it to the government relay node immediately.",
+        fakeSubject: "Subject: Internal Audit Flagged",
+        fakeBody: "Internal audit flagged your recent access. To avoid suspension, forward the full account dump to this address for verification.",
+        correctAnswer: "real"
+      }
+    ];
+
+    function loadRound(roundIndex) {
+      const round = rounds[roundIndex];
+      document.querySelector(".instruction-text").textContent = round.question;
+      document.querySelectorAll(".email-subject")[0].textContent = round.realSubject;
+      document.querySelectorAll(".email-body textarea")[0].value = round.realBody;
+      document.querySelectorAll(".email-subject")[1].textContent = round.fakeSubject;
+      document.querySelectorAll(".email-body textarea")[1].value = round.fakeBody;
+
+      // Clear selection and result message
+      document.querySelectorAll('input[name="phishing-choice"]').forEach(input => input.checked = false);
+      document.getElementById("resultMessage").textContent = "";
+      document.getElementById("resultMessage").className = "result-message";
+    }
+
     function confirm() {
-      const realOption = document.getElementById("real");
       const msg = document.getElementById("resultMessage");
       const selected = document.querySelector('input[name="phishing-choice"]:checked');
       if (!selected) return;
 
-      if (realOption.checked) {
+      const currentCorrectAnswer = rounds[currentRound].correctAnswer;
+      const isCorrect = selected.id === currentCorrectAnswer;
+
+      if (isCorrect) {
         playSFX(SFX.correct);
-        stopTimer();
         msg.className = "result-message correct";
         msg.textContent = "CORRECT. ACCESS GRANTED.";
-        setTimeout(() => window.location.href = "RecapSPhishing.html", 1500);
+
+        currentRound++;
+        if (currentRound >= rounds.length) {
+          stopTimer();
+          setTimeout(() => window.location.href = "RecapSPhishing.html", 1500);
+        } else {
+          setTimeout(() => loadRound(currentRound), 1500);
+        }
       } else {
         if (livesRemaining <= 0) return;
         playSFX(SFX.wrong);

@@ -801,12 +801,11 @@
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    WHAT TO DO: Select the emails that appear legitimate. Be careful—modern phishing attempts are often disguised as
-    trusted contacts like "Agent M."
+    WHAT TO DO: Select the emails that appear legitimate. A convincing tone doesn’t guarantee a legitimate source.
   </div>
 
   <div class="hint-box" id="hintBox">
-    Generic greetings ("Simon"), urgency ("Act fast"), and suspicious links are red flags.
+    A convincing tone doesn’t guarantee a legitimate source.
   </div>
 
   <script>
@@ -831,25 +830,50 @@
     // Background Music
     let bgMusic = null;
     if (localStorage.getItem("audioUnlocked") === "true") {
-      // Ideally use unique theme if available, or fallback
       bgMusic = new Audio("assets/04-Lufus-SpaceTime.mp3");
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
       bgMusic.addEventListener("loadedmetadata", () => {
-        bgMusic.currentTime = 0; // Default start time
+        bgMusic.currentTime = 0;
         if (localStorage.getItem("isMuted") !== "true") {
           bgMusic.play().catch(() => { });
         }
       });
     }
 
-    var livesRemaining = 2; // Reduced to 2 per user request
+    var livesRemaining = 2;
     var timer4;
     var totalMilliseconds4 = 0;
     var selectedIds = [];
-    var correctIdsLocked = []; // Track IDs of correct emails already found
-    var wrongIdsLocked = []; // Track IDs of wrong emails
-    const CORRECT_ANSWERS = ['1', '5']; // IDs of the real emails
+    var correctIdsLocked = [];
+    var wrongIdsLocked = [];
+
+    // Multi-round system
+    let currentRound = 0;
+    const rounds = [
+      {
+        correctAnswers: ['1', '5'],
+        emails: [
+          { id: '1', sender: "Agent M", subject: "Submit Your MASTERM1ND Findings", body: "Simon,<br>Update time. Securely submit your findings via our encrypted portal. Remember, verify with a call post-submission. Good luck.<br><br>- Agent M." },
+          { id: '2', sender: "IT Security", subject: "Verify Your Credentials", body: "Simon, confirm your login details for security audit. Reply to this email immediately to prevent account lockout.<br><br>IT Security Dept." },
+          { id: '3', sender: "Security Team", subject: "Secure Your Data Now!", body: "Simon, URGENT! We detected a breach. Send your data here for security checks. Act fast!! Failure to comply = termination.<br><br>Regards,<br>Security Team" },
+          { id: '4', sender: "Project team", subject: "Update Your Data", body: "Upload findings ASAP using this link: <span style='text-decoration:underline; color:#4fc3f7;'>http://bit.ly/secure-upload</span>. Thanks.<br><br>Best,<br>Project team" },
+          { id: '5', sender: "Agent M", subject: "Secure Check-In", body: "Simon,<br>Check-in through your secure dashboard. Procedure requires a verification call after any upload. Stay safe.<br><br>- Agent M." },
+          { id: '6', sender: "Aygent M", subject: "Send info Plz", body: "hey Symon send us ur info rn plz, asap.<br><br>A M." }
+        ]
+      },
+      {
+        correctAnswers: ['1', '2'],
+        emails: [
+          { id: '1', sender: "Agent M", subject: "Next Step", body: "We’re moving faster than KA.OS anticipated. I only need confirmation of access points—no raw data. Brief and clean." },
+          { id: '2', sender: "Agent M", subject: "Protocol Verification", body: "Simon, ensure you’re using the rotating keys for today’s transmission. I’ll be monitoring the secondary channel for your heartbeat signal." },
+          { id: '3', sender: "Security Team", subject: "URGENT: Password Reset Required", body: "A security breach has been detected. Follow the link to reset your password immediately or face account suspension." },
+          { id: '4', sender: "Helpdesk", subject: "Ticket #8922: Password Reset", body: "Your password reset request has been processed. Follow the link below to set your new password." },
+          { id: '5', sender: "Internal Audit", subject: "Data Retention Policy", body: "Per the new data retention policy, please archive all Project MASTERM1ND files and send a copy to this address." },
+          { id: '6', sender: "KA.OS Intelligence", subject: "We See You", body: "It's only a matter of time before your cover is blown. Join us and survive." }
+        ]
+      }
+    ];
 
     function formatTime(ms) {
       var min = Math.floor(ms / 60000);
@@ -870,36 +894,60 @@
       localStorage.setItem("totalTimeInSecondsEmail", totalMilliseconds4 / 1000);
     }
 
+    function loadRound(roundIndex) {
+      const round = rounds[roundIndex];
+      selectedIds = [];
+      correctIdsLocked = [];
+      wrongIdsLocked = [];
+      document.getElementById("resultMessage").textContent = "";
+      document.getElementById("resultMessage").className = "result-message";
+
+      round.emails.forEach(email => {
+        const card = document.getElementById('email-' + email.id);
+        if (card) {
+          card.className = "email-card";
+          card.querySelector('.email-sender').textContent = "Sender: " + email.sender;
+          card.querySelector('.email-subject').textContent = "Subject: " + email.subject;
+          card.querySelector('.email-body').innerHTML = email.body;
+        }
+      });
+    }
+
     window.onload = function () {
       startTimer();
       playSFX(SFX.popup);
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
       setTimeout(() => lh.classList.remove("visible"), 10000);
-
-      // Initialize music toggle state
       if (bgMusic) {
         document.getElementById("musicToggle").checked = localStorage.getItem("isMuted") === "true";
       }
+      loadRound(0);
     };
+
+    const emailPhishingHints = [
+      "A convincing tone doesn’t guarantee a legitimate source.",
+      "Watch for requests that escalate scope without explanation.",
+      "Legitimate senders rarely ask for everything at once."
+    ];
+    let hintIndex = 0;
 
     function showHint() {
       playSFX(SFX.popup);
-      document.getElementById("hintBox").classList.toggle("visible");
+      const hintBox = document.getElementById("hintBox");
+      hintBox.textContent = emailPhishingHints[hintIndex % emailPhishingHints.length];
+      hintBox.classList.toggle("visible");
+      if (hintBox.classList.contains("visible")) {
+        hintIndex++;
+      }
     }
 
     function toggleMusic() {
       const isStopped = document.getElementById("musicToggle").checked;
       localStorage.setItem("isMuted", isStopped);
       if (bgMusic) {
-        if (isStopped) {
-          bgMusic.pause();
-        } else {
-          // Only play if the game is NOT currently paused
-          if (!document.getElementById("pause-overlay").classList.contains("active")) {
-            bgMusic.play().catch(() => { });
-          }
-        }
+        if (isStopped) bgMusic.pause();
+        else if (!document.getElementById("pause-overlay").classList.contains("active")) bgMusic.play().catch(() => { });
       }
     }
 
@@ -910,21 +958,15 @@
         overlay.classList.add("active");
         stopTimer();
         if (bgMusic) bgMusic.pause();
-
-        // Sync toggle
         document.getElementById("musicToggle").checked = localStorage.getItem("isMuted") === "true";
-      } else {
-        resume();
-      }
+      } else resume();
     }
 
     function resume() {
       playSFX(SFX.unpause);
       document.getElementById("pause-overlay").classList.remove("active");
       startTimer();
-      if (bgMusic && localStorage.getItem("isMuted") !== "true") {
-        bgMusic.play().catch(() => { });
-      }
+      if (bgMusic && localStorage.getItem("isMuted") !== "true") bgMusic.play().catch(() => { });
     }
 
     function quitToMainMenu() {
@@ -933,21 +975,14 @@
     }
 
     function toggleSelection(id) {
-      // Ignore if locked (correct or wrong)
       if (correctIdsLocked.includes(id) || wrongIdsLocked.includes(id)) return;
-
       const card = document.getElementById('email-' + id);
-
       if (selectedIds.includes(id)) {
-        // Deselect
         selectedIds = selectedIds.filter(idx => idx !== id);
         card.classList.remove('selected');
       } else {
-        // Select
-        // Logic: If we need a max selection (e.g., 2), handle it. 
-        // BUT the prompt implies finding remaining ones, so we might allow "up to remaining needed"
-        // Let's allow selecting up to 2 items actively max for clarity.
-        const needed = 2 - correctIdsLocked.length;
+        const roundData = rounds[currentRound];
+        const needed = roundData.correctAnswers.length - correctIdsLocked.length;
         if (selectedIds.length < needed) {
           selectedIds.push(id);
           card.classList.add('selected');
@@ -957,109 +992,69 @@
 
     function confirm() {
       const msg = document.getElementById("resultMessage");
-      const totalNeeded = 2;
+      const roundData = rounds[currentRound];
+      const totalNeeded = roundData.correctAnswers.length;
 
-      // Allow confirming with 1 or 2 selections, but not 0
       if (selectedIds.length === 0) {
         msg.innerText = "PLEASE SELECT AT LEAST ONE EMAIL.";
         return;
       }
 
-      // Also prevent selecting more than needed (though UI prevents it, good to check)
-      const remaining = totalNeeded - correctIdsLocked.length;
-      if (selectedIds.length > remaining) {
-        msg.innerText = "TOO MANY SELECTED.";
+      const hasIncorrect = selectedIds.some(id => !roundData.correctAnswers.includes(id));
+
+      if (hasIncorrect) {
+        const incorrectId = selectedIds.find(id => !roundData.correctAnswers.includes(id));
+        if (livesRemaining <= 0) return;
+        playSFX(SFX.wrong);
+        livesRemaining--;
+        document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
+        msg.className = "result-message incorrect";
+        msg.textContent = "INCORRECT. POTENTIAL BREACH DETECTED.";
+
+        const card = document.getElementById('email-' + incorrectId);
+        card.classList.add('wrong');
+        wrongIdsLocked.push(incorrectId);
+        selectedIds = selectedIds.filter(id => id !== incorrectId);
+        card.classList.remove('selected');
+
+        if (livesRemaining === 0) {
+          playSFX(SFX.gameOver);
+          stopTimer();
+          setTimeout(() => window.location.href = "GameOverEmail.html", 1200);
+        }
         return;
       }
 
-      // Check correctness of current selection
-      const currentSelectionAreCorrect = selectedIds.every(id => CORRECT_ANSWERS.includes(id));
+      correctIdsLocked = [...correctIdsLocked, ...selectedIds];
+      selectedIds.forEach(id => {
+        const card = document.getElementById('email-' + id);
+        card.classList.remove('selected');
+        card.classList.add('locked');
+      });
+      selectedIds = [];
 
-      if (currentSelectionAreCorrect) {
-        // Add current selection to locked
-        correctIdsLocked = [...correctIdsLocked, ...selectedIds];
-        selectedIds.forEach(id => {
-          document.getElementById('email-' + id).classList.remove('selected');
-          document.getElementById('email-' + id).classList.add('locked');
-        });
-        selectedIds = []; // Clear current selection
-
-        if (correctIdsLocked.length === totalNeeded) {
-          // FULL WIN
-          playSFX(SFX.correct);
+      if (correctIdsLocked.length === totalNeeded) {
+        // Round Success
+        playSFX(SFX.correct);
+        currentRound++;
+        if (currentRound >= rounds.length) {
+          // Level success
           stopTimer();
           localStorage.setItem("livesRemainingEmail", livesRemaining);
           msg.className = "result-message correct";
           msg.textContent = "CORRECT. SECURE COMMUNICATIONS CONFIRMED.";
           setTimeout(() => window.location.href = "RecapEmail.html", 1500);
         } else {
-          // PARTIAL SUCCESS
-          playSFX(SFX.popup);
+          // Next round
           msg.className = "result-message partial";
-          msg.textContent = "CORRECT. FIND THE REMAINING ONE.";
+          msg.textContent = "ROUND COMPLETE. LOADING NEXT SET…";
+          setTimeout(() => loadRound(currentRound), 1500);
         }
-
       } else {
-        if (livesRemaining <= 0) return;
-        // Incorrect selection logic
-        const correctInSelection = selectedIds.filter(id => CORRECT_ANSWERS.includes(id));
-        const wrongInSelection = selectedIds.filter(id => !CORRECT_ANSWERS.includes(id));
-
-        livesRemaining--;
-        document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-
-        if (livesRemaining <= 0) {
-          playSFX(SFX.gameOver);
-          stopTimer();
-          window.location.href = "GameOverEmail.html";
-          return;
-        }
-
-        if (correctInSelection.length > 0) {
-          // PARTIAL CORRECT
-          playSFX(SFX.popup);
-          msg.className = "result-message partial";
-          msg.textContent = "ONE CORRECT IDENTIFIED. LIFE LOST. WRONG CHOICE LOCKED.";
-
-          // Lock the correct one
-          correctInSelection.forEach(id => {
-            if (!correctIdsLocked.includes(id)) {
-              correctIdsLocked.push(id);
-              const card = document.getElementById('email-' + id);
-              card.classList.remove('selected');
-              card.classList.add('locked');
-            }
-          });
-
-          // Lock the wrong one(s)
-          wrongInSelection.forEach(id => {
-            if (!wrongIdsLocked.includes(id)) {
-              wrongIdsLocked.push(id);
-              const card = document.getElementById('email-' + id);
-              card.classList.remove('selected');
-              card.classList.add('locked-wrong');
-            }
-          });
-
-          selectedIds = [];
-
-        } else {
-          // ALL WRONG
-          playSFX(SFX.wrong);
-          msg.className = "result-message incorrect";
-          msg.textContent = "INCORRECT. TRY AGAIN. CHOICES LOCKED.";
-
-          // Lock these wrong ones
-          selectedIds.forEach(id => {
-            if (!wrongIdsLocked.includes(id)) {
-              wrongIdsLocked.push(id);
-              const card = document.getElementById('email-' + id);
-              card.classList.remove('selected');
-              card.classList.add('locked-wrong');
-            }
-          });
-          selectedIds = [];
-        }
+        // Partial success (more correct items to find)
+        playSFX(SFX.popup);
+        msg.className = "result-message partial";
+        msg.textContent = "CORRECT. FIND THE REMAINING ONE.";
       }
     }
   </script>

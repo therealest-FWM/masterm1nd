@@ -556,7 +556,8 @@
       3. Press ESC or the EXIT button to leave the feed.
     </div>
     <button class="exit-btn" onclick="exitScreen()">EXIT FEED</button>
-    <iframe src="https://itch.io/embed-upload/15934087?color=000000" allowfullscreen allow="fullscreen;">
+    <iframe src="https://itch.io/embed-upload/16015354?color=000000" allowfullscreen allow="fullscreen;" allowfullscreen
+      allow="fullscreen;">
     </iframe>
   </div>
 
@@ -663,10 +664,7 @@
         loc.style.color = "#39ff14"; // Neon Green
 
         stopTimer();
-        setTimeout(() => {
-          window.location.href = "PortsRecap.html";
-        }, 1500);
-
+        startSuccessSequence();
       } else {
         if (livesRemaining <= 0) return; // Prevention
         playSFX(SFX.wrong);
@@ -681,6 +679,32 @@
           window.location.href = "PortsGameOver.html";
         }
       }
+    }
+
+    function startSuccessSequence() {
+      const result = document.getElementById("passwordResult");
+      const loc = document.getElementById("loc");
+      const steps = [
+        "Access credentials accepted",
+        "Enumerating connected devices…",
+        "Unsecured port Compromised"
+      ];
+      let step = 0;
+
+      function next() {
+        if (step < steps.length) {
+          result.textContent = steps[step];
+          result.style.color = "#39ff14";
+          playSFX(SFX.popup);
+          step++;
+          setTimeout(next, 800);
+        } else {
+          setTimeout(() => {
+            window.location.href = "PortsRecap.html";
+          }, 500);
+        }
+      }
+      next();
     }
 
     /*****************************

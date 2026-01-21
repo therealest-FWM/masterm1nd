@@ -263,7 +263,7 @@
       min-width: 300px;
       /* Ensure they don't get too squished */
       position: relative;
-      display: flex;
+      display: none;
       flex-direction: column;
     }
 
@@ -707,7 +707,7 @@
       <div class="phishing-container">
         <!-- Message 1 (Left) -->
         <label class="phishing-item">
-          <input type="radio" name="phishing-choice" class="phishing-radio" value="Real1" id="real1">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="0" id="choice0">
           <div class="phishing-label">
             <div class="sms-box">
               <div class="sms-header">
@@ -734,7 +734,7 @@
 
         <!-- Message 2 (Center) -->
         <label class="phishing-item">
-          <input type="radio" name="phishing-choice" class="phishing-radio" value="Real2" id="real2">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="1" id="choice1">
           <div class="phishing-label">
             <div class="sms-box">
               <div class="sms-header">
@@ -761,7 +761,7 @@
 
         <!-- Message 3 (Right - Target) -->
         <label class="phishing-item">
-          <input type="radio" name="phishing-choice" class="phishing-radio" value="Fake" id="fake">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="2" id="choice2">
           <div class="phishing-label">
             <div class="sms-box">
               <div class="sms-header">
@@ -770,7 +770,6 @@
                   <div class="contact-avatar" style="background:#555;">U</div>
                   <div class="contact-name">Unknown &gt;</div>
                 </div>
-                <!-- Removed "Details" text -->
                 <div class="header-icons"></div>
               </div>
               <div class="sms-content">
@@ -779,7 +778,75 @@
                   <p>Urgent:</p>
                   <p>Simon, we've detected a breach! Send your MASTERM1ND data immediately to this number for secure
                     analysis. Don't risk project compromise!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
 
+        <!-- Message 4 -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="3" id="choice3">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar">AM</div>
+                  <div class="contact-name">Agent M &gt;</div>
+                </div>
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 9:00 PM</div>
+                <div class="message-bubble">
+                  <p>PLACEHOLDER</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <!-- Message 5 -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="4" id="choice4">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar">AM</div>
+                  <div class="contact-name">Agent M &gt;</div>
+                </div>
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 9:05 PM</div>
+                <div class="message-bubble">
+                  <p>PLACEHOLDER</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <!-- Message 6 -->
+        <label class="phishing-item">
+          <input type="radio" name="phishing-choice" class="phishing-radio" value="5" id="choice5">
+          <div class="phishing-label">
+            <div class="sms-box">
+              <div class="sms-header">
+                <span class="back-arrow">&lt;</span>
+                <div class="contact-info">
+                  <div class="contact-avatar">AM</div>
+                  <div class="contact-name">Agent M &gt;</div>
+                </div>
+                <div class="header-icons"></div>
+              </div>
+              <div class="sms-content">
+                <div class="timestamp">Text Message<br>Today 9:10 PM</div>
+                <div class="message-bubble">
+                  <p>PLACEHOLDER</p>
                 </div>
               </div>
             </div>
@@ -826,12 +893,11 @@
   </div>
 
   <div class="left-hint-box" id="leftHintBox">
-    WHAT TO DO: Pick the suspicious SMS message. Look for urgency, unknown senders, or requests for sensitive data—even
-    if they claim to be project alerts.
+    WHAT TO DO: Pick the suspicious SMS message. Text messages are for coordination, not data transfer.
   </div>
 
   <div class="hint-box" id="hintBox">
-    Legitimate agencies rarely ask for sensitive data via SMS or use "Unknown" numbers for urgent security alerts.
+    Text messages are for coordination, not data transfer.
   </div>
 
   <script>
@@ -897,12 +963,10 @@
       const lh = document.getElementById("leftHintBox");
       lh.classList.add("visible");
       setTimeout(() => lh.classList.remove("visible"), 10000);
+      loadRound(0);
     };
 
-    function showHint() {
-      playSFX(SFX.popup);
-      document.getElementById("hintBox").classList.toggle("visible");
-    }
+
 
     function toggleMusic() {
       const isStopped = document.getElementById("musicToggle").checked;
@@ -949,21 +1013,144 @@
       window.location.href = "LevelSelect.html";
     }
 
+    const smishingHints = [
+      "Text messages are for coordination, not data transfer.",
+      "Official operations avoid resolving “critical issues” over SMS.",
+      "Any request that breaks established rules is worth slowing down."
+    ];
+    let hintIndex = 0;
+
+    function showHint() {
+      playSFX(SFX.popup);
+      const hintBox = document.getElementById("hintBox");
+      hintBox.textContent = smishingHints[hintIndex % smishingHints.length];
+      hintBox.classList.toggle("visible");
+      if (hintBox.classList.contains("visible")) {
+        hintIndex++;
+      }
+    }
+
+    // Multi-round system
+    let currentRound = 0;
+    const rounds = [
+      {
+        question: "Pick the suspicious message",
+        messages: [
+          {
+            avatar: "U",
+            name: "Unknown >",
+            timestamp: "Text Message<br>Today 11:15 AM",
+            body: "<p>Agent M here. Secure systems are down. Text the recovered info now so we don’t lose momentum.</p>"
+          },
+          {
+            avatar: "G",
+            name: "GovComms >",
+            timestamp: "Text Message<br>Today 8:00 AM",
+            body: "<p>GOV-SEC: Daily MASTERM1ND status check complete. No response required. Continue operation as briefed.</p>"
+          },
+          {
+            avatar: "AM",
+            name: "Agent M >",
+            timestamp: "Text Message<br>Today 8:12 AM",
+            body: "<p>Short update only. Use the encrypted inbox when clear. Nothing sensitive over SMS.</p>"
+          }
+        ],
+        correctAnswers: ["choice0"]
+      },
+      {
+        question: "Pick the suspicious message",
+        messages: [
+          {
+            avatar: "G",
+            name: "GovComms >",
+            timestamp: "Text Message<br>Today 9:30 PM",
+            body: "<p>GOV-SEC: Operation MASTERM1ND update required. Log into the secure portal and submit today’s findings. No data via SMS.</p>"
+          },
+          {
+            avatar: "U",
+            name: "Unknown >",
+            timestamp: "Text Message<br>Today 9:35 PM",
+            body: "<p>System Note: Your clearance level is being reviewed. Reply with your clearance code ASAP.</p>"
+          },
+          {
+            avatar: "AM",
+            name: "Agent M >",
+            timestamp: "Text Message<br>Today 9:40 PM",
+            body: "<p>Agent M here. Urgent—email filters are blocking your reports. Reply with the files attached so we can proceed.</p>"
+          }
+        ],
+        correctAnswers: ["choice1"]
+      },
+      {
+        question: "Pick the suspicious message",
+        messages: [
+          {
+            avatar: "AM",
+            name: "Agent M >",
+            timestamp: "Text Message<br>Today 10:15 PM",
+            body: "<p>Signal compromised. Do not respond here. Check the encrypted inbox when you’re clear.</p>"
+          },
+          {
+            avatar: "G",
+            name: "GovComms >",
+            timestamp: "Text Message<br>Today 10:25 PM",
+            body: "<p>Security Alert: Unusual activity detected on your clearance. Verify your identity by checking the portal.</p>"
+          },
+          {
+            avatar: "U",
+            name: "Unknown >",
+            timestamp: "Text Message<br>Today 10:20 PM",
+            body: "<p>Weather Alert: High priority broadcast. Verify your identity by replying with your last access credentials.</p>"
+          }
+        ],
+        correctAnswers: ["choice2"]
+      }
+    ];
+
+    function loadRound(roundIndex) {
+      const round = rounds[roundIndex];
+      document.querySelector(".instruction-text").textContent = round.question;
+
+      const items = document.querySelectorAll(".phishing-item");
+      items.forEach(item => item.style.display = "none");
+
+      const messageBoxes = document.querySelectorAll(".sms-box");
+      round.messages.forEach((msg, index) => {
+        const box = messageBoxes[index];
+        items[index].style.display = "flex";
+        box.querySelector(".contact-avatar").textContent = msg.avatar;
+        box.querySelector(".contact-name").textContent = msg.name;
+        box.querySelector(".timestamp").innerHTML = msg.timestamp;
+        box.querySelector(".message-bubble").innerHTML = msg.body;
+      });
+
+      // Clear selection and result message
+      document.querySelectorAll('input[name="phishing-choice"]').forEach(input => input.checked = false);
+      document.getElementById("resultMessage").textContent = "";
+      document.getElementById("resultMessage").className = "result-message";
+    }
+
     function confirm() {
-      const fakeOption = document.getElementById("fake");
       const msg = document.getElementById("resultMessage");
       const selected = document.querySelector('input[name="phishing-choice"]:checked');
       if (!selected) return;
 
-      // The 'fake' option is the CORRECT choice in this context (picking the suspicious one)
+      const currentCorrectAnswers = rounds[currentRound].correctAnswers;
+      const isCorrect = currentCorrectAnswers.includes(selected.id);
 
-      if (fakeOption.checked) {
+      if (isCorrect) {
         playSFX(SFX.correct);
-        stopTimer();
-        localStorage.setItem("livesRemainingSMS", livesRemaining);
         msg.className = "result-message correct";
         msg.textContent = "CORRECT. THREAT IDENTIFIED.";
-        setTimeout(() => window.location.href = "RecapSMSishing.html", 1500);
+
+        currentRound++;
+        if (currentRound >= rounds.length) {
+          stopTimer();
+          localStorage.setItem("livesRemainingSMS", livesRemaining);
+          setTimeout(() => window.location.href = "RecapSMSishing.html", 1500);
+        } else {
+          setTimeout(() => loadRound(currentRound), 1500);
+        }
       } else {
         if (livesRemaining <= 0) return;
         playSFX(SFX.wrong);

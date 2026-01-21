@@ -1084,11 +1084,10 @@
       height: 15px;
     }
 
-    /* Hint Box */
     .hint-box,
     .left-hint-box {
       position: fixed;
-      top: 80px;
+      top: 180px;
       width: 400px;
       transition: all 0.4s;
       z-index: 1500;
@@ -1867,16 +1866,58 @@
     }
 
     // QTE System (Key Sequence)
+    var qteRound = 1;
     var qteSequence = [];
     var qteIndex = 0;
     var qteTimer;
+    var qteActive = false;
     var qteKeys = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+    var qteRoundTimes = [10000, 8000, 6000];
 
     function startQTE() {
       document.getElementById('qte-overlay').classList.add('active');
       document.getElementById('qte-result').textContent = '';
+      qteRound = 1;
+      qteActive = false;
+
+      // Transition A: Before Typing QTE
+      runTransitionSequence([
+        "Establishing secure channel…",
+        "Synchronizing packets…"
+      ], setupRound);
+    }
+
+    function runTransitionSequence(steps, callback) {
+      const resultDiv = document.getElementById('qte-result');
+      const sequenceDiv = document.getElementById('qte-sequence');
+      const instructionDiv = document.querySelector('.qte-instruction');
+
+      // Hide sequence keys and instruction during transition
+      if (sequenceDiv) sequenceDiv.style.visibility = 'hidden';
+      if (instructionDiv) instructionDiv.style.visibility = 'hidden';
+
+      let step = 0;
+      function next() {
+        if (step < steps.length) {
+          resultDiv.textContent = steps[step];
+          resultDiv.className = 'qte-result';
+          playSFX(SFX.popup);
+          step++;
+          setTimeout(next, 700);
+        } else {
+          resultDiv.textContent = '';
+          if (sequenceDiv) sequenceDiv.style.visibility = 'visible';
+          if (instructionDiv) instructionDiv.style.visibility = 'visible';
+          callback();
+        }
+      }
+      next();
+    }
+
+    function setupRound() {
       qteSequence = [];
       qteIndex = 0;
+      qteActive = true;
 
       // Generate 5 random keys
       for (let i = 0; i < 5; i++) {
@@ -1887,13 +1928,29 @@
         keyElement.classList.remove('active', 'pressed');
       }
 
-      // Start 10-second timer for the WHOLE sequence
+      // Update title with round info (placeholder-ish as requested)
+      const qteTitle = document.querySelector('#qte-overlay h2');
+      if (qteTitle) {
+        qteTitle.innerHTML = `BREACH LARRY'S MPHONE<br><span style="font-size: 0.5em; color: var(--hud-primary);">STRENGTHENING FIREWALL - ROUND ${qteRound}/3</span>`;
+      }
+
+      // Update left hint box with instructions
+      const leftHintBox = document.getElementById("leftHintBox");
+      if (leftHintBox) {
+        leftHintBox.textContent = "Instruction: Press the highlighted keys quickly!";
+        leftHintBox.classList.add("visible");
+        // Keep it visible during the QTE, or for a long time
+        setTimeout(() => leftHintBox.classList.remove("visible"), 8000);
+      }
+
+      // Start timer for the current round
       var timerFill = document.getElementById('qte-timer-fill');
+      var currentTimeLimit = qteRoundTimes[qteRound - 1];
       timerFill.style.transition = 'none';
       timerFill.style.width = '100%';
       timerFill.offsetWidth; // Force reflow
       setTimeout(() => {
-        timerFill.style.transition = 'width 10s linear';
+        timerFill.style.transition = `width ${currentTimeLimit}ms linear`;
         timerFill.style.width = '0%';
       }, 10);
 
@@ -1901,22 +1958,45 @@
       qteTimer = setTimeout(() => {
         // Failed to press all in time
         handleQteFail('TOO SLOW!');
-      }, 10000);
-
+      }, currentTimeLimit);
       nextQteStep();
     }
 
     function nextQteStep() {
       if (qteIndex >= 5) {
-        // QTE Complete
+        // Current Round Complete
+        qteActive = false;
         clearTimeout(qteTimer);
-        playSFX(SFX.correct);
-        document.getElementById('qte-result').textContent = 'BREACH SUCCESSFUL!';
-        document.getElementById('qte-result').className = 'qte-result';
-        setTimeout(() => {
-          document.getElementById('qte-overlay').classList.remove('active');
-          goToPage(3);
-        }, 1500);
+
+        if (qteRound < 3) {
+          // Advance to next round
+          playSFX(SFX.popup);
+          document.getElementById('qte-result').textContent = `ROUND ${qteRound} COMPLETE!`;
+          document.getElementById('qte-result').className = 'qte-result';
+
+          setTimeout(() => {
+            qteRound++;
+            document.getElementById('qte-result').textContent = '';
+            setupRound();
+          }, 1000);
+        } else {
+          // All Rounds Complete
+          playSFX(SFX.correct);
+
+          // Transition B: Between Typing QTE and Message Exchange
+          runTransitionSequence([
+            "Connecting…",
+            "Stabilizing…",
+            "Connection stabilized"
+          ], () => {
+            document.getElementById('qte-result').textContent = 'BREACH SUCCESSFUL!';
+            document.getElementById('qte-result').className = 'qte-result';
+            setTimeout(() => {
+              document.getElementById('qte-overlay').classList.remove('active');
+              goToPage(3);
+            }, 800);
+          });
+        }
         return;
       }
 
@@ -1926,6 +2006,7 @@
     }
 
     function handleQteFail(reason) {
+      qteActive = false;
       clearTimeout(qteTimer);
       var resultDiv = document.getElementById('qte-result');
       resultDiv.textContent = reason + ' -1 Life';
@@ -1938,10 +2019,9 @@
       }
     }
 
-    // Key listener for QTE
     window.addEventListener('keydown', function (e) {
       if (!document.getElementById('qte-overlay').classList.contains('active')) return;
-      if (qteIndex >= 5) return;
+      if (!qteActive || qteIndex >= 5) return;
 
       var pressedKey = e.key.toUpperCase();
       var targetKey = qteSequence[qteIndex];
@@ -1949,7 +2029,6 @@
       if (pressedKey === targetKey) {
         // Correct key
         playSFX(SFX.popup);
-        clearTimeout(qteTimer);
         document.getElementById('key-' + qteIndex).classList.add('pressed');
         qteIndex++;
         setTimeout(nextQteStep, 200);
