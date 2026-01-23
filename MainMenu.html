@@ -456,6 +456,8 @@
   </div>
 
   <script>
+    if (window.top !== window.self) {
+    window.top.location = window.self.location;}
     function tuto() {
       setTimeout(() => {
         window.location.href = 'InteractiveTutorial.html';
@@ -593,5 +595,6 @@
     };
   </script>
 </body>
+
 
 </html>
