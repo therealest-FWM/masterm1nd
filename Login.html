@@ -296,118 +296,134 @@
 </head>
 
 <body>
-    <div class="bg-layer"></div>
-    <div class="bg-overlay"></div>
-    <div class="scanline"></div>
-    <canvas id="particles"></canvas>
+  <div class="bg-layer"></div>
+  <div class="bg-overlay"></div>
+  <div class="scanline"></div>
+  <canvas id="particles"></canvas>
 
-    <button class="back-btn" onclick="goBack()">← Back</button>
+  <button class="back-btn" onclick="goBack()">← Back</button>
 
-    <div class="auth-container">
-        <h1 class="terminal-header">Login</h1>
-        <p class="terminal-subtext">// ENTER CREDENTIALS TO ACCESS SYSTEM</p>
+  <div class="auth-container">
+    <h1 class="terminal-header">Login</h1>
+    <p class="terminal-subtext">// ENTER CREDENTIALS TO ACCESS SYSTEM</p>
 
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label for="username">Username / Email</label>
-                <input type="text" id="username" placeholder="Enter your username or email" required>
-            </div>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="username">Email</label>
+        <input type="email" id="username" placeholder="Enter your email" required>
+      </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
 
-            <button type="submit" class="cyber-btn">Access System</button>
-        </form>
+      <button type="submit" class="cyber-btn">Access System</button>
+    </form>
 
-        <p class="auth-link">
-            New operative? <a href="Signup.html">Create Account</a>
-        </p>
-    </div>
+    <p class="auth-link">
+      New operative? <a href="Signup.html">Create Account</a>
+    </p>
+  </div>
 
-    <script>
-        function goBack() {
-            window.location.href = 'AuthChoice.html';
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+      authDomain: "masterm1nd.firebaseapp.com",
+      projectId: "masterm1nd",
+      storageBucket: "masterm1nd.appspot.com",
+      messagingSenderId: "191456665196",
+      appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          localStorage.setItem('loggedIn', 'true');
+          localStorage.setItem('email', email);
+          window.location.href = 'MainMenu.html';
+        })
+        .catch((error) => {
+          alert(`Login failed: ${error.message}`);
+        });
+    }
+
+    window.handleLogin = handleLogin;
+    window.goBack = function () {
+      window.location.href = 'AuthChoice.html';
+    };
+
+    // Particle system
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particlesList = [];
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+        this.alpha = Math.random() * 0.5 + 0.1;
+        this.life = Math.random() * 100 + 100;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life--;
+        if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+          this.reset();
         }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
 
-        function handleLogin(event) {
-            event.preventDefault();
+    function initParticles() {
+      resize();
+      for (let i = 0; i < 50; i++) {
+        particlesList.push(new Particle());
+      }
+      animate();
+    }
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particlesList.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
 
-            // For now, just proceed to main menu (no actual auth)
-            // In a real app, you would validate credentials here
-            if (username && password) {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('username', username);
-                window.location.href = 'MainMenu.html';
-            }
-        }
-
-        // --- Particle System ---
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particlesList = [];
-
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-                this.alpha = Math.random() * 0.5 + 0.1;
-                this.life = Math.random() * 100 + 100;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life--;
-                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            resize();
-            for (let i = 0; i < 50; i++) {
-                particlesList.push(new Particle());
-            }
-            animate();
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            particlesList.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', resize);
-        window.onload = initParticles;
-    </script>
+    window.addEventListener('resize', resize);
+    window.addEventListener('load', initParticles);
+  </script>
 </body>
-
 </html>
