@@ -401,9 +401,7 @@ createUserWithEmailAndPassword(auth, email, password)
   }
 
   // --- Back Button ---
-  function goBack() {
-    window.location.href = 'AuthChoice.html';
-  }
+
 
   // --- Event Listeners ---
   document.getElementById('confirmPassword').addEventListener('input', function () {
@@ -479,6 +477,11 @@ createUserWithEmailAndPassword(auth, email, password)
 
   window.addEventListener('resize', resize);
   window.addEventListener('load', initParticles);
+</script>
+<script>
+      function goBack() {
+    window.location.href = 'AuthChoice.html';
+  }
 </script>
 </body>
 
