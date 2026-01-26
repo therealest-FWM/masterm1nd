@@ -346,114 +346,136 @@
         </p>
     </div>
 
-    <script>
-        function goBack() {
-            window.location.href = 'AuthChoice.html';
-        }
+<script type="module">
+  // --- Firebase Setup ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-        function handleSignup(event) {
-            event.preventDefault();
+  const firebaseConfig = {
+    apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+    authDomain: "masterm1nd.firebaseapp.com",
+    projectId: "masterm1nd",
+    storageBucket: "masterm1nd.appspot.com",
+    messagingSenderId: "191456665196",
+    appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+  };
 
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const passwordError = document.getElementById('passwordError');
-            const confirmInput = document.getElementById('confirmPassword');
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-            // Validate passwords match
-            if (password !== confirmPassword) {
-                passwordError.classList.add('visible');
-                confirmInput.classList.add('error');
-                return;
-            }
+  // --- Signup Handler ---
+  function handleSignup(event) {
+    event.preventDefault();
 
-            // Clear any previous errors
-            passwordError.classList.remove('visible');
-            confirmInput.classList.remove('error');
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const passwordError = document.getElementById('passwordError');
+    const confirmInput = document.getElementById('confirmPassword');
 
-            // Store user data (in a real app, this would go to a backend)
-            if (username && email && password) {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('username', username);
-                localStorage.setItem('email', email);
-                window.location.href = 'MainMenu.html';
-            }
-        }
+    if (password !== confirmPassword) {
+      passwordError.classList.add('visible');
+      confirmInput.classList.add('error');
+      return;
+    }
 
-        // Clear error on input change
-        document.getElementById('confirmPassword').addEventListener('input', function () {
-            this.classList.remove('error');
-            document.getElementById('passwordError').classList.remove('visible');
-        });
+    passwordError.classList.remove('visible');
+    confirmInput.classList.remove('error');
 
-        document.getElementById('password').addEventListener('input', function () {
-            document.getElementById('confirmPassword').classList.remove('error');
-            document.getElementById('passwordError').classList.remove('visible');
-        });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // User created successfully
+        localStorage.setItem('loggedIn', 'true');
+        localStorage.setItem('username', username); // Firebase does not store this by default
+        localStorage.setItem('email', email);
+        window.location.href = 'MainMenu.html';
+      })
+      .catch((error) => {
+        alert(`Signup failed: ${error.message}`);
+      });
+  }
 
-        // --- Particle System ---
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particlesList = [];
+  // --- Back Button ---
+  function goBack() {
+    window.location.href = 'AuthChoice.html';
+  }
 
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
+  // --- Event Listeners ---
+  document.getElementById('confirmPassword').addEventListener('input', function () {
+    this.classList.remove('error');
+    document.getElementById('passwordError').classList.remove('visible');
+  });
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-                this.alpha = Math.random() * 0.5 + 0.1;
-                this.life = Math.random() * 100 + 100;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life--;
-                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
-                ctx.fill();
-            }
-        }
+  document.getElementById('password').addEventListener('input', function () {
+    document.getElementById('confirmPassword').classList.remove('error');
+    document.getElementById('passwordError').classList.remove('visible');
+  });
 
-        function initParticles() {
-            resize();
-            for (let i = 0; i < 50; i++) {
-                particlesList.push(new Particle());
-            }
-            animate();
-        }
+  document.getElementById('signupForm').addEventListener('submit', handleSignup);
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            particlesList.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
+  // --- Particle System ---
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particlesList = [];
 
-        window.addEventListener('resize', resize);
-        window.onload = initParticles;
-    </script>
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2 + 1;
+      this.alpha = Math.random() * 0.5 + 0.1;
+      this.life = Math.random() * 100 + 100;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life--;
+      if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    resize();
+    for (let i = 0; i < 50; i++) {
+      particlesList.push(new Particle());
+    }
+    animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particlesList.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', initParticles);
+</script>
 </body>
 
 </html>
