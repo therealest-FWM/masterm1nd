@@ -362,11 +362,11 @@
       const unlockSound = new Audio("assets/silence.mp3");
       unlockSound.play().then(() => {
         localStorage.setItem("audioUnlocked", "true");
-        window.location.href = 'MainMenu.html';
+        window.location.href = 'AuthChoice.html';
       }).catch(() => {
         // Even if silent playback fails (unlikely if clicked), we proceed
         localStorage.setItem("audioUnlocked", "true");
-        window.location.href = 'MainMenu.html';
+        window.location.href = 'AuthChoice.html';
       });
     }
 

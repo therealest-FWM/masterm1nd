@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTERM1ND - Sign Up</title>
+    <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-neon: #39ff14;
+            --secondary-neon: #2adb11;
+            --glass-bg: rgba(0, 20, 0, 0.4);
+            --glass-border: rgba(57, 255, 20, 0.3);
+            --error-color: #ff4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Background Layers --- */
+        .bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-image: url('assets/LSBG6.jpg');
+            background-size: cover;
+            background-position: center;
+            animation: bg-pulse 10s ease-in-out infinite alternate;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+            mix-blend-mode: multiply;
+            pointer-events: none;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50.5%, transparent 51%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- Form Container --- */
+        .auth-container {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 35px 40px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.15);
+        }
+
+        .terminal-header {
+            font-size: clamp(26px, 5vw, 40px);
+            color: var(--primary-neon);
+            text-shadow:
+                0 0 10px var(--primary-neon),
+                0 0 20px var(--primary-neon),
+                0 0 40px var(--primary-neon);
+            margin: 0 0 8px 0;
+            letter-spacing: 0.1em;
+            font-weight: 900;
+            text-transform: uppercase;
+            animation: title-flicker 4s infinite;
+        }
+
+        .terminal-subtext {
+            color: rgba(57, 255, 20, 0.7);
+            font-size: clamp(10px, 1.5vw, 13px);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        /* --- Form Styles --- */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--secondary-neon);
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--primary-neon);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(57, 255, 20, 0.3);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+
+        .form-group input.error {
+            border-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+
+        .error-msg {
+            color: var(--error-color);
+            font-size: 10px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-msg.visible {
+            display: block;
+        }
+
+        .cyber-btn {
+            position: relative;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--secondary-neon);
+            color: var(--secondary-neon);
+            padding: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(13px, 2vw, 17px);
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            margin-top: 8px;
+        }
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .cyber-btn:hover {
+            background: var(--primary-neon);
+            border-color: var(--primary-neon);
+            color: #000;
+            box-shadow: 0 0 30px var(--primary-neon);
+            transform: scale(1.02);
+            text-shadow: none;
+        }
+
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+
+        .cyber-btn:active {
+            transform: scale(0.98);
+        }
+
+        .auth-link {
+            margin-top: 22px;
+            color: rgba(57, 255, 20, 0.6);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .auth-link a {
+            color: var(--primary-neon);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .auth-link a:hover {
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--secondary-neon);
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: var(--glass-bg);
+            border-color: var(--primary-neon);
+            color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+
+        @keyframes bg-pulse {
+            0% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+
+            100% {
+                transform: scale(1.05);
+                filter: brightness(1.15);
+            }
+        }
+
+        @keyframes title-flicker {
+
+            0%,
+            18%,
+            22%,
+            25%,
+            53%,
+            57%,
+            100% {
+                text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon), 0 0 40px var(--primary-neon);
+                opacity: 1;
+            }
+
+            20%,
+            24%,
+            55% {
+                text-shadow: none;
+                opacity: 0.6;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .auth-container {
+                margin: 20px;
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="scanline"></div>
+    <canvas id="particles"></canvas>
+
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <div class="auth-container">
+        <h1 class="terminal-header">Sign Up</h1>
+        <p class="terminal-subtext">// CREATE NEW OPERATIVE PROFILE</p>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Choose your codename" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Create a secure password" required minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                <p class="error-msg" id="passwordError">Passwords do not match</p>
+            </div>
+
+            <button type="submit" class="cyber-btn">Initialize Account</button>
+        </form>
+
+        <p class="auth-link">
+            Already registered? <a href="Login.html">Login</a>
+        </p>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = 'AuthChoice.html';
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+            const confirmInput = document.getElementById('confirmPassword');
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                passwordError.classList.add('visible');
+                confirmInput.classList.add('error');
+                return;
+            }
+
+            // Clear any previous errors
+            passwordError.classList.remove('visible');
+            confirmInput.classList.remove('error');
+
+            // Store user data (in a real app, this would go to a backend)
+            if (username && email && password) {
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('username', username);
+                localStorage.setItem('email', email);
+                window.location.href = 'MainMenu.html';
+            }
+        }
+
+        // Clear error on input change
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+        });
+
+        document.getElementById('password').addEventListener('input', function () {
+            document.getElementById('confirmPassword').classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+        });
+
+        // --- Particle System ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particlesList = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.life = Math.random() * 100 + 100;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            resize();
+            for (let i = 0; i < 50; i++) {
+                particlesList.push(new Particle());
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particlesList.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        window.onload = initParticles;
+    </script>
+</body>
+
+</html>
