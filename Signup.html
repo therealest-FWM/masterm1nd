@@ -361,6 +361,10 @@
   };
 
   const app = initializeApp(firebaseConfig);
+  initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
+      isTokenAutoRefreshEnabled: true
+        });
   const auth = getAuth(app);
 
   // --- Signup Handler ---
