@@ -383,17 +383,21 @@
     passwordError.classList.remove('visible');
     confirmInput.classList.remove('error');
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // User created successfully
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('username', username); // Firebase does not store this by default
-        localStorage.setItem('email', email);
-        window.location.href = 'MainMenu.html';
-      })
-      .catch((error) => {
-        alert(`Signup failed: ${error.message}`);
-      });
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // User created successfully
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('username', username); // Firebase does not store this by default
+    localStorage.setItem('email', email);
+
+    // ✅ Redirect only on success
+    window.location.href = 'MainMenu.html';
+  })
+  .catch((error) => {
+    alert(`Signup failed: ${error.message}`);
+    // ❌ Don't redirect on error
+  });
+      
   }
 
   // --- Back Button ---
