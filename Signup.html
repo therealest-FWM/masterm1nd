@@ -341,141 +341,159 @@
         </p>
     </div>
 
-    <script type="module">
-        // --- Firebase Setup ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js"; // ← Add this line
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
-            authDomain: "masterm1nd.firebaseapp.com",
-            projectId: "masterm1nd",
-            storageBucket: "masterm1nd.appspot.com",
-            messagingSenderId: "191456665196",
-            appId: "1:191456665196:web:ff5723234f5aa8831f4249"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+        authDomain: "masterm1nd.firebaseapp.com",
+        projectId: "masterm1nd",
+        storageBucket: "masterm1nd.appspot.com",
+        messagingSenderId: "191456665196",
+        appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        initializeAppCheck(app, {
-            provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
-            isTokenAutoRefreshEnabled: true
-        });
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
+        isTokenAutoRefreshEnabled: true
+    });
+    const auth = getAuth(app);
 
-        // --- Signup Handler ---
-        function handleSignup(event) {
-            event.preventDefault();
+    const commonPasswords = [
+        '123456', 'password', '123456789', '12345678',
+        '12345', 'qwerty', '111111', '123123',
+        '1234567', 'qwerty123'
+    ];
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const passwordError = document.getElementById('passwordError');
-            const confirmInput = document.getElementById('confirmPassword');
+    function isPasswordStrong(password) {
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSymbol = /[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(password);
+        const hasNoSpaces = !/\s/.test(password);
+        const minLength = password.length >= 8;
+        const notCommon = !commonPasswords.includes(password.toLowerCase());
 
-            if (password !== confirmPassword) {
-                passwordError.classList.add('visible');
-                confirmInput.classList.add('error');
-                return;
-            }
+        return hasUpper && hasLower && hasNumber && hasSymbol && hasNoSpaces && minLength && notCommon;
+    }
 
-            passwordError.classList.remove('visible');
-            confirmInput.classList.remove('error');
+    function handleSignup(event) {
+        event.preventDefault();
 
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // User created successfully
-                    localStorage.setItem('loggedIn', 'true');
-                    localStorage.setItem('email', email);
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const passwordError = document.getElementById('passwordError');
+        const confirmInput = document.getElementById('confirmPassword');
+        const passwordInput = document.getElementById('password');
 
-                    // ✅ Redirect only on success
-                    window.location.href = 'MainMenu.html';
-                })
-                .catch((error) => {
-                    alert(`Signup failed: ${error.message}`);
-                    // ❌ Don't redirect on error
-                });
-
+        if (password !== confirmPassword) {
+            passwordError.textContent = "Passwords do not match";
+            passwordError.classList.add('visible');
+            confirmInput.classList.add('error');
+            return;
         }
 
-        // --- Back Button ---
-
-
-        // --- Event Listeners ---
-        document.getElementById('confirmPassword').addEventListener('input', function () {
-            this.classList.remove('error');
-            document.getElementById('passwordError').classList.remove('visible');
-        });
-
-        document.getElementById('password').addEventListener('input', function () {
-            document.getElementById('confirmPassword').classList.remove('error');
-            document.getElementById('passwordError').classList.remove('visible');
-        });
-
-        document.getElementById('signupForm').addEventListener('submit', handleSignup);
-
-        // --- Particle System ---
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particlesList = [];
-
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
+        if (!isPasswordStrong(password)) {
+            passwordError.textContent = "Password must be 8+ characters, include upper/lowercase, number, symbol, no spaces, and not be a common password.";
+            passwordError.classList.add('visible');
+            passwordInput.classList.add('error');
+            return;
         }
 
-        class Particle {
-            constructor() {
+        // Clear errors
+        passwordError.classList.remove('visible');
+        confirmInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('email', email);
+                window.location.href = 'MainMenu.html';
+            })
+            .catch((error) => {
+                alert(`Signup failed: ${error.message}`);
+            });
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', handleSignup);
+
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+        this.classList.remove('error');
+        document.getElementById('passwordError').classList.remove('visible');
+    });
+
+    document.getElementById('password').addEventListener('input', function () {
+        this.classList.remove('error');
+        document.getElementById('passwordError').classList.remove('visible');
+    });
+
+    // --- Particle System ---
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particlesList = [];
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 2 + 1;
+            this.alpha = Math.random() * 0.5 + 0.1;
+            this.life = Math.random() * 100 + 100;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life--;
+            if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
                 this.reset();
             }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-                this.alpha = Math.random() * 0.5 + 0.1;
-                this.life = Math.random() * 100 + 100;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life--;
-                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
-                ctx.fill();
-            }
         }
-
-        function initParticles() {
-            resize();
-            for (let i = 0; i < 50; i++) {
-                particlesList.push(new Particle());
-            }
-            animate();
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+            ctx.fill();
         }
+    }
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            particlesList.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
+    function initParticles() {
+        resize();
+        for (let i = 0; i < 50; i++) {
+            particlesList.push(new Particle());
         }
+        animate();
+    }
 
-        window.addEventListener('resize', resize);
-        window.addEventListener('load', initParticles);
-    </script>
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particlesList.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('load', initParticles);
+</script>
     <script>
         function goBack() {
             window.location.href = 'AuthChoice.html';
