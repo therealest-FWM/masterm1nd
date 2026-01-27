@@ -318,11 +318,6 @@
 
         <form id="signupForm" onsubmit="handleSignup(event)">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Choose your codename" required>
-            </div>
-
-            <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="Enter your email" required>
             </div>
@@ -346,148 +341,146 @@
         </p>
     </div>
 
-<script type="module">
-  // --- Firebase Setup ---
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js"; // ← Add this line
+    <script type="module">
+        // --- Firebase Setup ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js"; // ← Add this line
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
-    authDomain: "masterm1nd.firebaseapp.com",
-    projectId: "masterm1nd",
-    storageBucket: "masterm1nd.appspot.com",
-    messagingSenderId: "191456665196",
-    appId: "1:191456665196:web:ff5723234f5aa8831f4249"
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+            authDomain: "masterm1nd.firebaseapp.com",
+            projectId: "masterm1nd",
+            storageBucket: "masterm1nd.appspot.com",
+            messagingSenderId: "191456665196",
+            appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+        };
 
-  const app = initializeApp(firebaseConfig);
-  initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
-      isTokenAutoRefreshEnabled: true
+        const app = initializeApp(firebaseConfig);
+        initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
+            isTokenAutoRefreshEnabled: true
         });
-  const auth = getAuth(app);
+        const auth = getAuth(app);
 
-  // --- Signup Handler ---
-  function handleSignup(event) {
-    event.preventDefault();
+        // --- Signup Handler ---
+        function handleSignup(event) {
+            event.preventDefault();
 
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const passwordError = document.getElementById('passwordError');
-    const confirmInput = document.getElementById('confirmPassword');
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+            const confirmInput = document.getElementById('confirmPassword');
 
-    if (password !== confirmPassword) {
-      passwordError.classList.add('visible');
-      confirmInput.classList.add('error');
-      return;
-    }
+            if (password !== confirmPassword) {
+                passwordError.classList.add('visible');
+                confirmInput.classList.add('error');
+                return;
+            }
 
-    passwordError.classList.remove('visible');
-    confirmInput.classList.remove('error');
+            passwordError.classList.remove('visible');
+            confirmInput.classList.remove('error');
 
-createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // User created successfully
-    localStorage.setItem('loggedIn', 'true');
-    localStorage.setItem('username', username); // Firebase does not store this by default
-    localStorage.setItem('email', email);
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // User created successfully
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('email', email);
 
-    // ✅ Redirect only on success
-    window.location.href = 'MainMenu.html';
-  })
-  .catch((error) => {
-    alert(`Signup failed: ${error.message}`);
-    // ❌ Don't redirect on error
-  });
-      
-  }
+                    // ✅ Redirect only on success
+                    window.location.href = 'MainMenu.html';
+                })
+                .catch((error) => {
+                    alert(`Signup failed: ${error.message}`);
+                    // ❌ Don't redirect on error
+                });
 
-  // --- Back Button ---
+        }
+
+        // --- Back Button ---
 
 
-  // --- Event Listeners ---
-  document.getElementById('confirmPassword').addEventListener('input', function () {
-    this.classList.remove('error');
-    document.getElementById('passwordError').classList.remove('visible');
-  });
+        // --- Event Listeners ---
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+        });
 
-  document.getElementById('password').addEventListener('input', function () {
-    document.getElementById('confirmPassword').classList.remove('error');
-    document.getElementById('passwordError').classList.remove('visible');
-  });
+        document.getElementById('password').addEventListener('input', function () {
+            document.getElementById('confirmPassword').classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+        });
 
-  document.getElementById('signupForm').addEventListener('submit', handleSignup);
+        document.getElementById('signupForm').addEventListener('submit', handleSignup);
 
-  // --- Particle System ---
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  let particlesList = [];
+        // --- Particle System ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particlesList = [];
 
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
 
-  class Particle {
-    constructor() {
-      this.reset();
-    }
-    reset() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.5;
-      this.vy = (Math.random() - 0.5) * 0.5;
-      this.size = Math.random() * 2 + 1;
-      this.alpha = Math.random() * 0.5 + 0.1;
-      this.life = Math.random() * 100 + 100;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.life--;
-      if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-        this.reset();
-      }
-    }
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
-      ctx.fill();
-    }
-  }
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.life = Math.random() * 100 + 100;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
 
-  function initParticles() {
-    resize();
-    for (let i = 0; i < 50; i++) {
-      particlesList.push(new Particle());
-    }
-    animate();
-  }
+        function initParticles() {
+            resize();
+            for (let i = 0; i < 50; i++) {
+                particlesList.push(new Particle());
+            }
+            animate();
+        }
 
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    particlesList.forEach(p => {
-      p.update();
-      p.draw();
-    });
-    requestAnimationFrame(animate);
-  }
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particlesList.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
 
-  window.addEventListener('resize', resize);
-  window.addEventListener('load', initParticles);
-</script>
-<script>
-      function goBack() {
-    window.location.href = 'AuthChoice.html';
-  }
-</script>
+        window.addEventListener('resize', resize);
+        window.addEventListener('load', initParticles);
+    </script>
+    <script>
+        function goBack() {
+            window.location.href = 'AuthChoice.html';
+        }
+    </script>
 </body>
 
 </html>
