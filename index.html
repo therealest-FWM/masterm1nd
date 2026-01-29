@@ -343,11 +343,11 @@
   <script>
     function enterSite() {
       // Attempt full screen
-      const elem = document.documentElement;
+    /*  const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen().catch(err => {
           console.log("Fullscreen request failed", err);
-        });
+        }); */
       }
 
       // Hide welcome overlay
@@ -446,5 +446,6 @@
     }, 2000); // Wait 2 seconds before preloading
   </script>
 </body>
+
 
 </html>
