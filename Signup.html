@@ -15,6 +15,8 @@
             --glass-bg: rgba(0, 20, 0, 0.4);
             --glass-border: rgba(57, 255, 20, 0.3);
             --error-color: #ff4444;
+            --requirement-default: #ff4444;
+            --requirement-met: #39ff14;
         }
 
         * {
@@ -174,10 +176,51 @@
             border: 1px solid var(--error-color);
             border-radius: 6px;
             text-align: center;
-                        }
+        }
 
         .error-msg.visible {
-    display: block;
+            display: block;
+        }
+
+        /* Password Requirements Styles */
+        .password-requirements {
+            margin-top: 12px;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+        }
+
+        .password-requirements-title {
+            color: rgba(57, 255, 20, 0.8);
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            margin-bottom: 6px;
+            color: var(--requirement-default);
+            transition: color 0.3s ease;
+        }
+
+        .requirement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-item.met {
+            color: var(--requirement-met);
+        }
+
+        .requirement-item .check-icon {
+            font-size: 12px;
+            width: 16px;
+            text-align: center;
         }
 
         .cyber-btn {
@@ -330,7 +373,31 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Create a secure password" required minlength="6">
+                <input type="password" id="password" placeholder="Create a secure password" required minlength="8">
+
+                <div class="password-requirements">
+                    <div class="password-requirements-title">Password Requirements</div>
+                    <div class="requirement-item" id="req-length">
+                        <span class="check-icon">✗</span>
+                        <span>Minimum 8 characters</span>
+                    </div>
+                    <div class="requirement-item" id="req-uppercase">
+                        <span class="check-icon">✗</span>
+                        <span>At least one uppercase letter (A–Z)</span>
+                    </div>
+                    <div class="requirement-item" id="req-lowercase">
+                        <span class="check-icon">✗</span>
+                        <span>At least one lowercase letter (a–z)</span>
+                    </div>
+                    <div class="requirement-item" id="req-number">
+                        <span class="check-icon">✗</span>
+                        <span>At least one number (0–9)</span>
+                    </div>
+                    <div class="requirement-item" id="req-symbol">
+                        <span class="check-icon">✗</span>
+                        <span>At least one symbol (!@#$%^&*()_+-=[]{}|;:,.&lt;&gt;?)</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -347,159 +414,182 @@
         </p>
     </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
-    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
-        authDomain: "masterm1nd.firebaseapp.com",
-        projectId: "masterm1nd",
-        storageBucket: "masterm1nd.appspot.com",
-        messagingSenderId: "191456665196",
-        appId: "1:191456665196:web:ff5723234f5aa8831f4249"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+            authDomain: "masterm1nd.firebaseapp.com",
+            projectId: "masterm1nd",
+            storageBucket: "masterm1nd.appspot.com",
+            messagingSenderId: "191456665196",
+            appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
-        isTokenAutoRefreshEnabled: true
-    });
-    const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
+            isTokenAutoRefreshEnabled: true
+        });
+        const auth = getAuth(app);
 
-    const commonPasswords = [
-        '123456', 'password', '123456789', '12345678',
-        '12345', 'qwerty', '111111', '123123',
-        '1234567', 'qwerty123'
-    ];
+        const commonPasswords = [
+            '123456', 'password', '123456789', '12345678',
+            '12345', 'qwerty', '111111', '123123',
+            '1234567', 'qwerty123'
+        ];
 
-    function isPasswordStrong(password) {
-        const hasUpper = /[A-Z]/.test(password);
-        const hasLower = /[a-z]/.test(password);
-        const hasNumber = /\d/.test(password);
-        const hasSymbol = /[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(password);
-        const hasNoSpaces = !/\s/.test(password);
-        const minLength = password.length >= 8;
-        const notCommon = !commonPasswords.includes(password.toLowerCase());
+        function isPasswordStrong(password) {
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSymbol = /[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(password);
+            const hasNoSpaces = !/\s/.test(password);
+            const minLength = password.length >= 8;
+            const notCommon = !commonPasswords.includes(password.toLowerCase());
 
-        return hasUpper && hasLower && hasNumber && hasSymbol && hasNoSpaces && minLength && notCommon;
-    }
-
-    function handleSignup(event) {
-        event.preventDefault();
-
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const passwordError = document.getElementById('passwordError');
-        const confirmInput = document.getElementById('confirmPassword');
-        const passwordInput = document.getElementById('password');
-
-        if (password !== confirmPassword) {
-            passwordError.textContent = "Passwords do not match";
-            passwordError.classList.add('visible');
-            confirmInput.classList.add('error');
-            return;
+            return hasUpper && hasLower && hasNumber && hasSymbol && hasNoSpaces && minLength && notCommon;
         }
 
-        if (!isPasswordStrong(password)) {
-            passwordError.textContent = "Password must be 8+ characters, include upper/lowercase, number, symbol, no spaces, and not be a common password.";
-            passwordError.classList.add('visible');
-            passwordInput.classList.add('error');
-            return;
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+            const confirmInput = document.getElementById('confirmPassword');
+            const passwordInput = document.getElementById('password');
+
+            if (password !== confirmPassword) {
+                passwordError.textContent = "Passwords do not match";
+                passwordError.classList.add('visible');
+                confirmInput.classList.add('error');
+                return;
+            }
+
+            if (!isPasswordStrong(password)) {
+                passwordError.textContent = "Password must be 8+ characters, include upper/lowercase, number, symbol, no spaces, and not be a common password.";
+                passwordError.classList.add('visible');
+                passwordInput.classList.add('error');
+                return;
+            }
+
+            // Clear errors
+            passwordError.classList.remove('visible');
+            confirmInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('email', email);
+                    window.location.href = 'MainMenu.html';
+                })
+                .catch((error) => {
+                    alert(`Signup failed: ${error.message}`);
+                });
         }
 
-        // Clear errors
-        passwordError.classList.remove('visible');
-        confirmInput.classList.remove('error');
-        passwordInput.classList.remove('error');
+        document.getElementById('signupForm').addEventListener('submit', handleSignup);
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('email', email);
-                window.location.href = 'MainMenu.html';
-            })
-            .catch((error) => {
-                alert(`Signup failed: ${error.message}`);
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+        });
+
+        document.getElementById('password').addEventListener('input', function () {
+            this.classList.remove('error');
+            document.getElementById('passwordError').classList.remove('visible');
+            updatePasswordRequirements(this.value);
+        });
+
+        function updatePasswordRequirements(password) {
+            const requirements = [
+                { id: 'req-length', test: password.length >= 8 },
+                { id: 'req-uppercase', test: /[A-Z]/.test(password) },
+                { id: 'req-lowercase', test: /[a-z]/.test(password) },
+                { id: 'req-number', test: /\d/.test(password) },
+                { id: 'req-symbol', test: /[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(password) }
+            ];
+
+            requirements.forEach(req => {
+                const element = document.getElementById(req.id);
+                const icon = element.querySelector('.check-icon');
+                if (req.test) {
+                    element.classList.add('met');
+                    icon.textContent = '✓';
+                } else {
+                    element.classList.remove('met');
+                    icon.textContent = '✗';
+                }
             });
-    }
-
-    document.getElementById('signupForm').addEventListener('submit', handleSignup);
-
-    document.getElementById('confirmPassword').addEventListener('input', function () {
-        this.classList.remove('error');
-        document.getElementById('passwordError').classList.remove('visible');
-    });
-
-    document.getElementById('password').addEventListener('input', function () {
-        this.classList.remove('error');
-        document.getElementById('passwordError').classList.remove('visible');
-    });
-
-    // --- Particle System ---
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let particlesList = [];
-
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-
-    class Particle {
-        constructor() {
-            this.reset();
         }
-        reset() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
-            this.size = Math.random() * 2 + 1;
-            this.alpha = Math.random() * 0.5 + 0.1;
-            this.life = Math.random() * 100 + 100;
+
+        // --- Particle System ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particlesList = [];
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
         }
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.life--;
-            if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+
+        class Particle {
+            constructor() {
                 this.reset();
             }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.life = Math.random() * 100 + 100;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
+                ctx.fill();
+            }
         }
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(57, 255, 20, ${this.alpha})`;
-            ctx.fill();
+
+        function initParticles() {
+            resize();
+            for (let i = 0; i < 50; i++) {
+                particlesList.push(new Particle());
+            }
+            animate();
         }
-    }
 
-    function initParticles() {
-        resize();
-        for (let i = 0; i < 50; i++) {
-            particlesList.push(new Particle());
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particlesList.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
         }
-        animate();
-    }
 
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        particlesList.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resize);
-    window.addEventListener('load', initParticles);
-</script>
+        window.addEventListener('resize', resize);
+        window.addEventListener('load', initParticles);
+    </script>
     <script>
         function goBack() {
             window.location.href = 'AuthChoice.html';
