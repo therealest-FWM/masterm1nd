@@ -2,297 +2,299 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTERM1ND - Login</title>
-    <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASTERM1ND - Login</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Preload Main Menu background -->
+  <link rel="preload" as="image" href="assets/MMBG.jpg">
 
-    <style>
-        :root {
-            --primary-neon: #39ff14;
-            --secondary-neon: #2adb11;
-            --glass-bg: rgba(0, 20, 0, 0.4);
-            --glass-border: rgba(57, 255, 20, 0.3);
-            --error-color: #ff4444;
-        }
+  <style>
+    :root {
+      --primary-neon: #39ff14;
+      --secondary-neon: #2adb11;
+      --glass-bg: rgba(0, 20, 0, 0.4);
+      --glass-border: rgba(57, 255, 20, 0.3);
+      --error-color: #ff4444;
+    }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-        }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            overflow: hidden;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* --- Background Layers --- */
-        .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background-image: url('assets/LSBG6.jpg');
-            background-size: cover;
-            background-position: center;
-            animation: bg-pulse 10s ease-in-out infinite alternate;
-        }
+    /* --- Background Layers --- */
+    .bg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background-image: url('assets/LSBG6.jpg');
+      background-size: cover;
+      background-position: center;
+      animation: bg-pulse 10s ease-in-out infinite alternate;
+    }
 
-        .bg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.9) 100%);
-            mix-blend-mode: multiply;
-            pointer-events: none;
-        }
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
 
-        .scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50.5%, transparent 51%);
-            background-size: 100% 4px;
-            pointer-events: none;
-        }
+    .scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 50.5%, transparent 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
 
-        #particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-        }
+    #particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
 
-        /* --- Form Container --- */
-        .auth-container {
-            position: relative;
-            text-align: center;
-            z-index: 10;
-            width: 100%;
-            max-width: 480px;
-            padding: 40px;
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.15);
-        }
+    /* --- Form Container --- */
+    .auth-container {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px;
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 40px rgba(57, 255, 20, 0.15);
+    }
 
-        .terminal-header {
-            font-size: clamp(28px, 5vw, 42px);
-            color: var(--primary-neon);
-            text-shadow:
-                0 0 10px var(--primary-neon),
-                0 0 20px var(--primary-neon),
-                0 0 40px var(--primary-neon);
-            margin: 0 0 10px 0;
-            letter-spacing: 0.1em;
-            font-weight: 900;
-            text-transform: uppercase;
-            animation: title-flicker 4s infinite;
-        }
+    .terminal-header {
+      font-size: clamp(28px, 5vw, 42px);
+      color: var(--primary-neon);
+      text-shadow:
+        0 0 10px var(--primary-neon),
+        0 0 20px var(--primary-neon),
+        0 0 40px var(--primary-neon);
+      margin: 0 0 10px 0;
+      letter-spacing: 0.1em;
+      font-weight: 900;
+      text-transform: uppercase;
+      animation: title-flicker 4s infinite;
+    }
 
-        .terminal-subtext {
-            color: rgba(57, 255, 20, 0.7);
-            font-size: clamp(11px, 1.5vw, 14px);
-            margin-bottom: 35px;
-            letter-spacing: 2px;
-        }
+    .terminal-subtext {
+      color: rgba(57, 255, 20, 0.7);
+      font-size: clamp(11px, 1.5vw, 14px);
+      margin-bottom: 35px;
+      letter-spacing: 2px;
+    }
 
-        /* --- Form Styles --- */
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
+    /* --- Form Styles --- */
+    .form-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
 
-        .form-group label {
-            display: block;
-            color: var(--secondary-neon);
-            font-size: 12px;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+    .form-group label {
+      display: block;
+      color: var(--secondary-neon);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
 
-        .form-group input {
-            width: 100%;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            color: var(--primary-neon);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
+    .form-group input {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--primary-neon);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
 
-        .form-group input::placeholder {
-            color: rgba(57, 255, 20, 0.3);
-        }
+    .form-group input::placeholder {
+      color: rgba(57, 255, 20, 0.3);
+    }
 
-        .form-group input:focus {
-            border-color: var(--primary-neon);
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
-        }
+    .form-group input:focus {
+      border-color: var(--primary-neon);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+    }
 
-        .cyber-btn {
-            position: relative;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--secondary-neon);
-            color: var(--secondary-neon);
-            padding: 16px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(14px, 2vw, 18px);
-            font-weight: 700;
-            letter-spacing: 3px;
-            cursor: pointer;
-            text-transform: uppercase;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-            margin-top: 10px;
-        }
+    .cyber-btn {
+      position: relative;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--secondary-neon);
+      color: var(--secondary-neon);
+      padding: 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: pointer;
+      text-transform: uppercase;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+      margin-top: 10px;
+    }
 
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.4), transparent);
-            transition: 0.5s;
-        }
+    .cyber-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.4), transparent);
+      transition: 0.5s;
+    }
 
-        .cyber-btn:hover {
-            background: var(--primary-neon);
-            border-color: var(--primary-neon);
-            color: #000;
-            box-shadow: 0 0 30px var(--primary-neon);
-            transform: scale(1.02);
-            text-shadow: none;
-        }
+    .cyber-btn:hover {
+      background: var(--primary-neon);
+      border-color: var(--primary-neon);
+      color: #000;
+      box-shadow: 0 0 30px var(--primary-neon);
+      transform: scale(1.02);
+      text-shadow: none;
+    }
 
-        .cyber-btn:hover::before {
-            left: 100%;
-        }
+    .cyber-btn:hover::before {
+      left: 100%;
+    }
 
-        .cyber-btn:active {
-            transform: scale(0.98);
-        }
+    .cyber-btn:active {
+      transform: scale(0.98);
+    }
 
-        .auth-link {
-            margin-top: 25px;
-            color: rgba(57, 255, 20, 0.6);
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
+    .auth-link {
+      margin-top: 25px;
+      color: rgba(57, 255, 20, 0.6);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
 
-        .auth-link a {
-            color: var(--primary-neon);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
+    .auth-link a {
+      color: var(--primary-neon);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
 
-        .auth-link a:hover {
-            text-shadow: 0 0 10px var(--primary-neon);
-        }
+    .auth-link a:hover {
+      text-shadow: 0 0 10px var(--primary-neon);
+    }
 
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--secondary-neon);
-            padding: 10px 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--secondary-neon);
+      padding: 10px 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
 
-        .back-btn:hover {
-            background: var(--glass-bg);
-            border-color: var(--primary-neon);
-            color: var(--primary-neon);
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
-        }
+    .back-btn:hover {
+      background: var(--glass-bg);
+      border-color: var(--primary-neon);
+      color: var(--primary-neon);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+    }
 
-        .error-msg {
-            color: var(--error-color);
-            font-size: 11px;
-            margin-top: 5px;
-            display: none;
-        }
+    .error-msg {
+      color: var(--error-color);
+      font-size: 11px;
+      margin-top: 5px;
+      display: none;
+    }
 
-        @keyframes bg-pulse {
-            0% {
-                transform: scale(1);
-                filter: brightness(1);
-            }
+    @keyframes bg-pulse {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
 
-            100% {
-                transform: scale(1.05);
-                filter: brightness(1.15);
-            }
-        }
+      100% {
+        transform: scale(1.05);
+        filter: brightness(1.15);
+      }
+    }
 
-        @keyframes title-flicker {
+    @keyframes title-flicker {
 
-            0%,
-            18%,
-            22%,
-            25%,
-            53%,
-            57%,
-            100% {
-                text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon), 0 0 40px var(--primary-neon);
-                opacity: 1;
-            }
+      0%,
+      18%,
+      22%,
+      25%,
+      53%,
+      57%,
+      100% {
+        text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon), 0 0 40px var(--primary-neon);
+        opacity: 1;
+      }
 
-            20%,
-            24%,
-            55% {
-                text-shadow: none;
-                opacity: 0.6;
-            }
-        }
+      20%,
+      24%,
+      55% {
+        text-shadow: none;
+        opacity: 0.6;
+      }
+    }
 
-        @media (max-width: 520px) {
-            .auth-container {
-                margin: 20px;
-                padding: 30px 25px;
-            }
-        }
-    </style>
+    @media (max-width: 520px) {
+      .auth-container {
+        margin: 20px;
+        padding: 30px 25px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -344,7 +346,7 @@
     initializeAppCheck(app, {
       provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
       isTokenAutoRefreshEnabled: true
-        });
+    });
     const auth = getAuth(app);
 
     function handleLogin(event) {
@@ -431,4 +433,5 @@
     window.addEventListener('load', initParticles);
   </script>
 </body>
+
 </html>
