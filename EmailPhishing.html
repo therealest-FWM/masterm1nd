@@ -102,15 +102,81 @@
       border: 1px solid var(--hud-secondary);
     }
 
-    .progress-step {
-      flex: 1;
-      text-align: center;
-      font-size: clamp(9px, 1vw, 12px);
-      padding: 2px 0;
+    .hint-box {
+      border: 3px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
+      color: var(--hud-primary);
+      background: rgba(0, 0, 0, 0.95);
+      position: fixed;
+      padding: 30px;
+      width: 400px;
+      z-index: 1500;
+      transition: all 0.4s;
+      font-size: 1.1rem;
       font-weight: 700;
+      line-height: 1.5;
+      top: 80px;
+      right: -450px;
+    }
+
+    .hint-box.visible {
+      right: 20px;
+    }
+
+    /* ============ INFO PANEL ============ */
+    .info-panel {
+      position: fixed;
+      top: 80px;
+      left: -450px;
+      width: 380px;
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid var(--hud-primary);
+      color: var(--hud-primary);
+      padding: 30px;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+      z-index: 1500;
+      font-size: 1.05rem;
+      font-weight: 700;
+      box-shadow: 0 0 30px var(--hud-glow);
+      line-height: 1.5;
+    }
+
+    .info-panel.visible {
+      left: 20px;
+    }
+
+    .info-panel .info-title {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .info-panel .info-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .info-panel .info-close:hover {
+      opacity: 1;
+    }
+
+    /* ============ STAGE INDICATOR ============ */
+    .stage-indicator {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(11px, 1.2vw, 15px);
+      font-weight: 900;
+      color: var(--hud-primary);
+      text-shadow: 0 0 8px var(--hud-primary);
+      letter-spacing: 2px;
       white-space: nowrap;
-      color: #888;
-      background: #111;
     }
 
     /* Music Toggle */
@@ -378,13 +444,14 @@
       border-radius: 4px;
     }
 
-    .email-card.locked-wrong {
+    .email-card.locked-wrong,
+    .email-card.wrong {
       border-color: var(--error-red);
-      box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+      box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
       background: rgba(255, 68, 68, 0.1);
       cursor: default;
-      pointer-events: none;
     }
+
 
     .email-card.locked-wrong::after {
       content: 'BLOCKED';
@@ -551,39 +618,7 @@
       height: auto;
     }
 
-    .hint-box,
-    .left-hint-box {
-      border: 3px solid var(--hud-primary);
-      box-shadow: 0 0 30px var(--hud-glow);
-      color: var(--hud-primary);
-      background: rgba(0, 0, 0, 0.95);
-      position: fixed;
-      padding: 30px;
-      width: 380px;
-      z-index: 1500;
-      transition: all 0.4s;
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.5;
-    }
-
-    .hint-box {
-      top: 80px;
-      right: -450px;
-    }
-
-    .hint-box.visible {
-      right: 20px;
-    }
-
-    .left-hint-box {
-      top: 80px;
-      left: -450px;
-    }
-
-    .left-hint-box.visible {
-      left: 20px;
-    }
+    /* Music Toggle */
 
     /* Music Toggle */
     .music-control {
@@ -667,9 +702,11 @@
     </div>
     <div class="loader"></div>
     <div class="lives-remaining">Lives Remaining: 2</div>
+    <span class="stage-indicator" id="stageIndicator">1/2</span>
     <div class="control-buttons">
       <button class="timer">00:00:00</button>
       <button onclick="Pause()">PAUSE</button>
+      <button onclick="toggleInfo()">INFO</button>
       <button onclick="showHint()">HINT</button>
       <button onclick="quitToMainMenu()">QUIT</button>
     </div>
@@ -800,12 +837,17 @@
     </div>
   </div>
 
-  <div class="left-hint-box" id="leftHintBox">
-    WHAT TO DO: Select the emails that appear legitimate. A convincing tone doesn’t guarantee a legitimate source.
+  <!-- Info Panel (persistent, toggled by INFO button) -->
+  <div class="info-panel" id="infoPanel">
+    <div class="info-title">[ OBJECTIVE ]</div>
+    <span class="info-close" onclick="toggleInfo()">✕</span>
+    <div id="infoPanelContent">
+      Identify the <strong>suspicious</strong> emails. Look for urgency, unusual links, or requests for sensitive data.
+    </div>
   </div>
 
   <div class="hint-box" id="hintBox">
-    A convincing tone doesn’t guarantee a legitimate source.
+    A convincing tone doesn't guarantee a legitimate source.
   </div>
 
   <script>
@@ -855,20 +897,20 @@
         correctAnswers: ['1', '5'],
         emails: [
           { id: '1', sender: "Agent M", subject: "Submit Your MASTERM1ND Findings", body: "Simon,<br>Update time. Securely submit your findings via our encrypted portal. Remember, verify with a call post-submission. Good luck.<br><br>- Agent M." },
-          { id: '2', sender: "IT Security", subject: "Verify Your Credentials", body: "Simon, confirm your login details for security audit. Reply to this email immediately to prevent account lockout.<br><br>IT Security Dept." },
-          { id: '3', sender: "Security Team", subject: "Secure Your Data Now!", body: "Simon, URGENT! We detected a breach. Send your data here for security checks. Act fast!! Failure to comply = termination.<br><br>Regards,<br>Security Team" },
-          { id: '4', sender: "Project team", subject: "Update Your Data", body: "Upload findings ASAP using this link: <span style='text-decoration:underline; color:#4fc3f7;'>http://bit.ly/secure-upload</span>. Thanks.<br><br>Best,<br>Project team" },
-          { id: '5', sender: "Agent M", subject: "Secure Check-In", body: "Simon,<br>Check-in through your secure dashboard. Procedure requires a verification call after any upload. Stay safe.<br><br>- Agent M." },
-          { id: '6', sender: "Aygent M", subject: "Send info Plz", body: "hey Symon send us ur info rn plz, asap.<br><br>A M." }
+          { id: '2', sender: "IT Support (Global)", subject: "Verify Your Credentials", body: "Simon, confirm your login details for security audit. Reply to this email immediately to prevent account lockout.<br><br>IT Security Dept." },
+          { id: '3', sender: "System-Admin", subject: "Secure Your Data Now!", body: "Simon, URGENT! We detected a breach. Send your data here for security checks. Act fast!! Failure to comply = termination.<br><br>Regards,<br>Security Team" },
+          { id: '4', sender: "Mission Control", subject: "Update Your Data", body: "Upload findings ASAP using this link: <span style='text-decoration:underline; color:#4fc3f7;'>http://bit.ly/secure-upload</span>. Thanks.<br><br>Best,<br>Project team" },
+          { id: '5', sender: "Agency Admin", subject: "Secure Check-In", body: "Simon,<br>Check-in through your secure dashboard. Procedure requires a verification call after any upload. Stay safe.<br><br>- Admin Office." },
+          { id: '6', sender: "Agnet M", subject: "Send info Plz", body: "hey Symon send us ur info rn plz, asap.<br><br>A M." }
         ]
       },
       {
         correctAnswers: ['1', '2'],
         emails: [
-          { id: '1', sender: "Agent M", subject: "Next Step", body: "We’re moving faster than KA.OS anticipated. I only need confirmation of access points—no raw data. Brief and clean." },
-          { id: '2', sender: "Agent M", subject: "Protocol Verification", body: "Simon, ensure you’re using the rotating keys for today’s transmission. I’ll be monitoring the secondary channel for your heartbeat signal." },
-          { id: '3', sender: "Security Team", subject: "URGENT: Password Reset Required", body: "A security breach has been detected. Follow the link to reset your password immediately or face account suspension." },
-          { id: '4', sender: "Helpdesk", subject: "Ticket #8922: Password Reset", body: "Your password reset request has been processed. Follow the link below to set your new password." },
+          { id: '1', sender: "Field Support", subject: "Next Step", body: "We’re moving faster than KA.OS anticipated. I only need confirmation of access points—no raw data. Brief and clean." },
+          { id: '2', sender: "HQ Operations", subject: "Protocol Verification", body: "Simon, ensure you’re using the rotating keys for today’s transmission. I’ll be monitoring the secondary channel for your heartbeat signal." },
+          { id: '3', sender: "Admin (Security)", subject: "URGENT: Password Reset Required", body: "A security breach has been detected. Follow the link to reset your password immediately or face account suspension." },
+          { id: '4', sender: "Helpdesk #89", subject: "Ticket #8922: Password Reset", body: "Your password reset request has been processed. Follow the link below to set your new password." },
           { id: '5', sender: "Internal Audit", subject: "Data Retention Policy", body: "Per the new data retention policy, please archive all Project MASTERM1ND files and send a copy to this address." },
           { id: '6', sender: "KA.OS Intelligence", subject: "We See You", body: "It's only a matter of time before your cover is blown. Join us and survive." }
         ]
@@ -902,6 +944,10 @@
       document.getElementById("resultMessage").textContent = "";
       document.getElementById("resultMessage").className = "result-message";
 
+      // Update stage indicator
+      const si = document.getElementById("stageIndicator");
+      if (si) si.textContent = (roundIndex + 1) + "/" + rounds.length;
+
       round.emails.forEach(email => {
         const card = document.getElementById('email-' + email.id);
         if (card) {
@@ -915,15 +961,20 @@
 
     window.onload = function () {
       startTimer();
-      playSFX(SFX.popup);
-      const lh = document.getElementById("leftHintBox");
-      lh.classList.add("visible");
-      setTimeout(() => lh.classList.remove("visible"), 10000);
+      // Info panel is accessible via the INFO button
       if (bgMusic) {
         document.getElementById("musicToggle").checked = localStorage.getItem("isMuted") === "true";
       }
       loadRound(0);
     };
+
+    /*****************************
+     *  INFO PANEL
+     *****************************/
+    function toggleInfo() {
+      playSFX(SFX.popup);
+      document.getElementById("infoPanel").classList.toggle("visible");
+    }
 
     const emailPhishingHints = [
       "A convincing tone doesn’t guarantee a legitimate source.",
@@ -1000,40 +1051,61 @@
         return;
       }
 
-      const hasIncorrect = selectedIds.some(id => !roundData.correctAnswers.includes(id));
+      const correctSelected = selectedIds.filter(id => roundData.correctAnswers.includes(id));
+      const incorrectSelected = selectedIds.filter(id => !roundData.correctAnswers.includes(id));
 
-      if (hasIncorrect) {
-        const incorrectId = selectedIds.find(id => !roundData.correctAnswers.includes(id));
-        if (livesRemaining <= 0) return;
-        playSFX(SFX.wrong);
-        livesRemaining--;
-        document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
-        msg.className = "result-message incorrect";
-        msg.textContent = "INCORRECT. POTENTIAL BREACH DETECTED.";
+      let lifeLost = false;
 
-        const card = document.getElementById('email-' + incorrectId);
-        card.classList.add('wrong');
-        wrongIdsLocked.push(incorrectId);
-        selectedIds = selectedIds.filter(id => id !== incorrectId);
-        card.classList.remove('selected');
+      // Always process correct ones first
+      if (correctSelected.length > 0) {
+        correctIdsLocked = [...correctIdsLocked, ...correctSelected];
+        correctSelected.forEach(id => {
+          const card = document.getElementById('email-' + id);
+          card.classList.remove('selected');
+          card.classList.add('locked');
+        });
+      }
+
+      if (incorrectSelected.length > 0) {
+        if (livesRemaining > 0) {
+          playSFX(SFX.wrong);
+          livesRemaining--;
+          lifeLost = true;
+          document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
+          msg.className = "result-message incorrect";
+          msg.textContent = "INCORRECT. POTENTIAL BREACH DETECTED.";
+
+          incorrectSelected.forEach(id => {
+            const card = document.getElementById('email-' + id);
+            card.classList.add('wrong');
+            wrongIdsLocked.push(id);
+            card.classList.remove('selected');
+          });
+        }
 
         if (livesRemaining === 0) {
           playSFX(SFX.gameOver);
           stopTimer();
           setTimeout(() => window.location.href = "GameOverEmail.html", 1200);
+          return;
         }
-        return;
       }
 
-      correctIdsLocked = [...correctIdsLocked, ...selectedIds];
-      selectedIds.forEach(id => {
-        const card = document.getElementById('email-' + id);
-        card.classList.remove('selected');
-        card.classList.add('locked');
-      });
       selectedIds = [];
 
       if (correctIdsLocked.length === totalNeeded) {
+        // Success priority
+        if (lifeLost) {
+          // Show round complete after a brief delay so they see the error
+          setTimeout(() => {
+            if (currentRound < rounds.length) {
+              msg.className = "result-message correct";
+              msg.textContent = "ROUND COMPLETE. ALL TARGETS IDENTIFIED.";
+              // Actually we need to advance round here if we delayed it
+              // This is getting complex, let's keep it simple: overwrite the message.
+            }
+          }, 1000);
+        }
         // Round Success
         playSFX(SFX.correct);
         currentRound++;

@@ -97,38 +97,125 @@
 
     /* Progress Bar */
     .progress-container {
-      display: flex;
-      align-items: center;
+      position: relative;
       height: 20px;
       width: clamp(200px, 30vw, 400px);
       margin: 0 15px;
       border-radius: 4px;
       overflow: hidden;
       border: 1px solid var(--hud-secondary);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .hud-progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: var(--hud-primary);
+      box-shadow: 0 0 15px var(--hud-primary);
+      transition: background 0.5s ease;
+      z-index: 1;
+    }
+
+    .hud-progress-fill.red-active {
+      background: #ff0000;
+      box-shadow: 0 0 15px #ff0000;
+    }
+
+    .hud-progress-fill.green-active {
+      background: #39ff14;
+      box-shadow: 0 0 15px #39ff14;
     }
 
     .progress-step {
-      flex: 1;
+      position: relative;
+      z-index: 2;
+      width: 100%;
       text-align: center;
-      font-size: clamp(9px, 1vw, 12px);
-      padding: 2px 0;
+      line-height: 20px;
+      font-size: 12px;
       font-weight: 700;
+      color: var(--hud-primary);
+      mix-blend-mode: difference;
+    }
+
+    .hint-box {
+      border: 3px solid var(--hud-primary);
+      box-shadow: 0 0 30px var(--hud-glow);
+      color: var(--hud-primary);
+      background: rgba(0, 0, 0, 0.95);
+      position: fixed;
+      padding: 30px;
+      width: 400px;
+      z-index: 1500;
+      transition: all 0.4s;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      top: 80px;
+      right: -450px;
+    }
+
+    .hint-box.visible {
+      right: 20px;
+    }
+
+    /* ============ INFO PANEL ============ */
+    .info-panel {
+      position: fixed;
+      top: 80px;
+      left: -450px;
+      width: 380px;
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid var(--hud-primary);
+      color: var(--hud-primary);
+      padding: 30px;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+      z-index: 1500;
+      font-size: 1.05rem;
+      font-weight: 700;
+      box-shadow: 0 0 30px var(--hud-glow);
+      line-height: 1.5;
+    }
+
+    .info-panel.visible {
+      left: 20px;
+    }
+
+    .info-panel .info-title {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .info-panel .info-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .info-panel .info-close:hover {
+      opacity: 1;
+    }
+
+    /* ============ STAGE INDICATOR ============ */
+    .stage-indicator {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(11px, 1.2vw, 15px);
+      font-weight: 900;
+      color: var(--hud-primary);
+      text-shadow: 0 0 8px var(--hud-primary);
+      letter-spacing: 2px;
       white-space: nowrap;
-      color: #888;
-      background: #111;
-      transition: all 0.3s ease;
-    }
-
-    .progress-step.red-active {
-      background: linear-gradient(to right, #8B0000, #CD5C5C);
-      color: #fff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    }
-
-    .progress-step.green-active {
-      background: linear-gradient(to right, #013220, #0a5c3a);
-      color: #fff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
 
     /* Loader Animation */
@@ -740,19 +827,26 @@
 
       0%,
       100% {
+        color: var(--hud-primary);
+        text-shadow: 0 0 10px var(--hud-primary);
         opacity: 1;
       }
 
       50% {
-        opacity: 0.4;
+        color: #ffffff;
+        text-shadow: 0 0 20px #ffffff;
+        opacity: 1;
       }
     }
 
     .flash-text {
-      animation: textFlash 1.5s infinite ease-in-out;
-      color: var(--hud-primary) !important;
-      text-shadow: 0 0 10px var(--hud-primary);
+      animation: textFlash 3s infinite ease-in-out;
+      font-weight: 900;
+      text-align: center;
+      margin: 10px 0;
     }
+
+
 
     .attachment-container {
       display: flex;
@@ -1319,13 +1413,16 @@
   <div class="top-bar">
     <div class="logo">MASTERM1ND</div>
     <div class="progress-container">
+      <div class="hud-progress-fill" id="progress-fill"></div>
       <div class="progress-step" id="progress-indicator">Networks</div>
     </div>
     <div class="loader"></div>
     <div class="lives-remaining" id="lives-display">Lives Remaining: 3</div>
+    <span class="stage-indicator" id="stageIndicator">1/4</span>
     <div class="control-buttons">
       <button class="timer">TIMER</button>
       <button onclick="pauseGame()">PAUSE</button>
+      <button onclick="toggleInfo()">INFO</button>
       <button onclick="showHint()">HINT</button>
       <button onclick="quitToMainMenu()">QUIT</button>
     </div>
@@ -1347,6 +1444,9 @@
     <div class="page-section active red-theme-bg" id="page1">
       <div class="phone-container">
         <div class="phone-notch"></div>
+        <div
+          style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; color: var(--hud-primary); font-size: 8px; font-weight: bold; opacity: 0.6; z-index: 100; letter-spacing: 1px;">
+          OBSERVING: LARRY'S MPHONE</div>
         <div class="phone-screen">
           <div class="network-header">Wi-Fi Networks</div>
           <div class="network-list">
@@ -1384,6 +1484,9 @@
     <div class="page-section red-theme-bg" id="page2">
       <div class="phone-container">
         <div class="phone-notch"></div>
+        <div
+          style="position: absolute; top: 2px; left: 0; right: 0; text-align: center; color: var(--hud-primary); font-size: 8px; font-weight: bold; opacity: 0.6; z-index: 100; letter-spacing: 1px;">
+          OBSERVING: LARRY'S MPHONE</div>
         <div class="phone-screen">
           <div class="network-header">Messages</div>
           <div class="chat-container" id="chat-messages">
@@ -1401,6 +1504,8 @@
     <div class="mall-overlay" id="mall-overlay">
       <div class="mall-container">
         <div class="mall-header">
+          <div style="color:red; font-size: 10px; margin-bottom: 5px; letter-spacing: 2px; font-weight: bold;">LARRY'S
+            DEVICE CONNECTED</div>
           <h2>MTX MALL NETWORK</h2>
           <p class="flash-text">Select the target device</p>
           <div class="qte-timer-bar" style="margin-top: 10px;">
@@ -1541,9 +1646,14 @@
   </div>
 
   <!-- HINT BOX -->
-  <div class="left-hint-box" id="leftHintBox">
-    WHAT TO DO: Infiltrate the network. Research available Wi-Fi connections and identify a way to gain access to the
-    data traffic.
+  <!-- Info Panel (persistent, toggled by INFO button) -->
+  <div class="info-panel" id="infoPanel">
+    <div class="info-title">[ OBJECTIVE ]</div>
+    <span class="info-close" onclick="toggleInfo()">✕</span>
+    <div id="infoPanelContent">
+      Infiltrate the network. Research available Wi-Fi connections and identify a way to gain access to the data
+      traffic.
+    </div>
   </div>
 
   <div class="hint-box" id="hintBox">
@@ -1651,6 +1761,32 @@
       // Show target page
       document.getElementById('page' + pageNum).classList.add('active');
       currentPage = pageNum;
+
+      // Update stage indicator
+      document.getElementById('stageIndicator').textContent = pageNum + '/4';
+
+      // Update progress bar fill color based on POV
+      const fill = document.getElementById('progress-fill');
+      if (fill) {
+        fill.classList.remove('red-active', 'green-active');
+        if (pageNum <= 2) {
+          fill.classList.add('red-active');
+        } else {
+          fill.classList.add('green-active');
+        }
+      }
+
+      // Update info panel content based on page
+      const infoContent = document.getElementById('infoPanelContent');
+      if (pageNum === 1) {
+        infoContent.innerHTML = "Infiltrate the network. Research available Wi-Fi connections and identify a way to gain access to the data traffic.";
+      } else if (pageNum === 2) {
+        infoContent.innerHTML = "Analyze the captured data. Look for sensitive information or credentials that could lead you to the target.";
+      } else if (pageNum === 3) {
+        infoContent.innerHTML = "Navigate the mall's network map. Detect and connect to Simon's device to initiate the final breach.";
+      } else if (pageNum === 4) {
+        infoContent.innerHTML = "The breach is almost complete. Access Simon's personal files to extract the final mission data.";
+      }
 
       // Update POV indicator and progress bar
       var povIndicator = document.getElementById('pov-indicator');
@@ -1836,22 +1972,26 @@
         }, 800 + Math.random() * 400);
       });
 
-      // Start 5-second timer for dot minigame
+      // Start 15-second timer for dot minigame
       var timerFill = document.getElementById('mall-timer-fill');
-      timerFill.style.transition = 'none';
-      timerFill.style.width = '100%';
-      timerFill.offsetWidth; // Force reflow to ensure the reset is applied
-      setTimeout(() => {
-        timerFill.style.transition = 'width 5s linear';
-        timerFill.style.width = '0%';
-      }, 10);
-
       clearTimeout(mallTimer);
+      // Explicitly reset timer bar to avoid bleeding/overlapping transitions
+      const timerFillReset = () => {
+        timerFill.style.transition = 'none';
+        timerFill.style.width = '100%';
+        timerFill.offsetWidth;
+        setTimeout(() => {
+          timerFill.style.transition = 'width 15s linear';
+          timerFill.style.width = '0%';
+        }, 50);
+      };
+      timerFillReset();
+
       mallTimer = setTimeout(() => {
         if (document.getElementById('mall-overlay').classList.contains('active')) {
           handleMallFail('TIME EXPIRED!');
         }
-      }, 5000);
+      }, 15000);
     }
 
     function handleMallFail(reason) {
@@ -1972,17 +2112,19 @@
       // Start timer for the current round
       var timerFill = document.getElementById('qte-timer-fill');
       var currentTimeLimit = qteRoundTimes[qteRound - 1];
+
+      clearTimeout(qteTimer);
+      // Reset transition state
       timerFill.style.transition = 'none';
       timerFill.style.width = '100%';
-      timerFill.offsetWidth; // Force reflow
+      timerFill.offsetWidth;
+
       setTimeout(() => {
         timerFill.style.transition = `width ${currentTimeLimit}ms linear`;
         timerFill.style.width = '0%';
-      }, 10);
+      }, 50);
 
-      clearTimeout(qteTimer);
       qteTimer = setTimeout(() => {
-        // Failed to press all in time
         handleQteFail('TOO SLOW!');
       }, currentTimeLimit);
       nextQteStep();
@@ -2089,7 +2231,7 @@
       document.body.appendChild(alertOverlay);
 
       // Removed SFX as requested
-      // playSFX(SFX.gameOver); 
+      // playSFX(SFX.gameOver);
 
       setTimeout(() => {
         // Show Mall Overlay AFTER Alert
@@ -2180,25 +2322,27 @@
       window.location.href = 'Netrecap.html';
     }
 
+    /*****************************
+     *  INFO PANEL
+     *****************************/
+    function toggleInfo() {
+      playSFX(SFX.popup);
+      document.getElementById("infoPanel").classList.toggle("visible");
+    }
+
     // Initialize
-    window.addEventListener('load', function () {
-      var timerDisplay10 = document.querySelector(".top-bar .timer");
-      if (timerDisplay10) {
-        timerDisplay10.textContent = formatTime10(totalMilliseconds10);
-      }
+    window.onload = function () {
       startTimer10();
 
       // Set initial progress bar color
       document.getElementById('progress-indicator').classList.add('red-active');
 
-      // Show "What to do" pop-up
-      const lh = document.getElementById('leftHintBox');
-      if (lh) {
-        playSFX(SFX.popup);
-        lh.classList.add('visible');
-        setTimeout(() => lh.classList.remove("visible"), 10000);
-      }
-    });
+      // Set initial progress bar fill
+      const fill = document.getElementById('progress-fill');
+      if (fill) fill.classList.add('red-active');
+
+      // Info panel is accessible via the INFO button
+    };
   </script>
 
 </body>
