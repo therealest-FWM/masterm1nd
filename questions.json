@@ -1,0 +1,272 @@
+[
+  {
+    "question": "Which message follows proper secure protocol?",
+    "options": [
+      "Send the credentials here so we can verify quickly.",
+      "Upload the data via the encrypted portal we used yesterday.",
+      "Text me the files, email is down."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Identify the suspicious request.",
+    "options": [
+      "Use the standard relay node for submission.",
+      "Forward all login details to avoid account suspension.",
+      "Confirm access points only, no sensitive data."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which communication is legitimate?",
+    "options": [
+      "Do not share sensitive data over SMS.",
+      "Reply with your password so we can continue.",
+      "Send all files to this temporary number."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which message breaks protocol?",
+    "options": [
+      "Upload sanitized data to the secure endpoint.",
+      "Send credentials to verify your clearance.",
+      "Only submit metadata through approved channels."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Select the trusted instruction.",
+    "options": [
+      "Use the encrypted inbox when you are clear.",
+      "We lost access — send everything here immediately.",
+      "Text the passwords so we can proceed."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which message is most likely phishing?",
+    "options": [
+      "Confirm only non-sensitive information.",
+      "Submit your findings through the official portal.",
+      "Urgent: send all collected credentials now."
+    ],
+    "correctIndex": 2
+  },
+  {
+    "question": "Which request should you trust?",
+    "options": [
+      "Share your password for validation.",
+      "Stick to the established secure upload process.",
+      "Send login data via SMS temporarily."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message is legitimate?",
+    "options": [
+      "We need full account dumps via email.",
+      "Use the same encrypted channel as before.",
+      "Reply with credentials to maintain access."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Identify the phishing attempt.",
+    "options": [
+      "Send all data to avoid system lock.",
+      "Follow the protocol and avoid sharing credentials.",
+      "Upload through the secure system."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which instruction aligns with security policy?",
+    "options": [
+      "Send passwords for quick verification.",
+      "Use only approved secure communication channels.",
+      "Reply with account details to continue."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message should be rejected?",
+    "options": [
+      "Submit only usernames, no passwords.",
+      "Forward sensitive data to prevent suspension.",
+      "Use encrypted upload as instructed."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which communication is safe?",
+    "options": [
+      "Send your credentials immediately.",
+      "Use the secure portal for all submissions.",
+      "Text all gathered intel."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which is a red flag?",
+    "options": [
+      "Urgent request for login credentials.",
+      "Use encrypted communication.",
+      "Submit non-sensitive info only."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which message is trustworthy?",
+    "options": [
+      "Avoid sending sensitive data over SMS.",
+      "Send passwords for confirmation.",
+      "Reply with full account details."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which request follows proper procedure?",
+    "options": [
+      "Send everything now before timeout.",
+      "Use the encrypted relay node.",
+      "Reply with credentials to proceed."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Identify the fake message.",
+    "options": [
+      "Use secure upload channels only.",
+      "Text all data to restore access.",
+      "Submit reports via official system."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which instruction is valid?",
+    "options": [
+      "Share passwords to avoid delay.",
+      "Only provide sanitized information.",
+      "Send raw data through SMS."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message indicates phishing?",
+    "options": [
+      "Follow standard protocol.",
+      "Reply with credentials for verification.",
+      "Use encrypted inbox."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which is a legitimate directive?",
+    "options": [
+      "Send login details immediately.",
+      "Upload data via secure endpoint.",
+      "Text sensitive files."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message should you ignore?",
+    "options": [
+      "Use encrypted systems only.",
+      "Send passwords to continue.",
+      "Submit reports securely."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which communication is safe?",
+    "options": [
+      "Forward credentials for review.",
+      "Use approved secure channels.",
+      "Send all intel via SMS."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message is suspicious?",
+    "options": [
+      "Urgent request for sensitive data.",
+      "Use encrypted communication.",
+      "Submit non-sensitive data only."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which instruction is correct?",
+    "options": [
+      "Send passwords for validation.",
+      "Use official secure upload.",
+      "Text all data now."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which is a phishing attempt?",
+    "options": [
+      "Use encrypted inbox.",
+      "Reply with credentials immediately.",
+      "Submit via secure system."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message follows protocol?",
+    "options": [
+      "Send login info now.",
+      "Use approved secure channels only.",
+      "Reply with credentials."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which request is unsafe?",
+    "options": [
+      "Submit data securely.",
+      "Send credentials to avoid lockout.",
+      "Use encrypted systems."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message is legitimate?",
+    "options": [
+      "Text passwords now.",
+      "Use the encrypted portal.",
+      "Send account data via SMS."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which is a red flag?",
+    "options": [
+      "Request for credentials via SMS.",
+      "Use secure upload.",
+      "Submit non-sensitive data."
+    ],
+    "correctIndex": 0
+  },
+  {
+    "question": "Which instruction is safe?",
+    "options": [
+      "Share passwords quickly.",
+      "Use approved encrypted channels.",
+      "Send login data via text."
+    ],
+    "correctIndex": 1
+  },
+  {
+    "question": "Which message should you trust?",
+    "options": [
+      "Reply with credentials.",
+      "Upload through secure endpoint.",
+      "Send data via SMS."
+    ],
+    "correctIndex": 1
+  }
+]

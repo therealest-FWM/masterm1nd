@@ -10,10 +10,14 @@
   <style>
     :root {
       /* Bright Grey/Silver Theme */
-      --primary: #d1d5db; /* light silver */
-      --secondary: #9ca3af; /* grey */
-      --highlight: #f3f4f6; /* bright highlight */
-      --bg-dark: #0f172a; /* dark contrast */
+      --primary: #d1d5db;
+      /* light silver */
+      --secondary: #9ca3af;
+      /* grey */
+      --highlight: #f3f4f6;
+      /* bright highlight */
+      --bg-dark: #0f172a;
+      /* dark contrast */
 
       --hud-primary: var(--primary);
       --hud-secondary: var(--secondary);
@@ -122,9 +126,20 @@
     }
 
     @keyframes logo-pulse {
-      0% { text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14; opacity: 1; }
-      50% { text-shadow: 0 0 15px #39ff14, 0 0 30px #39ff14; opacity: 0.9; }
-      100% { text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14; opacity: 1; }
+      0% {
+        text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+        opacity: 1;
+      }
+
+      50% {
+        text-shadow: 0 0 15px #39ff14, 0 0 30px #39ff14;
+        opacity: 0.9;
+      }
+
+      100% {
+        text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+        opacity: 1;
+      }
     }
 
     .date-cycler span {
@@ -240,9 +255,19 @@
       border-radius: 1px;
     }
 
-    .status-win { background: var(--success-green); box-shadow: 0 0 5px var(--success-green); }
-    .status-loss { background: var(--error-red); box-shadow: 0 0 5px var(--error-red); }
-    .status-none { background: #4b5563; }
+    .status-win {
+      background: var(--success-green);
+      box-shadow: 0 0 5px var(--success-green);
+    }
+
+    .status-loss {
+      background: var(--error-red);
+      box-shadow: 0 0 5px var(--error-red);
+    }
+
+    .status-none {
+      background: #4b5563;
+    }
 
     .cutoff-message {
       font-size: 20px;
@@ -250,16 +275,18 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       margin-top: 40px;
-      text-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     /* Custom Scrollbar for Tracker */
     .tracker-popup::-webkit-scrollbar {
       width: 4px;
     }
+
     .tracker-popup::-webkit-scrollbar-track {
       background: rgba(0, 0, 0, 0.2);
     }
+
     .tracker-popup::-webkit-scrollbar-thumb {
       background: var(--hud-secondary);
     }
@@ -386,9 +413,17 @@
     }
 
     @keyframes success-pulse {
-      0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
-      50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.6); }
-      100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+      0% {
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
+      }
+
+      100% {
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+      }
     }
 
     .message-card.wrong {
@@ -399,8 +434,13 @@
     }
 
     @keyframes error-flicker {
-      0% { opacity: 1; }
-      100% { opacity: 0.8; }
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.8;
+      }
     }
 
     .message-card.wrong::after {
@@ -535,8 +575,13 @@
     }
 
     @keyframes rotation {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .hidden {
@@ -549,9 +594,22 @@
     }
 
     @keyframes glitchFade {
-      0% { opacity: 0; transform: scale(0.98); filter: blur(2px) hue-rotate(90deg); }
-      50% { opacity: 0.5; filter: blur(1px) hue-rotate(-90deg); }
-      100% { opacity: 1; transform: scale(1); filter: blur(0) hue-rotate(0deg); }
+      0% {
+        opacity: 0;
+        transform: scale(0.98);
+        filter: blur(2px) hue-rotate(90deg);
+      }
+
+      50% {
+        opacity: 0.5;
+        filter: blur(1px) hue-rotate(-90deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0) hue-rotate(0deg);
+      }
     }
   </style>
 </head>
@@ -591,8 +649,11 @@
         <div style="color: var(--hud-primary); margin-top: 10px;">Decrypting Incoming Transmission...</div>
       </div>
 
-      <div id="challengeContent" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <div id="archiveLabel" class="hidden" style="font-size: 10px; color: var(--secondary); letter-spacing: 2px; margin-bottom: 10px;">ARCHIVED RECORD — READ ONLY</div>
+      <div id="challengeContent" class="hidden"
+        style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div id="archiveLabel" class="hidden"
+          style="font-size: 10px; color: var(--secondary); letter-spacing: 2px; margin-bottom: 10px;">ARCHIVED
+          RECORD — READ ONLY</div>
         <div class="context-header" id="questionText">---</div>
         <div class="options-grid" id="optionsGrid"></div>
       </div>
@@ -611,6 +672,73 @@
       </div>
     </div>
   </div>
+
+  <!-- ============================================================
+         FIREBASE CLOUD-SYNC MODULE
+         Exposes window.cloudResults for the classic script below.
+         Signed-in users → results stored in Firestore.
+         Guests → window.cloudResults.whoAmI() resolves to null and
+                  the classic script falls back to localStorage.
+    ============================================================ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+    import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app-check.js";
+    import {
+      getFirestore, doc, setDoc, collection, getDocs, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHU77-uaSdu5HLsBqm1gtb_Z_NEwuoVtM",
+      authDomain: "masterm1nd.firebaseapp.com",
+      projectId: "masterm1nd",
+      storageBucket: "masterm1nd.appspot.com",
+      messagingSenderId: "191456665196",
+      appId: "1:191456665196:web:ff5723234f5aa8831f4249"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider('6Ldl4FYsAAAAABBc04E_ya-kK3I5-tM9KjFJl22X'),
+      isTokenAutoRefreshEnabled: true
+    });
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Resolves once on the first auth state callback (user | null).
+    const authReady = new Promise((resolve) => {
+      const unsub = onAuthStateChanged(auth, (user) => {
+        unsub();
+        resolve(user);
+      });
+    });
+
+    window.cloudResults = {
+      async whoAmI() {
+        return await authReady;
+      },
+      async getAllResults() {
+        const user = await authReady;
+        if (!user) return null;
+        const snap = await getDocs(collection(db, 'users', user.uid, 'dailyResults'));
+        const out = {};
+        snap.forEach(d => {
+          const data = d.data();
+          out[d.id] = { result: data.result, selectedIndex: data.selectedIndex };
+        });
+        return out;
+      },
+      async saveResult(dateString, result, selectedIndex) {
+        const user = await authReady;
+        if (!user) return false;
+        await setDoc(
+          doc(db, 'users', user.uid, 'dailyResults', dateString),
+          { result, selectedIndex, completedAt: serverTimestamp() }
+        );
+        return true;
+      }
+    };
+  </script>
 
   <script>
     /*****************************
@@ -789,16 +917,47 @@
     let bgMusic = null;
     let musicEnabled = localStorage.getItem('dc_music_enabled') !== 'false';
 
-    // Initialize daily_results and daily_challenge_cache if they don't exist
-    if (!localStorage.getItem('daily_results')) {
-      localStorage.setItem('daily_results', JSON.stringify({}));
-    }
+    // daily_challenge_cache stays in localStorage regardless — it's a
+    // deterministic per-date question cache, not user progress.
     if (!localStorage.getItem('daily_challenge_cache')) {
       localStorage.setItem('daily_challenge_cache', JSON.stringify({}));
     }
 
-    // Migration helper for old string results
-    (function migrateResults() {
+    /*****************************
+     * UNIFIED RESULTS STORE
+     * - Signed in:  Firestore via window.cloudResults
+     * - Guest:      localStorage 'daily_results'
+     * The in-memory `resultsStore` is the single source of truth at
+     * runtime; reads are sync, writes update memory immediately and
+     * persist to the right backend asynchronously.
+     *****************************/
+    let resultsStore = {};
+    let cloudMode = false;
+
+    async function initResultsStore() {
+      const cloud = window.cloudResults;
+      let user = null;
+      if (cloud) {
+        try { user = await cloud.whoAmI(); }
+        catch (e) { console.warn('Auth check failed; staying local.', e); }
+      }
+
+      if (user) {
+        cloudMode = true;
+        try {
+          resultsStore = (await cloud.getAllResults()) || {};
+        } catch (e) {
+          console.error('Failed to load cloud results, starting empty:', e);
+          resultsStore = {};
+        }
+        return;
+      }
+
+      // Guest mode — localStorage with legacy-string migration.
+      cloudMode = false;
+      if (!localStorage.getItem('daily_results')) {
+        localStorage.setItem('daily_results', JSON.stringify({}));
+      }
       const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
       let changed = false;
       for (const date in results) {
@@ -808,15 +967,37 @@
         }
       }
       if (changed) localStorage.setItem('daily_results', JSON.stringify(results));
-    })();
+      resultsStore = results;
+    }
+
+    function getAllResults() {
+      return resultsStore;
+    }
+
+    async function saveResult(dateString, result, selectedIndex) {
+      resultsStore[dateString] = { result, selectedIndex };
+      if (cloudMode) {
+        try {
+          await window.cloudResults.saveResult(dateString, result, selectedIndex);
+        } catch (e) {
+          console.error('Cloud save failed; result kept in memory only:', e);
+        }
+      } else {
+        localStorage.setItem('daily_results', JSON.stringify(resultsStore));
+      }
+    }
 
     /*****************************
      * INIT & NAVIGATION
      *****************************/
-    window.onload = () => {
+    window.onload = async () => {
       initAudio();
+
+      // Wait for auth + initial results pull before rendering the day.
+      // The loader spinner is already visible by default in markup.
+      await initResultsStore();
       loadChallengeForDate(selectedDate);
-      
+
       // Add hover sounds to buttons
       document.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('mouseenter', () => playSFX(sfxHover, 0.3));
@@ -824,12 +1005,12 @@
     };
 
     function initAudio() {
-      bgMusic = new Audio('assets/AntiMatterMagic.ogg');
+      bgMusic = new Audio('assets/lastarea.wav');
       bgMusic.loop = true;
       bgMusic.volume = 0.2;
-      
+
       if (musicEnabled && localStorage.getItem("audioUnlocked") === "true") {
-        bgMusic.play().catch(() => {});
+        bgMusic.play().catch(() => { });
       }
       updateMusicUI();
     }
@@ -838,9 +1019,9 @@
       playSFX(sfxClick);
       musicEnabled = !musicEnabled;
       localStorage.setItem('dc_music_enabled', musicEnabled);
-      
+
       if (musicEnabled) {
-        bgMusic.play().catch(() => {});
+        bgMusic.play().catch(() => { });
       } else {
         bgMusic.pause();
       }
@@ -856,17 +1037,17 @@
       if (localStorage.getItem("audioUnlocked") !== "true") return;
       audio.currentTime = 0;
       audio.volume = vol;
-      audio.play().catch(() => {});
+      audio.play().catch(() => { });
     }
 
     function prevDay() {
       playSFX(sfxClick);
       let d = new Date(selectedDate);
       d.setDate(d.getDate() - 1);
-      
+
       // Cutoff check
       if (d < DAILY_START_DATE) return;
-      
+
       selectedDate = d.toISOString().split('T')[0];
       loadChallengeForDate(selectedDate);
     }
@@ -876,7 +1057,7 @@
       let d = new Date(selectedDate);
       let today = new Date(todayStr);
       if (d >= today) return;
-      
+
       d.setDate(d.getDate() + 1);
       selectedDate = d.toISOString().split('T')[0];
       loadChallengeForDate(selectedDate);
@@ -886,7 +1067,7 @@
       playSFX(sfxPopup);
       const popup = document.getElementById('trackerPopup');
       const isActive = popup.classList.contains('active');
-      
+
       if (!isActive) {
         renderTracker();
         popup.classList.add('active');
@@ -898,33 +1079,33 @@
     function renderTracker() {
       const log = document.getElementById('trackerLog');
       log.innerHTML = '';
-      
-      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+
+      const results = getAllResults();
       const start = new Date(DAILY_START_DATE);
       const end = new Date(todayStr);
-      
+
       let current = new Date(end);
       while (current >= start) {
         const dStr = current.toISOString().split('T')[0];
         const resObj = results[dStr];
         const res = resObj ? resObj.result : null;
-        
+
         const row = document.createElement('div');
         row.className = 'tracker-row' + (dStr === selectedDate ? ' active' : '');
-        
+
         const month = current.toLocaleString('default', { month: 'short' }).toUpperCase();
         const day = current.getDate().toString().padStart(2, '0');
         const displayDate = `${month} ${day}`;
-        
+
         let statusClass = 'status-none';
         if (res === 'win') statusClass = 'status-win';
         else if (res === 'loss') statusClass = 'status-loss';
-        
+
         row.innerHTML = `
           <span>${displayDate}</span>
           <div class="status-box ${statusClass}"></div>
         `;
-        
+
         // Make row clickable
         row.onclick = (e) => {
           e.stopPropagation();
@@ -946,12 +1127,12 @@
      *****************************/
     function loadChallengeForDate(dateString) {
       document.getElementById('dateDisplay').innerText = dateString;
-      
+
       const isToday = (dateString === todayStr);
       const dObj = new Date(dateString);
       const isAtStart = (dObj <= DAILY_START_DATE);
       const isFuture = (dObj > new Date(todayStr));
-      
+
       document.getElementById('btnNextDay').disabled = isToday;
       document.getElementById('btnPrevDay').disabled = isAtStart;
       if (document.getElementById('btnPrevDayResult')) {
@@ -977,12 +1158,12 @@
         return;
       }
 
-      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+      const results = getAllResults();
       const dayData = results[dateString];
 
       setTimeout(() => {
         currentChallenge = getChallengeByDate(dateString);
-        
+
         if (dayData) {
           // ALREADY COMPLETED (Today or Past) - Archive mode
           renderChallenge(currentChallenge, true, dayData);
@@ -991,7 +1172,7 @@
           // NOT COMPLETED - Playable if not future
           isLocked = false;
           renderChallenge(currentChallenge, false);
-          
+
           if (!isToday) {
             // Archived record label for past playable days? 
             // The prompt says "archived record" is for completed days.
@@ -1043,7 +1224,7 @@
       const { question, options, correctIndex } = data;
       const grid = document.getElementById('optionsGrid');
       grid.innerHTML = '';
-      
+
       document.getElementById('questionText').innerText = question;
       if (readOnly) document.getElementById('archiveLabel').classList.remove('hidden');
 
@@ -1106,7 +1287,7 @@
         const meta = c.querySelector('.message-metadata');
         if (meta) meta.innerText = "TRACING STATUS: LOCKED";
       });
-      
+
       if (isCorrect) {
         playSFX(sfxCorrect);
         element.classList.add('correct');
@@ -1122,20 +1303,20 @@
     }
 
     function savePlayed(dateString, result, selectedIndex) {
-      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
-      results[dateString] = { result, selectedIndex };
-      localStorage.setItem('daily_results', JSON.stringify(results));
+      // Fire-and-forget — the in-memory store is updated synchronously
+      // inside saveResult so the rest of the flow can rely on it.
+      saveResult(dateString, result, selectedIndex);
     }
 
     function showResultScreen(result, isArchived = false) {
       document.getElementById('loader').classList.add('hidden');
-      
+
       const challengeContent = document.getElementById('challengeContent');
       challengeContent.classList.remove('hidden');
-      
+
       // If fresh completion, re-render in read-only mode to show correct answer glow
       if (!isArchived) {
-        const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+        const results = getAllResults();
         const dayData = results[selectedDate];
         renderChallenge(currentChallenge, true, dayData);
       }
@@ -1154,7 +1335,7 @@
         resultTitle.innerText = (isArchived || isLocked) ? "CHALLENGE SUCCESSFULLY COMPLETED" : "✔ TRANSMISSION VERIFIED";
         resultTitle.className = "result-title success";
         resultSubtext.innerText = "Secure node authenticated for this cycle.";
-        gameArea.className = "center-box correct"; 
+        gameArea.className = "center-box correct";
       } else {
         resultTitle.innerText = (isArchived || isLocked) ? "SECURITY BREACH DETECTED" : "✖ MALICIOUS SOURCE DETECTED";
         resultTitle.className = "result-title error";
