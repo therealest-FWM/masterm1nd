@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAILY CHALLENGE - MASTERM1ND</title>
+  <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Bright Grey/Silver Theme */
+      --primary: #d1d5db; /* light silver */
+      --secondary: #9ca3af; /* grey */
+      --highlight: #f3f4f6; /* bright highlight */
+      --bg-dark: #0f172a; /* dark contrast */
+
+      --hud-primary: var(--primary);
+      --hud-secondary: var(--secondary);
+      --hud-glow: rgba(209, 213, 219, 0.4);
+
+      --level-primary: var(--highlight);
+      --level-secondary: var(--secondary);
+      --level-highlight: #ffffff;
+      --level-glow: rgba(243, 244, 246, 0.4);
+
+      --box-bg: rgba(15, 23, 42, 0.95);
+      --card-bg: rgba(15, 23, 42, 0.8);
+
+      --error-red: #ff4444;
+      --success-green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-dark);
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ============ SCANLINE OVERLAY ============ */
+    .scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: linear-gradient(to bottom, transparent 50%, rgba(209, 213, 219, 0.05) 50.5%, transparent 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    /* ============ TOP BAR ============ */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 20px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 30, 0.9) 100%);
+      gap: 15px;
+      z-index: 100;
+      position: relative;
+      color: var(--hud-primary);
+      border-bottom: 1px solid rgba(209, 213, 219, 0.2);
+    }
+
+    .top-bar .logo {
+      font-weight: 900;
+      font-size: clamp(16px, 2vw, 24px);
+      text-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    .date-cycler {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .date-cycler button {
+      background: transparent;
+      border: 1px solid var(--hud-secondary);
+      color: var(--hud-primary);
+      padding: 4px 15px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .date-cycler button:hover:not(:disabled) {
+      background: var(--hud-primary);
+      color: #000;
+      box-shadow: 0 0 10px var(--hud-primary);
+    }
+
+    .date-cycler button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ============ LOGO & HUD ============ */
+    .top-bar .logo {
+      font-weight: 900;
+      font-size: clamp(16px, 2vw, 24px);
+      color: #39ff14;
+      text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+      letter-spacing: 2px;
+      animation: logo-pulse 4s infinite alternate;
+      cursor: pointer;
+    }
+
+    @keyframes logo-pulse {
+      0% { text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14; opacity: 1; }
+      50% { text-shadow: 0 0 15px #39ff14, 0 0 30px #39ff14; opacity: 0.9; }
+      100% { text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14; opacity: 1; }
+    }
+
+    .date-cycler span {
+      font-size: clamp(14px, 2vw, 20px);
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      min-width: 160px;
+      text-align: center;
+      text-shadow: 0 0 5px var(--hud-primary);
+    }
+
+    .top-bar .control-buttons button {
+      background: transparent;
+      border: 1px solid var(--hud-secondary);
+      color: var(--hud-primary);
+      padding: 6px 14px;
+      font-family: 'Orbitron', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .top-bar .control-buttons button:hover {
+      background: var(--hud-primary);
+      color: #000;
+      box-shadow: 0 0 15px var(--hud-primary);
+    }
+
+    .top-bar .control-buttons .btn-music {
+      min-width: 130px;
+    }
+
+    /* ============ TRACKER POPUP ============ */
+    .tracker-popup {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      width: 220px;
+      max-height: 400px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid var(--hud-secondary);
+      border-radius: 4px;
+      z-index: 1000;
+      padding: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px var(--hud-glow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      overflow-y: auto;
+    }
+
+    .tracker-popup.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .tracker-header {
+      font-size: 12px;
+      color: var(--hud-primary);
+      border-bottom: 1px solid rgba(209, 213, 219, 0.2);
+      padding-bottom: 5px;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .tracker-title {
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: var(--highlight);
+    }
+
+    .tracker-log {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tracker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 2px;
+      font-size: 11px;
+      transition: all 0.2s;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .tracker-row:hover {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 8px rgba(209, 213, 219, 0.2);
+      transform: translateX(2px);
+    }
+
+    .tracker-row.active {
+      border: 1px solid var(--hud-primary);
+      background: rgba(209, 213, 219, 0.1);
+      box-shadow: 0 0 10px var(--hud-glow);
+    }
+
+    .status-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 1px;
+    }
+
+    .status-win { background: var(--success-green); box-shadow: 0 0 5px var(--success-green); }
+    .status-loss { background: var(--error-red); box-shadow: 0 0 5px var(--error-red); }
+    .status-none { background: #4b5563; }
+
+    .cutoff-message {
+      font-size: 20px;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 40px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Custom Scrollbar for Tracker */
+    .tracker-popup::-webkit-scrollbar {
+      width: 4px;
+    }
+    .tracker-popup::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .tracker-popup::-webkit-scrollbar-thumb {
+      background: var(--hud-secondary);
+    }
+
+    .tracker-popup::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 50%, rgba(209, 213, 219, 0.02) 50.5%, transparent 51%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ============ MAIN GAME AREA ============ */
+    .game-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 40px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg-dark);
+    }
+
+    .bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.15;
+      z-index: 0;
+      filter: grayscale(100%);
+    }
+
+    .center-box {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      width: 100%;
+      max-width: 1200px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--level-secondary);
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      transition: all 0.5s ease;
+    }
+
+    .center-box.correct {
+      border-color: var(--success-green);
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+    }
+
+    .center-box.wrong {
+      border-color: var(--error-red);
+      box-shadow: 0 0 30px rgba(255, 68, 68, 0.3);
+    }
+
+    /* ============ CONTEXT HEADER ============ */
+    .context-header {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--level-secondary);
+      padding: 15px 30px;
+      margin-bottom: 30px;
+      border-radius: 4px;
+      box-shadow: 0 0 15px var(--level-glow);
+      font-size: clamp(16px, 1.8vw, 24px);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--level-primary);
+      text-shadow: 0 0 8px var(--level-primary);
+      width: 100%;
+      max-width: 800px;
+      transition: opacity 0.3s ease;
+    }
+
+    /* ============ IMMERSIVE PHISHING MESSAGE CARDS ============ */
+    .options-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .message-card {
+      background: var(--card-bg);
+      border: 1px solid var(--level-secondary);
+      border-radius: 8px;
+      padding: 15px;
+      width: 320px;
+      min-height: 180px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .message-card:hover:not(.disabled) {
+      border-color: var(--level-primary);
+      background: rgba(209, 213, 219, 0.1);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 20px var(--level-glow);
+    }
+
+    .message-card.correct {
+      border-color: var(--success-green);
+      background: rgba(34, 197, 94, 0.2);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+      animation: success-pulse 2s infinite;
+    }
+
+    @keyframes success-pulse {
+      0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.6); }
+      100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+    }
+
+    .message-card.wrong {
+      border-color: var(--error-red);
+      background: rgba(255, 68, 68, 0.2);
+      box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+      animation: error-flicker 0.3s ease infinite alternate;
+    }
+
+    @keyframes error-flicker {
+      0% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+
+    .message-card.wrong::after {
+      content: 'BLOCKED';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: var(--error-red);
+      font-size: 10px;
+      font-weight: bold;
+      border: 1px solid var(--error-red);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .message-card.disabled {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .message-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .message-sender {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--level-primary);
+      margin-bottom: 4px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .message-metadata {
+      font-size: 10px;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .message-body {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.5;
+      flex-grow: 1;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    /* Output screen replacement */
+    .result-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-height: 250px;
+      gap: 20px;
+    }
+
+    .result-title {
+      font-size: clamp(24px, 3.5vw, 42px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .result-title.success {
+      color: var(--success-green);
+      text-shadow: 0 0 20px var(--success-green);
+    }
+
+    .result-title.error {
+      color: var(--error-red);
+      text-shadow: 0 0 20px var(--error-red);
+    }
+
+    .result-subtext {
+      font-size: 18px;
+      color: var(--primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--hud-glow);
+      margin-bottom: 15px;
+    }
+
+    .result-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .result-btn {
+      background: transparent;
+      border: 1px solid var(--level-secondary);
+      border-radius: 4px;
+      padding: 12px 24px;
+      font-size: 16px;
+      color: var(--level-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .result-btn:hover {
+      background: var(--level-primary);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px var(--level-glow);
+    }
+
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid var(--hud-primary);
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Glitch/Fade Transitions */
+    .glitch-fade {
+      animation: glitchFade 0.5s ease forwards;
+    }
+
+    @keyframes glitchFade {
+      0% { opacity: 0; transform: scale(0.98); filter: blur(2px) hue-rotate(90deg); }
+      50% { opacity: 0.5; filter: blur(1px) hue-rotate(-90deg); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0) hue-rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scanline"></div>
+  <div class="top-bar">
+    <div class="logo">MASTERM1ND</div>
+    <div class="date-cycler">
+      <button onclick="prevDay()" id="btnPrevDay">←</button>
+      <span id="dateDisplay">YYYY-MM-DD</span>
+      <button onclick="nextDay()" id="btnNextDay">→</button>
+    </div>
+    <div class="control-buttons">
+      <button onclick="toggleMusic()" id="btnMusic" class="btn-music">MUSIC: ON</button>
+      <button onclick="toggleTracker()">Tracker</button>
+      <button onclick="window.location.href='MainMenu.html'">Main Menu</button>
+    </div>
+  </div>
+
+  <div class="tracker-popup" id="trackerPopup">
+    <div class="tracker-header">SYSTEM ACTIVITY RECORD</div>
+    <div class="tracker-title">DAILY ACTIVITY LOG</div>
+    <div class="tracker-log" id="trackerLog">
+      <!-- Entries injected here -->
+    </div>
+  </div>
+
+  <div class="game-container">
+    <video class="bg-video" autoplay loop muted playsinline>
+      <source src="assets/MMDCBG.mp4" type="video/mp4">
+    </video>
+
+    <div class="center-box" id="gameArea">
+      <div id="loader" class="loader-container">
+        <span class="loader"></span>
+        <div style="color: var(--hud-primary); margin-top: 10px;">Decrypting Incoming Transmission...</div>
+      </div>
+
+      <div id="challengeContent" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div id="archiveLabel" class="hidden" style="font-size: 10px; color: var(--secondary); letter-spacing: 2px; margin-bottom: 10px;">ARCHIVED RECORD — READ ONLY</div>
+        <div class="context-header" id="questionText">---</div>
+        <div class="options-grid" id="optionsGrid"></div>
+      </div>
+
+      <div id="resultScreen" class="result-screen hidden">
+        <div class="result-title" id="resultTitle">---</div>
+        <div class="result-subtext" id="resultSubtext">---</div>
+        <div class="result-buttons">
+          <button class="result-btn" onclick="window.location.href='MainMenu.html'">MAIN MENU</button>
+          <button class="result-btn" onclick="prevDay()" id="btnPrevDayResult">PREVIOUS DAY</button>
+        </div>
+      </div>
+
+      <div id="cutoffScreen" class="hidden">
+        <div class="cutoff-message">NO ARCHIVED CHALLENGES EXIST BEFORE MAY 1ST</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*****************************
+     * QUESTIONS
+     *****************************/
+    const QUESTIONS = [
+      {
+        "question": "Which message follows proper secure protocol?",
+        "options": ["Send the credentials here so we can verify quickly.", "Upload the data via the encrypted portal we used yesterday.", "Text me the files, email is down."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Identify the suspicious request.",
+        "options": ["Use the standard relay node for submission.", "Forward all login details to avoid account suspension.", "Confirm access points only, no sensitive data."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which communication is legitimate?",
+        "options": ["Do not share sensitive data over SMS.", "Reply with your password so we can continue.", "Send all files to this temporary number."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which message breaks protocol?",
+        "options": ["Upload sanitized data to the secure endpoint.", "Send credentials to verify your clearance.", "Only submit metadata through approved channels."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Select the trusted instruction.",
+        "options": ["Use the encrypted inbox when you are clear.", "We lost access — send everything here immediately.", "Text the passwords so we can proceed."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which message is most likely phishing?",
+        "options": ["Confirm only non-sensitive information.", "Submit your findings through the official portal.", "Urgent: send all collected credentials now."],
+        "correctIndex": 2
+      },
+      {
+        "question": "Which request should you trust?",
+        "options": ["Share your password for validation.", "Stick to the established secure upload process.", "Send login data via SMS temporarily."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message is legitimate?",
+        "options": ["We need full account dumps via email.", "Use the same encrypted channel as before.", "Reply with credentials to maintain access."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Identify the phishing attempt.",
+        "options": ["Send all data to avoid system lock.", "Follow the protocol and avoid sharing credentials.", "Upload through the secure system."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which instruction aligns with security policy?",
+        "options": ["Send passwords for quick verification.", "Use only approved secure communication channels.", "Reply with account details to continue."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message should be rejected?",
+        "options": ["Submit only usernames, no passwords.", "Forward sensitive data to prevent suspension.", "Use encrypted upload as instructed."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which communication is safe?",
+        "options": ["Send your credentials immediately.", "Use the secure portal for all submissions.", "Text all gathered intel."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which is a red flag?",
+        "options": ["Urgent request for login credentials.", "Use encrypted communication.", "Submit non-sensitive info only."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which message is trustworthy?",
+        "options": ["Avoid sending sensitive data over SMS.", "Send passwords for confirmation.", "Reply with full account details."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which request follows proper procedure?",
+        "options": ["Send everything now before timeout.", "Use the encrypted relay node.", "Reply with credentials to proceed."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Identify the fake message.",
+        "options": ["Use secure upload channels only.", "Text all data to restore access.", "Submit reports via official system."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which instruction is valid?",
+        "options": ["Share passwords to avoid delay.", "Only provide sanitized information.", "Send raw data through SMS."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message indicates phishing?",
+        "options": ["Follow standard protocol.", "Reply with credentials for verification.", "Use encrypted inbox."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which is a legitimate directive?",
+        "options": ["Send login details immediately.", "Upload data via secure endpoint.", "Text sensitive files."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message should you ignore?",
+        "options": ["Use encrypted systems only.", "Send passwords to continue.", "Submit reports securely."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which communication is safe?",
+        "options": ["Forward credentials for review.", "Use approved secure channels.", "Send all intel via SMS."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message is suspicious?",
+        "options": ["Urgent request for sensitive data.", "Use encrypted communication.", "Submit non-sensitive data only."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which instruction is correct?",
+        "options": ["Send passwords for validation.", "Use official secure upload.", "Text all data now."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which is a phishing attempt?",
+        "options": ["Use encrypted inbox.", "Reply with credentials immediately.", "Submit via secure system."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message follows protocol?",
+        "options": ["Send login info now.", "Use approved secure channels only.", "Reply with credentials."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which request is unsafe?",
+        "options": ["Submit data securely.", "Send credentials to avoid lockout.", "Use encrypted systems."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message is legitimate?",
+        "options": ["Text passwords now.", "Use the encrypted portal.", "Send account data via SMS."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which is a red flag?",
+        "options": ["Request for credentials via SMS.", "Use secure upload.", "Submit non-sensitive data."],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which instruction is safe?",
+        "options": ["Share passwords quickly.", "Use approved encrypted channels.", "Send login data via text."],
+        "correctIndex": 1
+      },
+      {
+        "question": "Which message should you trust?",
+        "options": ["Reply with credentials.", "Upload through secure endpoint.", "Send data via SMS."],
+        "correctIndex": 1
+      }
+    ];
+
+    /*****************************
+     * STATE
+     *****************************/
+    const DAILY_START_DATE = new Date("2026-05-01");
+    let selectedDate = new Date().toISOString().split('T')[0];
+    const todayStr = selectedDate;
+    let currentChallenge = null;
+    let isLocked = false; // Is this session input locked?
+
+    // Audio
+    const sfxHover = new Audio('assets/pause-89443.mp3');
+    const sfxClick = new Audio('assets/unpause-106278.mp3');
+    const sfxCorrect = new Audio('assets/success-48018-(right).mp3');
+    const sfxWrong = new Audio('assets/error-mistake-sound-effect-incorrect-answer-437420-(wrong).mp3');
+    const sfxWin = new Audio('assets/level-completed-90734.mp3');
+    const sfxPopup = new Audio('assets/correct-choice-43861-(popup).mp3');
+
+    let bgMusic = null;
+    let musicEnabled = localStorage.getItem('dc_music_enabled') !== 'false';
+
+    // Initialize daily_results and daily_challenge_cache if they don't exist
+    if (!localStorage.getItem('daily_results')) {
+      localStorage.setItem('daily_results', JSON.stringify({}));
+    }
+    if (!localStorage.getItem('daily_challenge_cache')) {
+      localStorage.setItem('daily_challenge_cache', JSON.stringify({}));
+    }
+
+    // Migration helper for old string results
+    (function migrateResults() {
+      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+      let changed = false;
+      for (const date in results) {
+        if (typeof results[date] === 'string') {
+          results[date] = { result: results[date], selectedIndex: -1 };
+          changed = true;
+        }
+      }
+      if (changed) localStorage.setItem('daily_results', JSON.stringify(results));
+    })();
+
+    /*****************************
+     * INIT & NAVIGATION
+     *****************************/
+    window.onload = () => {
+      initAudio();
+      loadChallengeForDate(selectedDate);
+      
+      // Add hover sounds to buttons
+      document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mouseenter', () => playSFX(sfxHover, 0.3));
+      });
+    };
+
+    function initAudio() {
+      bgMusic = new Audio('assets/AntiMatterMagic.ogg');
+      bgMusic.loop = true;
+      bgMusic.volume = 0.2;
+      
+      if (musicEnabled && localStorage.getItem("audioUnlocked") === "true") {
+        bgMusic.play().catch(() => {});
+      }
+      updateMusicUI();
+    }
+
+    function toggleMusic() {
+      playSFX(sfxClick);
+      musicEnabled = !musicEnabled;
+      localStorage.setItem('dc_music_enabled', musicEnabled);
+      
+      if (musicEnabled) {
+        bgMusic.play().catch(() => {});
+      } else {
+        bgMusic.pause();
+      }
+      updateMusicUI();
+    }
+
+    function updateMusicUI() {
+      const btn = document.getElementById('btnMusic');
+      if (btn) btn.innerText = `MUSIC: ${musicEnabled ? 'ON' : 'OFF'}`;
+    }
+
+    function playSFX(audio, vol = 0.5) {
+      if (localStorage.getItem("audioUnlocked") !== "true") return;
+      audio.currentTime = 0;
+      audio.volume = vol;
+      audio.play().catch(() => {});
+    }
+
+    function prevDay() {
+      playSFX(sfxClick);
+      let d = new Date(selectedDate);
+      d.setDate(d.getDate() - 1);
+      
+      // Cutoff check
+      if (d < DAILY_START_DATE) return;
+      
+      selectedDate = d.toISOString().split('T')[0];
+      loadChallengeForDate(selectedDate);
+    }
+
+    function nextDay() {
+      playSFX(sfxClick);
+      let d = new Date(selectedDate);
+      let today = new Date(todayStr);
+      if (d >= today) return;
+      
+      d.setDate(d.getDate() + 1);
+      selectedDate = d.toISOString().split('T')[0];
+      loadChallengeForDate(selectedDate);
+    }
+
+    function toggleTracker() {
+      playSFX(sfxPopup);
+      const popup = document.getElementById('trackerPopup');
+      const isActive = popup.classList.contains('active');
+      
+      if (!isActive) {
+        renderTracker();
+        popup.classList.add('active');
+      } else {
+        popup.classList.remove('active');
+      }
+    }
+
+    function renderTracker() {
+      const log = document.getElementById('trackerLog');
+      log.innerHTML = '';
+      
+      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+      const start = new Date(DAILY_START_DATE);
+      const end = new Date(todayStr);
+      
+      let current = new Date(end);
+      while (current >= start) {
+        const dStr = current.toISOString().split('T')[0];
+        const resObj = results[dStr];
+        const res = resObj ? resObj.result : null;
+        
+        const row = document.createElement('div');
+        row.className = 'tracker-row' + (dStr === selectedDate ? ' active' : '');
+        
+        const month = current.toLocaleString('default', { month: 'short' }).toUpperCase();
+        const day = current.getDate().toString().padStart(2, '0');
+        const displayDate = `${month} ${day}`;
+        
+        let statusClass = 'status-none';
+        if (res === 'win') statusClass = 'status-win';
+        else if (res === 'loss') statusClass = 'status-loss';
+        
+        row.innerHTML = `
+          <span>${displayDate}</span>
+          <div class="status-box ${statusClass}"></div>
+        `;
+        
+        // Make row clickable
+        row.onclick = (e) => {
+          e.stopPropagation();
+          playSFX(sfxClick);
+          selectedDate = dStr;
+          loadChallengeForDate(dStr);
+          renderTracker(); // Refresh active state
+        };
+
+        row.onmouseenter = () => playSFX(sfxHover, 0.2);
+
+        log.appendChild(row);
+        current.setDate(current.getDate() - 1);
+      }
+    }
+
+    /*****************************
+     * CHALLENGE SYSTEM
+     *****************************/
+    function loadChallengeForDate(dateString) {
+      document.getElementById('dateDisplay').innerText = dateString;
+      
+      const isToday = (dateString === todayStr);
+      const dObj = new Date(dateString);
+      const isAtStart = (dObj <= DAILY_START_DATE);
+      const isFuture = (dObj > new Date(todayStr));
+      
+      document.getElementById('btnNextDay').disabled = isToday;
+      document.getElementById('btnPrevDay').disabled = isAtStart;
+      if (document.getElementById('btnPrevDayResult')) {
+        document.getElementById('btnPrevDayResult').disabled = isAtStart;
+      }
+
+      const gameArea = document.getElementById('gameArea');
+      gameArea.classList.remove('correct', 'wrong');
+      document.getElementById('challengeContent').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('cutoffScreen').classList.add('hidden');
+      document.getElementById('archiveLabel').classList.add('hidden');
+      document.getElementById('loader').classList.remove('hidden');
+
+      // Future/Before start check
+      if (isFuture || dObj < DAILY_START_DATE) {
+        setTimeout(() => {
+          document.getElementById('loader').classList.add('hidden');
+          const cutoff = document.getElementById('cutoffScreen');
+          cutoff.querySelector('.cutoff-message').innerText = isFuture ? "NO CHALLENGE DATA AVAILABLE" : "NO ARCHIVED CHALLENGES EXIST BEFORE MAY 1ST";
+          cutoff.classList.remove('hidden');
+        }, 400);
+        return;
+      }
+
+      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+      const dayData = results[dateString];
+
+      setTimeout(() => {
+        currentChallenge = getChallengeByDate(dateString);
+        
+        if (dayData) {
+          // ALREADY COMPLETED (Today or Past) - Archive mode
+          renderChallenge(currentChallenge, true, dayData);
+          showResultScreen(dayData.result, true);
+        } else {
+          // NOT COMPLETED - Playable if not future
+          isLocked = false;
+          renderChallenge(currentChallenge, false);
+          
+          if (!isToday) {
+            // Archived record label for past playable days? 
+            // The prompt says "archived record" is for completed days.
+            // "Add small label: ARCHIVED RECORD — READ ONLY" - that's for completed.
+          }
+        }
+      }, 400);
+    }
+
+    function getChallengeByDate(dateString) {
+      const cache = JSON.parse(localStorage.getItem('daily_challenge_cache') || '{}');
+      if (cache[dateString]) return cache[dateString];
+
+      // Generate and cache
+      const seed = parseInt(dateString.replace(/-/g, ""));
+      const qIdx = seed % QUESTIONS.length;
+      const baseQ = QUESTIONS[qIdx];
+
+      // Deterministic shuffle using seed
+      const optionsWithMeta = baseQ.options.map((text, i) => ({
+        text,
+        isCorrect: i === baseQ.correctIndex
+      }));
+
+      // A simple deterministic shuffle based on seed
+      const shuffled = [];
+      const pool = [...optionsWithMeta];
+      let s = seed;
+      while (pool.length > 0) {
+        s = (s * 16807) % 2147483647;
+        const idx = s % pool.length;
+        shuffled.push(pool.splice(idx, 1)[0]);
+      }
+
+      const correctIdx = shuffled.findIndex(o => o.isCorrect);
+      const challenge = {
+        date: dateString,
+        question: baseQ.question,
+        options: shuffled.map(o => o.text),
+        correctIndex: correctIdx
+      };
+
+      cache[dateString] = challenge;
+      localStorage.setItem('daily_challenge_cache', JSON.stringify(cache));
+      return challenge;
+    }
+
+    function renderChallenge(data, readOnly = false, resultData = null) {
+      const { question, options, correctIndex } = data;
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+      
+      document.getElementById('questionText').innerText = question;
+      if (readOnly) document.getElementById('archiveLabel').classList.remove('hidden');
+
+      options.forEach((text, i) => {
+        const card = document.createElement('div');
+        card.className = 'message-card';
+        if (readOnly) card.classList.add('disabled');
+
+        const senderList = ["UNKNOWN SOURCE", "SECURE SYSTEM", "EXTERNAL NODE"];
+        const senderText = senderList[i % senderList.length];
+
+        card.innerHTML = `
+          <div class="message-header">
+            <div class="message-sender">SENDER: ${senderText}</div>
+            <div class="message-metadata">TRACING STATUS: ${readOnly ? 'ARCHIVED' : 'PENDING'}</div>
+          </div>
+          <div class="message-body">${text}</div>
+        `;
+
+        // Archive/Read-Only Highlights
+        if (readOnly) {
+          if (i === correctIndex) {
+            card.classList.add('correct');
+          }
+          if (resultData && i === resultData.selectedIndex && i !== correctIndex) {
+            card.classList.add('wrong');
+          }
+        } else {
+          card.onclick = () => {
+            playSFX(sfxClick);
+            handleSelection(i, i === correctIndex, card);
+          };
+          card.onmouseenter = () => playSFX(sfxHover, 0.3);
+        }
+
+        grid.appendChild(card);
+      });
+
+      document.getElementById('loader').classList.add('hidden');
+      const content = document.getElementById('challengeContent');
+      content.classList.remove('hidden');
+      content.classList.remove('glitch-fade');
+      void content.offsetWidth;
+      content.classList.add('glitch-fade');
+    }
+
+    /*****************************
+     * SELECTION & LOGIC
+     *****************************/
+    function handleSelection(idx, isCorrect, element) {
+      if (isLocked) return;
+      isLocked = true;
+
+      const resultStr = isCorrect ? 'win' : 'loss';
+      savePlayed(selectedDate, resultStr, idx);
+
+      const cards = document.querySelectorAll('.message-card');
+      cards.forEach(c => {
+        c.classList.add('disabled');
+        const meta = c.querySelector('.message-metadata');
+        if (meta) meta.innerText = "TRACING STATUS: LOCKED";
+      });
+      
+      if (isCorrect) {
+        playSFX(sfxCorrect);
+        element.classList.add('correct');
+      } else {
+        playSFX(sfxWrong);
+        element.classList.add('wrong');
+      }
+
+      setTimeout(() => {
+        if (isCorrect) playSFX(sfxWin, 0.4);
+        showResultScreen(resultStr);
+      }, 1200);
+    }
+
+    function savePlayed(dateString, result, selectedIndex) {
+      const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+      results[dateString] = { result, selectedIndex };
+      localStorage.setItem('daily_results', JSON.stringify(results));
+    }
+
+    function showResultScreen(result, isArchived = false) {
+      document.getElementById('loader').classList.add('hidden');
+      
+      const challengeContent = document.getElementById('challengeContent');
+      challengeContent.classList.remove('hidden');
+      
+      // If fresh completion, re-render in read-only mode to show correct answer glow
+      if (!isArchived) {
+        const results = JSON.parse(localStorage.getItem('daily_results') || '{}');
+        const dayData = results[selectedDate];
+        renderChallenge(currentChallenge, true, dayData);
+      }
+
+      const resultScreen = document.getElementById('resultScreen');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultSubtext = document.getElementById('resultSubtext');
+      const gameArea = document.getElementById('gameArea');
+
+      resultScreen.classList.remove('hidden');
+      resultScreen.classList.remove('glitch-fade');
+      void resultScreen.offsetWidth;
+      resultScreen.classList.add('glitch-fade');
+
+      if (result === 'win') {
+        resultTitle.innerText = (isArchived || isLocked) ? "CHALLENGE SUCCESSFULLY COMPLETED" : "✔ TRANSMISSION VERIFIED";
+        resultTitle.className = "result-title success";
+        resultSubtext.innerText = "Secure node authenticated for this cycle.";
+        gameArea.className = "center-box correct"; 
+      } else {
+        resultTitle.innerText = (isArchived || isLocked) ? "SECURITY BREACH DETECTED" : "✖ MALICIOUS SOURCE DETECTED";
+        resultTitle.className = "result-title error";
+        resultSubtext.innerText = "Security breach logged. Node compromised.";
+        gameArea.className = "center-box wrong";
+      }
+    }
+  </script>
+</body>
+
+</html>
