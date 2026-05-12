@@ -1,0 +1,34 @@
+name: Daily Challenge
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pick daily question
+        run: |
+          COUNT=$(jq length questions.json)
+          INDEX=$((RANDOM % COUNT))
+          DATE=$(date +%F)
+
+          QUESTION=$(jq ".[$INDEX]" questions.json)
+
+          echo "{
+            \"date\": \"$DATE\",
+            \"data\": $QUESTION
+          }" > daily.json
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add daily.json
+          git commit -m "Daily update" || echo "No changes"
+          git push
