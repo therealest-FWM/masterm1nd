@@ -319,10 +319,41 @@
         opacity: 0.6;
       }
     }
+
+    /* Orientation Overlay */
+    #orientation-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000; z-index: 9999;
+      color: #39ff14; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; padding: 20px; font-family: 'Orbitron', sans-serif;
+    }
+    #orientation-overlay .icon { font-size: 50px; margin-bottom: 20px; animation: rotatePhone 2s infinite ease-in-out; }
+    
+    @keyframes rotatePhone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* Show overlay on mobile/tablet portrait */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      #orientation-overlay { display: flex !important; }
+      #welcome-overlay, .splash-container, .bg-layer, .bg-overlay, .scanline, #particles { display: none !important; }
+    }
   </style>
 </head>
 
 <body>
+  <!-- Orientation Warning -->
+  <div id="orientation-overlay">
+    <div class="icon">📱</div>
+    <h2>LANDSCAPE MODE REQUIRED</h2>
+    <p>Please rotate your device horizontally to play MASTERM1ND.</p>
+  </div>
+
   <!-- Welcome Overlay -->
   <div id="welcome-overlay" onclick="enterSite()">
     <div class="welcome-text">WELCOME OPERATIVE</div>

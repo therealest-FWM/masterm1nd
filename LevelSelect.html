@@ -259,6 +259,42 @@
       }
     }
 
+    /* Orientation Overlay */
+    #orientation-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000; z-index: 9999;
+      color: #39ff14; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; padding: 20px; font-family: 'Orbitron', sans-serif;
+    }
+    #orientation-overlay .icon { font-size: 50px; margin-bottom: 20px; animation: rotatePhone 2s infinite ease-in-out; }
+    
+    @keyframes rotatePhone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* Show overlay on mobile/tablet portrait */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      #orientation-overlay { display: flex !important; }
+      .content-wrapper, .bg-layer, .bg-overlay, .scanline, #particles { display: none !important; }
+    }
+
+    /* Landscape Mobile Optimization */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .content-wrapper { gap: 10px; padding: 10px; justify-content: center; }
+      .page-title { margin-bottom: 5px; font-size: clamp(20px, 4vw, 30px); }
+      .levels-grid { gap: 15px; }
+      .level-card { width: 150px; padding: 10px; }
+      .level-card img { margin-bottom: 5px; }
+      .level-stats { padding-top: 5px; margin-top: 5px; }
+      .action-bar { margin-top: 10px; gap: 20px; }
+      .cyber-btn { padding: 0.5rem 1.5rem; font-size: 14px; min-width: 120px; }
+    }
+
     /* Responsive */
     @media (max-width: 1200px) {
       .levels-grid {
@@ -274,6 +310,12 @@
   <div class="bg-overlay"></div>
   <div class="scanline"></div>
   <canvas id="particles"></canvas>
+
+  <div id="orientation-overlay">
+    <div class="icon">📱</div>
+    <h2>LANDSCAPE MODE REQUIRED</h2>
+    <p>Please rotate your device horizontally to play MASTERM1ND.</p>
+  </div>
 
   <div class="content-wrapper">
     <div class="page-title">Select Level</div>
