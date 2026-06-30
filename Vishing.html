@@ -7,6 +7,8 @@
   <title>VISHING</title>
   <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/orientation.css">
+  <script src="assets/device-detector.js"></script>
   <style>
     :root {
       /* TOP BAR COLORS (NEON GREEN - STANDARD HUD) */
@@ -107,7 +109,8 @@
       display: flex;
       align-items: center;
       height: 20px;
-      width: clamp(200px, 30vw, 400px);
+      width: auto;
+      max-width: 45vw;
       margin: 0 15px;
       border-radius: 4px;
       overflow: hidden;
@@ -115,10 +118,11 @@
     }
 
     .progress-step {
-      flex: 1;
+      flex: 0 0 auto;
+      min-width: max-content;
       text-align: center;
       font-size: clamp(9px, 1vw, 12px);
-      padding: 2px 0;
+      padding: 2px 10px;
       font-weight: 700;
       white-space: nowrap;
       color: #888;
@@ -598,7 +602,7 @@
       white-space: nowrap;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 900px) and (orientation: portrait) {
       .top-bar {
         flex-direction: column;
         height: auto;
@@ -623,10 +627,53 @@
         padding: 20px;
       }
     }
+
+    /* Hide page content in portrait (overlay styles live in assets/orientation.css) */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      .top-bar, .game-container, .pause-overlay, .info-panel, .hint-box { display: none !important; }
+    }
+
+    /* Landscape Mobile Optimization */
+    @media (max-width: 1024px) and (orientation: landscape) {
+      /* Top bar: keep on one compact row */
+      .top-bar { flex-wrap: nowrap; gap: 6px; padding: 3px 8px; }
+      .top-bar .logo { font-size: clamp(11px, 1.6vw, 15px); }
+      .top-bar .lives-remaining { font-size: clamp(9px, 1.2vw, 12px); }
+      .top-bar .control-buttons { gap: 4px; flex-wrap: nowrap; }
+      .top-bar .control-buttons button { padding: 4px 8px; font-size: clamp(8px, 1vw, 11px); }
+      .progress-container { height: 18px; width: auto; max-width: 42vw; margin: 0 6px; }
+      .progress-step { font-size: clamp(7px, 0.9vw, 10px); padding: 2px 6px; flex: 0 0 auto; min-width: max-content; }
+      .loader { width: 18px; }
+      .stage-indicator { font-size: clamp(9px, 1vw, 12px); }
+
+      /* Game content: fit two audio cards into a short viewport */
+      .center-box { padding: 0 12px; }
+      .instruction-text { font-size: clamp(13px, 2vw, 20px); margin-bottom: 14px; padding: 6px 18px; }
+      .audio-container { gap: 20px; }
+      .audio-card { width: min(420px, 42vw); padding: 14px; gap: 12px; }
+      .custom-checkbox { width: 24px; height: 24px; }
+      .cyber-btn { margin-top: 16px; padding: 9px 36px; }
+      .result-message { height: auto; margin-top: 8px; font-size: 16px; }
+
+      /* Info panel + hint box: smaller, narrower, scrollable */
+      .info-panel { width: min(300px, 60vw); top: 56px; padding: 14px; font-size: 0.8rem; max-height: 80vh; overflow-y: auto; }
+      .info-panel .info-title { font-size: 0.95rem; margin-bottom: 6px; padding-bottom: 5px; }
+      .hint-box { width: min(280px, 55vw); top: 56px; padding: 14px; font-size: 0.85rem; max-height: 80vh; overflow-y: auto; }
+
+      /* Pause menu */
+      .pause-menu { padding: 20px 30px; }
+      .pause-menu h1 { font-size: clamp(20px, 4vw, 32px); margin-bottom: 16px; }
+    }
   </style>
 </head>
 
 <body>
+
+  <div id="orientation-overlay">
+    <div class="icon">📱</div>
+    <h2>LANDSCAPE MODE REQUIRED</h2>
+    <p>Please rotate your device horizontally to play MASTERM1ND.</p>
+  </div>
 
   <div class="top-bar">
     <div class="logo">MASTERM1ND</div>
