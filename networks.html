@@ -2191,25 +2191,60 @@
       }
     }
 
-    window.addEventListener('keydown', function (e) {
-      if (!document.getElementById('qte-overlay').classList.contains('active')) return;
-      if (!qteActive || qteIndex >= 5) return;
+    // Detect phones (not desktop or laptops)
+function isPhoneDevice() {
+  return window.matchMedia(
+    '(max-width: 767px) and (pointer: coarse)'
+  ).matches;
+}
 
-      var pressedKey = e.key.toUpperCase();
-      var targetKey = qteSequence[qteIndex];
+// Shared QTE input handler
+function processQTEInput(index) {
 
-      if (pressedKey === targetKey) {
-        // Correct key
-        playSFX(SFX.popup);
-        document.getElementById('key-' + qteIndex).classList.add('pressed');
-        qteIndex++;
-        setTimeout(nextQteStep, 200);
-      } else {
-        // Wrong key - only penalize if it's one of the potential QTE keys to avoid accidental triggers
-        if (qteKeys.indexOf(pressedKey) !== -1) {
-        }
-      }
-    });
+  if (!document.getElementById('qte-overlay').classList.contains('active')) return;
+  if (!qteActive || qteIndex >= 5) return;
+
+  // Only accept the currently highlighted square
+  if (index === qteIndex) {
+
+    playSFX(SFX.popup);
+
+    document.getElementById('key-' + qteIndex).classList.add('pressed');
+
+    qteIndex++;
+
+    setTimeout(nextQteStep, 200);
+  }
+}
+
+// PC: Keyboard controls
+window.addEventListener('keydown', function (e) {
+
+  if (isPhoneDevice()) return;
+
+  if (!document.getElementById('qte-overlay').classList.contains('active')) return;
+  if (!qteActive || qteIndex >= 5) return;
+
+  var pressedKey = e.key.toUpperCase();
+  var targetKey = qteSequence[qteIndex];
+
+  if (pressedKey === targetKey) {
+    processQTEInput(qteIndex);
+  }
+});
+
+// Phone: Touch/click controls
+document.querySelectorAll('.qte-key').forEach((key, index) => {
+
+  key.addEventListener('click', function () {
+
+    if (!isPhoneDevice()) return;
+
+    processQTEInput(index);
+
+  });
+
+});
 
     // Hacking animation with combined data extraction
     function showBreachAlert() {
