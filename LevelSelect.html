@@ -268,14 +268,15 @@
 
     /* Landscape Mobile Optimization */
     @media (max-width: 1024px) and (orientation: landscape) {
-      .content-wrapper { gap: 10px; padding: 10px; justify-content: center; }
-      .page-title { margin-bottom: 5px; font-size: clamp(20px, 4vw, 30px); }
-      .levels-grid { gap: 15px; }
-      .level-card { width: 150px; padding: 10px; }
+      /* fit short landscape screens (~310-420px tall); safe center lets it scroll instead of clipping the title */
+      .content-wrapper { gap: clamp(4px, 2vh, 10px); padding: 8px; justify-content: center; justify-content: safe center; overflow-y: auto; }
+      .page-title { margin-bottom: 0; font-size: clamp(16px, 6vh, 30px); }
+      .levels-grid { gap: clamp(8px, 2vw, 15px); }
+      .level-card { width: clamp(100px, 38vh, 150px); padding: 8px; }
       .level-card img { margin-bottom: 5px; }
       .level-stats { padding-top: 5px; margin-top: 5px; }
-      .action-bar { margin-top: 10px; gap: 20px; }
-      .cyber-btn { padding: 0.5rem 1.5rem; font-size: 14px; min-width: 120px; }
+      .action-bar { margin-top: 0; gap: 20px; }
+      .cyber-btn { padding: clamp(4px, 1.5vh, 8px) 1.5rem; font-size: clamp(11px, 3.5vh, 14px); min-width: 110px; }
     }
 
     /* Responsive */
