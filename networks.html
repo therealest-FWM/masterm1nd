@@ -7,12 +7,15 @@
   <title>Networks Level</title>
   <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/orientation.css?v=3"> <!-- ?v=2: needs the portrait-required rules; a stale cached copy would block portrait -->
   <style>
     :root {
       /* HUD COLORS (NEON GREEN) */
       --hud-primary: #39ff14;
       --hud-secondary: #2adb11;
       --hud-glow: rgba(57, 255, 20, 0.4);
+      --primary-neon: #39ff14;
+      --glass-border: rgba(57, 255, 20, 0.4);
 
       /* PAGE THEMES */
       --red-theme: #ff0000;
@@ -93,10 +96,12 @@
       letter-spacing: 1px;
     }
 
+    @media (hover: hover) {
     .top-bar .control-buttons button:hover {
       background: var(--hud-primary);
       color: #000;
       box-shadow: 0 0 15px var(--hud-primary);
+    }
     }
 
     /* Progress Bar */
@@ -476,10 +481,12 @@
       align-items: center;
     }
 
+    @media (hover: hover) {
     .network-item:hover {
       background: rgba(60, 60, 60, 0.9);
       border-color: var(--hud-primary);
       box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+    }
     }
 
     .network-name {
@@ -582,7 +589,7 @@
       box-shadow: 0 0 15px var(--hud-primary);
       transform: scale(1.1);
     }
-    @media (max-width: 767px) and (pointer: coarse) {
+    @media (pointer: coarse) {
 
   .qte-key {
     cursor: pointer;
@@ -795,15 +802,19 @@
       white-space: nowrap;
     }
 
+    @media (hover: hover) {
     .connected-device:hover .device-dot {
       background: #fff;
       box-shadow: 0 0 25px #fff;
       transform: scale(1.3);
     }
+    }
 
+    @media (hover: hover) {
     .connected-device:hover .device-label {
       color: #fff;
       font-weight: 700;
+    }
     }
 
     .connected-device.correct {
@@ -1099,10 +1110,12 @@
       margin-top: 12px;
     }
 
+    @media (hover: hover) {
     .action-btn:hover {
       background: var(--hud-secondary);
       box-shadow: 0 0 30px var(--hud-primary);
       transform: scale(1.05);
+    }
     }
 
     .action-btn:active {
@@ -1271,17 +1284,19 @@
       width: 16px;
       left: 4px;
       bottom: 3px;
-      background-color: var(--hud-primary);
+      background-color: #777;
       transition: .4s;
-      box-shadow: 0 0 10px var(--hud-primary);
+      box-shadow: none;
     }
 
     input:checked+.slider {
-      background-color: rgba(57, 255, 20, 0.2);
+      background-color: rgba(57, 255, 20, 0.35);
     }
 
     input:checked+.slider:before {
       transform: translateX(24px);
+      background-color: #39ff14;
+      box-shadow: 0 0 10px #39ff14;
     }
 
     .slider.round {
@@ -1300,61 +1315,128 @@
       left: 20px;
     }
 
-    /* ============ RESPONSIVE ============ */
-    @media (max-width: 768px) {
+    /* ============ BREACH PAD (touch screens only - stays empty when a keyboard is used) ============ */
+    .qte-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 250px; margin: 18px auto 0; }
+    .qte-pad:empty { display: none; }
+    .qte-pad-key {
+      height: 62px;
+      padding: 0;
+      background: #111;
+      border: 1px solid #555;
+      border-radius: 8px;
+      color: #ddd;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qte-pad-key:active { background: var(--hud-primary); color: #000; border-color: var(--hud-primary); }
+    .qte-pad-key.wrong { animation: padWrong 0.3s; }
+    @keyframes padWrong {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); border-color: #ff4444; background: rgba(255, 68, 68, 0.35); }
+      75% { transform: translateX(3px); border-color: #ff4444; background: rgba(255, 68, 68, 0.35); }
+    }
+
+    /* Mall: target name called out in the instruction */
+    .mall-target { color: #ff4d4d; text-shadow: 0 0 8px #ff4d4d; white-space: nowrap; }
+
+    /* data.docx: drawn file icon */
+    .doc-svg { flex-shrink: 0; }
+
+    /* ============ RESPONSIVE: PHONE PORTRAIT ============ */
+    /* This level is played upright on phones; phones held sideways get the
+       "rotate to portrait" prompt (#orientation-overlay.portrait-required in assets/orientation.css). */
+    @media (max-width: 1024px) and (orientation: portrait) {
+      /* Top bar: 3 compact rows - [logo loader lives stage] / [progress] / [timer + buttons] */
       .top-bar {
-        flex-direction: column;
-        height: auto;
-        padding: 10px;
+        display: grid;
+        grid-template-columns: auto auto 1fr auto;
+        grid-template-areas: "logo loader lives stage" "prog prog prog prog" "btns btns btns btns";
+        align-items: center;
+        gap: 6px 8px;
+        padding: 8px 10px;
       }
+      .top-bar .logo { grid-area: logo; font-size: clamp(14px, 4.5vw, 20px); }
+      .loader { grid-area: loader; width: 16px; }
+      .top-bar .lives-remaining { grid-area: lives; font-size: clamp(10px, 3vw, 13px); text-align: right; }
+      .stage-indicator { grid-area: stage; font-size: clamp(11px, 3.2vw, 14px); letter-spacing: 1px; }
+      .progress-container { grid-area: prog; width: 100%; height: 14px; margin: 0; }
+      .progress-step { line-height: 14px; font-size: 10px; }
+      .top-bar .control-buttons { grid-area: btns; flex-wrap: nowrap; gap: 5px; }
+      .top-bar .control-buttons button { flex: 1; padding: 8px 2px; font-size: clamp(9px, 2.7vw, 12px); letter-spacing: 0; }
+      .top-bar .control-buttons button.timer { flex: 1.5; }
 
-      .game-container {
-        height: auto;
-        min-height: 100vh;
-        padding-top: 140px;
-      }
-
-      .phone-container {
-        width: 90%;
-        max-width: 350px;
-      }
-
-      .laptop-container {
-        width: 95%;
-        height: auto;
-        min-height: 400px;
-      }
-
+      /* Game area: POV badge on top, device frame fills the rest */
       .pov-indicator {
-        top: 120px;
-        left: 10px;
-        font-size: 12px;
-        padding: 8px 12px;
+        position: absolute;
+        top: 8px !important; /* goToPage() sets an inline top for the desktop layout */
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px 12px;
+        border-width: 2px;
+        font-size: 11px;
+        white-space: nowrap;
       }
+      .page-section { padding: 40px 12px 12px; }
 
-      .hacking-grid {
-        grid-template-columns: 1fr;
-      }
+      /* Phone frame (pages 1-2) */
+      .phone-container { width: 100%; max-width: 400px; height: 100%; max-height: 760px; border-radius: 24px; }
+      .network-header { padding: 14px; font-size: 18px; }
+      .network-list { padding: 12px; }
+      .network-item { padding: 14px 16px; }
+      .network-name { font-size: 15px; }
+      .network-input { font-size: 16px; } /* 16px+ stops iOS zooming the page when the field is focused */
+      .message { font-size: 14px; max-width: 80%; }
+      .chat-input-bar input { font-size: 14px; }
 
-      .mall-container {
-        width: 95%;
-        height: 90%;
-      }
+      /* Laptop frame (pages 3-4): full width, height follows content */
+      .laptop-container { width: 100%; max-width: 440px; height: auto; }
+      .laptop-screen { padding: 16px 12px; }
+      .hacking-container { padding: 6px; }
+      .hacking-grid { grid-template-columns: 1fr; gap: 10px; }
+      .hacking-label { font-size: 12px; }
 
-      .connected-device {
-        width: 50px;
-        height: 50px;
-      }
+      /* Mall map overlay: map takes whatever height the header leaves */
+      .mall-container { width: 94%; height: 82%; display: flex; flex-direction: column; }
+      .mall-header { padding: 12px; }
+      .mall-map { flex: 1; height: auto; }
+      .connected-device { width: 56px; }
+      .device-label { white-space: normal; width: 70px; font-size: 9px; line-height: 1.15; }
+      .mall-result { width: 88%; padding: 10px 12px; text-align: center; bottom: 16px; }
 
-      .device-dot {
-        width: 15px;
-        height: 15px;
-      }
+      /* Breach (QTE) overlay: 5 keys must fit a ~330px-wide card */
+      .qte-container { width: 92%; padding: 24px 14px; }
+      .qte-title { font-size: 20px; margin-bottom: 16px; }
+      .qte-sequence { gap: 8px; }
+      .qte-key { width: 50px; height: 50px; font-size: 22px; }
+      .breach-alert h1 { font-size: 24px !important; padding: 0 16px; }
+      .breach-alert h2 { font-size: 16px !important; }
 
-      .qte-circle-container {
-        width: 200px;
-        height: 200px;
+      /* Pause menu */
+      .pause-menu { width: 88vw; padding: 28px 18px; }
+      .pause-menu .cta { padding: 12px 28px; }
+
+      /* INFO / HINT: full-width cards just under the top bar */
+      .info-panel,
+      .hint-box {
+        width: calc(100vw - 24px);
+        top: 104px;
+        padding: 14px 16px;
+        font-size: 14px;
+        line-height: 1.4;
+        max-height: 60vh;
+        overflow-y: auto;
       }
+      .info-panel { left: -110vw; }
+      .info-panel.visible { left: 12px; }
+      .info-panel .info-title { font-size: 15px; padding-right: 24px; }
+      .hint-box { right: -110vw; }
+      .hint-box.visible { right: 12px; }
+
+      /* readable mall labels */
+      .device-label { font-size: 10px; }
     }
 
     /* Music Toggle */
@@ -1404,17 +1486,19 @@
       width: 16px;
       left: 4px;
       bottom: 3px;
-      background-color: var(--primary-neon);
+      background-color: #777;
       transition: .4s;
-      box-shadow: 0 0 10px var(--primary-neon);
+      box-shadow: none;
     }
 
     input:checked+.slider {
-      background-color: rgba(57, 255, 20, 0.2);
+      background-color: rgba(57, 255, 20, 0.35);
     }
 
     input:checked+.slider:before {
       transform: translateX(24px);
+      background-color: #39ff14;
+      box-shadow: 0 0 10px #39ff14;
     }
 
     .slider.round {
@@ -1428,6 +1512,12 @@
 </head>
 
 <body>
+
+  <div id="orientation-overlay" class="portrait-required">
+    <div class="icon">📱</div>
+    <h2>PORTRAIT MODE REQUIRED</h2>
+    <p>This level is played vertically. Please rotate your device upright to continue.</p>
+  </div>
 
   <!-- TOP BAR -->
   <div class="top-bar">
@@ -1527,7 +1617,7 @@
           <div style="color:red; font-size: 10px; margin-bottom: 5px; letter-spacing: 2px; font-weight: bold;">LARRY'S
             DEVICE CONNECTED</div>
           <h2>MTX MALL NETWORK</h2>
-          <p class="flash-text">Select the target device</p>
+          <p class="flash-text">Find and select <span class="mall-target">Larry's MPhone</span> on the map</p>
           <div class="qte-timer-bar" style="margin-top: 10px;">
             <div id="mall-timer-fill" class="qte-timer-fill"></div>
           </div>
@@ -1555,6 +1645,7 @@
           <div class="qte-key" id="key-3"></div>
           <div class="qte-key" id="key-4"></div>
         </div>
+        <div class="qte-pad" id="qte-pad"></div>
         <div class="qte-result" id="qte-result"></div>
       </div>
     </div>
@@ -1571,9 +1662,7 @@
               <div class="message received">Good. Send me the data.</div>
               <div class="message sent attachment-container">
                 <div style="display:flex; align-items:center; gap:10px;">
-                  <div style="background:#fff; border-radius:4px; padding:5px;">
-                    <span style="font-size:24px;">📄</span>
-                  </div>
+                  <svg class="doc-svg" width="30" height="38" viewBox="0 0 34 42" aria-hidden="true"><path d="M3 1h20l10 10v28a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="#fff"/><path d="M23 1v8a2 2 0 0 0 2 2h8" fill="#cbd5e1"/><path d="M6 8h12M6 13h12M6 18h21" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/><rect x="4" y="25" width="26" height="11" rx="2" fill="#2563eb"/><text x="17" y="33.2" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" font-family="Arial, sans-serif">DOCX</text></svg>
                   <div>
                     <div style="font-weight:bold; font-size:14px;">data.docx</div>
                     <div style="font-size:10px; opacity:0.8;">1.2 MB</div>
@@ -1919,9 +2008,7 @@
             // Use standard Word icon if possible, or a styled separate block
             msgDiv.innerHTML = `
               <div style="display:flex; align-items:center; gap:10px;">
-                <div style="background:#fff; border-radius:4px; padding:5px;">
-                  <span style="font-size:24px;">📄</span>
-                </div>
+                <svg class="doc-svg" width="30" height="38" viewBox="0 0 34 42" aria-hidden="true"><path d="M3 1h20l10 10v28a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="#fff"/><path d="M23 1v8a2 2 0 0 0 2 2h8" fill="#cbd5e1"/><path d="M6 8h12M6 13h12M6 18h21" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/><rect x="4" y="25" width="26" height="11" rx="2" fill="#2563eb"/><text x="17" y="33.2" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" font-family="Arial, sans-serif">DOCX</text></svg>
                 <div>
                   <div style="font-weight:bold; font-size:14px;">data.docx</div>
                   <div style="font-size:10px; opacity:0.8;">1.2 MB</div>
@@ -1972,8 +2059,11 @@
       devices.forEach((device, index) => {
         var deviceDiv = document.createElement('div');
         deviceDiv.className = 'connected-device';
-        deviceDiv.style.left = device.x + '%';
-        deviceDiv.style.top = device.y + '%';
+        // portrait map is tall and narrow: swap axes so devices + labels fit
+        var swap = window.matchMedia('(orientation: portrait)').matches;
+        var bx = swap ? device.y : device.x, by = swap ? device.x : device.y;
+        deviceDiv.style.left = bx + '%';
+        deviceDiv.style.top = by + '%';
         deviceDiv.innerHTML = `
           <div class="device-dot"></div>
           <div class="device-label">${device.name}</div>
@@ -1985,10 +2075,10 @@
 
         // Random movement animation
         setInterval(() => {
-          var randomX = device.x + (Math.random() - 0.5) * 15;
-          var randomY = device.y + (Math.random() - 0.5) * 15;
-          deviceDiv.style.left = Math.max(5, Math.min(95, randomX)) + '%';
-          deviceDiv.style.top = Math.max(5, Math.min(95, randomY)) + '%';
+          var randomX = bx + (Math.random() - 0.5) * 15;
+          var randomY = by + (Math.random() - 0.5) * 15;
+          deviceDiv.style.left = Math.max(5, Math.min(85, randomX)) + '%';
+          deviceDiv.style.top = Math.max(5, Math.min(85, randomY)) + '%';
         }, 800 + Math.random() * 400);
       });
 
@@ -2029,8 +2119,19 @@
       }
     }
 
+    // stop a CSS-transition countdown bar where it currently is
+    function freezeBar(fill) {
+      var w = getComputedStyle(fill).width;
+      fill.style.transition = 'none';
+      fill.style.width = w;
+    }
+
     function selectDevice(device, deviceDiv) {
       var resultDiv = document.getElementById('mall-result');
+      // already resolved: ignore extra taps (a double tap on the target used to start the breach twice)
+      if (resultDiv.classList.contains('show')) return;
+      clearTimeout(mallTimer);
+      freezeBar(document.getElementById('mall-timer-fill')); // device picked: stop the 15s countdown
 
       if (device.correct) {
         clearTimeout(mallTimer);
@@ -2057,7 +2158,10 @@
     var qteIndex = 0;
     var qteTimer;
     var qteActive = false;
-    var qteKeys = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+    var QTE_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // letters + numbers, no look-alikes (O/0, I/1/L): Orbitron draws them almost the same
+    var QTE_TEXT_PAD = 'Tap the highlighted letters & numbers on the pad below!';
+    var QTE_TEXT_TYPE = 'Type the highlighted letters & numbers on your keyboard!';
+    var physicalKeyboardUsed = false; // set by the first real key press - touch devices with a keyboard then skip the pad
     var qteRoundTimes = [10000, 8000, 6000];
 
     function startQTE() {
@@ -2081,6 +2185,7 @@
       // Hide sequence keys and instruction during transition
       if (sequenceDiv) sequenceDiv.style.visibility = 'hidden';
       if (instructionDiv) instructionDiv.style.visibility = 'hidden';
+      document.getElementById('qte-pad').style.visibility = 'hidden';
 
       let step = 0;
       function next() {
@@ -2094,6 +2199,7 @@
           resultDiv.textContent = '';
           if (sequenceDiv) sequenceDiv.style.visibility = 'visible';
           if (instructionDiv) instructionDiv.style.visibility = 'visible';
+          document.getElementById('qte-pad').style.visibility = 'visible';
           callback();
         }
       }
@@ -2107,12 +2213,17 @@
 
       // Generate 5 random keys
       for (let i = 0; i < 5; i++) {
-        let key = qteKeys[Math.floor(Math.random() * qteKeys.length)];
+        let key = QTE_CHARS[Math.floor(Math.random() * QTE_CHARS.length)];
         qteSequence.push(key);
         let keyElement = document.getElementById('key-' + i);
         keyElement.textContent = key;
         keyElement.classList.remove('active', 'pressed');
       }
+
+      // touch screens get the 3x3 pad; keyboards (laptops, or a tablet once a real key is pressed) just type
+      var usePad = isPhoneDevice() && !physicalKeyboardUsed;
+      document.querySelector('.qte-instruction').textContent = usePad ? QTE_TEXT_PAD : QTE_TEXT_TYPE;
+      if (usePad) renderQtePad(); else document.getElementById('qte-pad').innerHTML = '';
 
       // Update title with round info (placeholder-ish as requested)
       const qteTitle = document.querySelector('#qte-overlay h2');
@@ -2152,6 +2263,9 @@
 
     function nextQteStep() {
       if (qteIndex >= 5) {
+        // fast taps queue several nextQteStep calls: only the first may finish the round
+        // (the rest used to replay a round / run the finish sequence twice)
+        if (!qteActive) return;
         // Current Round Complete
         qteActive = false;
         clearTimeout(qteTimer);
@@ -2207,10 +2321,10 @@
       }
     }
 
-    // Detect phones (not desktop or laptops)
+    // Phones/tablets: breach keys come from the on-screen pad (laptops keep the physical keyboard)
 function isPhoneDevice() {
   return window.matchMedia(
-    '(max-width: 767px) and (pointer: coarse)'
+    '(pointer: coarse), (max-width: 1024px) and (orientation: portrait)'
   ).matches;
 }
 
@@ -2229,6 +2343,12 @@ function processQTEInput(index) {
 
     qteIndex++;
 
+    if (qteIndex >= 5) {
+      // round won: stop its countdown now and freeze the bar where it is
+      clearTimeout(qteTimer);
+      freezeBar(document.getElementById('qte-timer-fill'));
+    }
+
     setTimeout(nextQteStep, 200);
   }
 }
@@ -2236,31 +2356,55 @@ function processQTEInput(index) {
 // PC: Keyboard controls
 window.addEventListener('keydown', function (e) {
 
-  if (isPhoneDevice()) return;
-
   if (!document.getElementById('qte-overlay').classList.contains('active')) return;
   if (!qteActive || qteIndex >= 5) return;
 
   var pressedKey = e.key.toUpperCase();
   var targetKey = qteSequence[qteIndex];
 
+  if (e.key.length === 1 && !physicalKeyboardUsed) {
+    // a real keyboard is attached (e.g. tablet + keyboard): drop the touch pad from now on
+    physicalKeyboardUsed = true;
+    document.getElementById('qte-pad').innerHTML = '';
+    document.querySelector('.qte-instruction').textContent = QTE_TEXT_TYPE;
+  }
+
   if (pressedKey === targetKey) {
     processQTEInput(qteIndex);
   }
 });
 
-// Phone: Touch/click controls
-document.querySelectorAll('.qte-key').forEach((key, index) => {
+// Touch screens: 3x3 pad = this round's targets + random fillers, shuffled (keyboards just type)
+function renderQtePad() {
+  var chars = qteSequence.filter(function (c, i, a) { return a.indexOf(c) === i; });
+  var pool = QTE_CHARS.split('').filter(function (c) { return chars.indexOf(c) === -1; });
+  while (chars.length < 9) chars.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+  for (var i = chars.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = chars[i]; chars[i] = chars[j]; chars[j] = t; }
 
-  key.addEventListener('click', function () {
-
-    if (!isPhoneDevice()) return;
-
-    processQTEInput(index);
-
+  var pad = document.getElementById('qte-pad');
+  pad.innerHTML = '';
+  chars.forEach(function (ch) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'qte-pad-key';
+    b.textContent = ch;
+    b.addEventListener('click', function () { pressQteChar(ch, b); });
+    pad.appendChild(b);
   });
+}
 
-});
+function pressQteChar(ch, btn) {
+  if (!qteActive || qteIndex >= 5) return;
+  if (ch === qteSequence[qteIndex]) {
+    if (navigator.vibrate) navigator.vibrate(15);
+    processQTEInput(qteIndex);
+  } else {
+    // wrong key: shake it, no penalty beyond the lost time
+    btn.classList.remove('wrong');
+    void btn.offsetWidth;
+    btn.classList.add('wrong');
+  }
+}
 
     // Hacking animation with combined data extraction
     function showBreachAlert() {
@@ -2268,6 +2412,7 @@ document.querySelectorAll('.qte-key').forEach((key, index) => {
       // Using a dedicated full screen overlay for the alert to ensure it takes focus
 
       const alertOverlay = document.createElement('div');
+      alertOverlay.className = 'breach-alert';
       alertOverlay.style.position = 'fixed';
       alertOverlay.style.top = '0';
       alertOverlay.style.left = '0';
@@ -2318,7 +2463,7 @@ document.querySelectorAll('.qte-key').forEach((key, index) => {
         playSFX(SFX.correct);
         document.getElementById('data-complete-title').classList.add('show');
         document.getElementById('confirm-btn').style.display = 'inline-block';
-      }, 2500);
+      }, 1500 + 2000 + 200); // last bar starts at 1500ms + its 2s CSS width transition
     }
 
     // Game controls
@@ -2385,9 +2530,23 @@ document.querySelectorAll('.qte-key').forEach((key, index) => {
       document.getElementById("infoPanel").classList.toggle("visible");
     }
 
+    // Phones held sideways see the rotate prompt (same query as orientation.css): start the clock only once
+    // the level is visible, and pause if the player turns the phone sideways mid-level.
+    var landscapeBlocked = window.matchMedia('(orientation: landscape) and (max-width: 1024px) and (max-height: 500px), (orientation: landscape) and (max-height: 600px) and (pointer: coarse)');
+    var levelStarted = false;
+    function onOrientation() {
+      if (landscapeBlocked.matches) {
+        if (levelStarted && !document.getElementById('pause-overlay').classList.contains('active')) pauseGame();
+      } else if (!levelStarted) {
+        levelStarted = true;
+        startTimer10();
+      }
+    }
+    landscapeBlocked.addEventListener('change', onOrientation);
+
     // Initialize
     window.onload = function () {
-      startTimer10();
+      onOrientation();
 
       // Set initial progress bar color
       document.getElementById('progress-indicator').classList.add('red-active');

@@ -7,6 +7,19 @@
     <title>Game Over - Networks</title>
     <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
     <link rel="stylesheet" href="results.css">
+    <style>
+      @media screen and (max-width: 1024px) and (orientation: portrait) {
+        body { overflow-y: auto; }
+        .result-card { display: block !important; width: 92vw; padding: 2rem 1.2rem; max-height: 92vh; overflow-y: auto; margin: auto; }
+        h1 { font-size: clamp(1.6rem, 8vw, 2.4rem); letter-spacing: 2px; }
+        h2 { font-size: 1rem; letter-spacing: 2px; margin-bottom: 1.5rem; }
+        p { font-size: 0.95rem; line-height: 1.5; }
+        .stats-grid { gap: 1.5rem; margin: 1.2rem 0; padding: 0.8rem; }
+        .stat-value { font-size: 1.3rem; }
+        .action-buttons { flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; }
+        .cyber-btn { width: 100%; padding: 14px; font-size: 0.9rem; letter-spacing: 2px; }
+      }
+    </style>
 </head>
 
 <body class="failure-bg">

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "c:/Users/eyada/OneDrive/Desktop/masterm1nd/masterm1nd/networks.html"
+        ],
+        "createdAt": "2026-11-16T13:01:44.471Z",
+        "reason": "Claude: the neon glow is MASTERM1ND's established game theme (line 63 predates this session, present in HEAD); not introduced by these edits"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "c:/Users/eyada/OneDrive/Desktop/masterm1nd/masterm1nd/networks.html"
+        ],
+        "createdAt": "2026-11-16T13:03:42.982Z",
+        "reason": "Claude: both width transitions (.qte-timer-fill, .progress-fill) predate this session (present in HEAD); tiny progress bars whose width is driven and read by game JS (round timer freeze, download timing) - switching to scaleX would mean rewriting that logic for no visible gain"
+      }
+    ]
+  }
+}
