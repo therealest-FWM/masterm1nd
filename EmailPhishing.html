@@ -719,14 +719,18 @@
       .top-bar .logo { font-size: clamp(11px, 1.6vw, 15px); }
       .top-bar .lives-remaining { font-size: clamp(9px, 1.2vw, 12px); }
       .top-bar .control-buttons { display: flex; gap: 4px; flex-wrap: nowrap; }
-      .top-bar .control-buttons button { padding: 4px 8px; font-size: clamp(8px, 1vw, 11px); }
-      .progress-container { height: 18px; width: auto; max-width: 42vw; margin: 0 6px; }
+      .top-bar .control-buttons button { padding: 4px 6px; letter-spacing: 0.5px; font-size: clamp(8px, 1vw, 11px); }
+      .progress-container { height: 18px; width: auto; max-width: none; flex-shrink: 0; margin: 0 6px; }
+      .top-bar .lives-remaining { min-width: 0; }
       .progress-step { font-size: clamp(7px, 0.9vw, 10px); padding: 2px 6px; flex: 0 0 auto; min-width: max-content; }
       .loader { width: 18px; }
       .stage-indicator { font-size: clamp(9px, 1vw, 12px); }
 
-      /* Game content: fit all 6 cards (3 cols x 2 rows) without scrolling */
-      .center-box { height: 100%; justify-content: center; padding: 6px 12px; }
+      /* Game content: scroll inside .center-box (video bg stays put); safe center = centered when it fits, top-aligned + scrollable when not */
+      .game-container { min-height: 0; }
+      .center-box { height: 100%; overflow-y: auto; justify-content: flex-start; justify-content: safe center; padding: 6px 12px 16px; scrollbar-width: thin; scrollbar-color: rgba(59, 130, 246, 0.6) transparent; }
+      .center-box::-webkit-scrollbar { width: 4px; }
+      .center-box::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.6); border-radius: 4px; }
       .instruction-text { font-size: clamp(12px, 1.8vw, 18px); margin-bottom: 8px; padding: 4px 14px; }
       .email-grid { gap: 8px; max-height: none; overflow: visible; flex-wrap: wrap; }
       .email-card { width: clamp(150px, 30vw, 230px); min-height: 0; padding: 8px 10px; }
@@ -1024,14 +1028,14 @@
       });
     }
 
-    window.onload = function () {
+    window.addEventListener("DOMContentLoaded", function () {
       startTimer();
       // Info panel is accessible via the INFO button
       if (bgMusic) {
         document.getElementById("musicToggle").checked = localStorage.getItem("isMuted") === "true";
       }
       loadRound(0);
-    };
+    });
 
     /*****************************
      *  INFO PANEL

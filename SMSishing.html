@@ -737,8 +737,9 @@
       .top-bar .logo { font-size: clamp(11px, 1.6vw, 15px); }
       .top-bar .lives-remaining { font-size: clamp(9px, 1.2vw, 12px); }
       .top-bar .control-buttons { gap: 4px; flex-wrap: nowrap; }
-      .top-bar .control-buttons button { padding: 4px 8px; font-size: clamp(8px, 1vw, 11px); }
-      .progress-container { height: 18px; width: auto; max-width: 42vw; margin: 0 6px; }
+      .top-bar .control-buttons button { padding: 4px 6px; letter-spacing: 0.5px; font-size: clamp(8px, 1vw, 11px); }
+      .progress-container { height: 18px; width: auto; max-width: none; flex-shrink: 0; margin: 0 6px; }
+      .top-bar .lives-remaining { min-width: 0; }
       .progress-step { font-size: clamp(7px, 0.9vw, 10px); padding: 2px 6px; flex: 0 0 auto; min-width: max-content; }
       .loader { width: 18px; }
       .stage-indicator { font-size: clamp(9px, 1vw, 12px); }
@@ -1065,11 +1066,11 @@
       localStorage.setItem("totalTimeInSecondsSMS", totalMilliseconds4 / 1000);
     }
 
-    window.onload = function () {
+    window.addEventListener("DOMContentLoaded", function () {
       startTimer();
       // Info panel is accessible via the INFO button
       loadRound(0);
-    };
+    });
 
     /*****************************
      *  INFO PANEL
