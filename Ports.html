@@ -8,6 +8,7 @@
   <title>Unsecure Charging-Ports</title>
   <link rel="icon" type="image/webp" href="assets/MMLogo.webp">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/orientation.css?v=3">
 
   <style>
     :root {
@@ -177,10 +178,13 @@
       text-transform: uppercase;
     }
 
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .control-buttons button:hover {
       background: var(--hud-primary);
       color: #000;
       box-shadow: 0 0 15px var(--hud-primary);
+    }
     }
 
     /* ============ GAME CONTAINER ============ */
@@ -268,10 +272,13 @@
       clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
     }
 
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .cyber-btn:hover {
       background: var(--primary-neon);
       color: #000;
       box-shadow: 0 0 20px var(--primary-neon);
+    }
     }
 
     #passwordResult {
@@ -300,20 +307,43 @@
 
     .feed-instruction {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 16px;
+      left: 16px;
       z-index: 1001;
+      max-width: min(440px, 70vw);
       color: var(--hud-primary);
-      font-size: clamp(14px, 1.5vw, 18px);
+      font-size: clamp(11px, 1.2vw, 15px);
       font-weight: 700;
+      line-height: 1.5;
       background: rgba(0, 0, 0, 0.85);
-      padding: 15px 25px;
+      padding: 12px 36px 12px 16px;
       border-radius: 8px;
-      pointer-events: none;
       text-shadow: 0 0 10px var(--hud-primary);
       border: 2px solid var(--hud-primary);
       box-shadow: 0 0 20px var(--hud-glow);
+      transition: opacity 0.3s ease;
     }
+
+    .feed-goal { color: var(--primary-neon); text-shadow: 0 0 8px var(--primary-neon); }
+    .feed-instruction.hidden { opacity: 0; pointer-events: none; }
+    .feed-instruction-close { position: absolute; top: 4px; right: 8px; background: none; border: 0; color: inherit; font-size: 16px; cursor: pointer; padding: 4px; }
+    .feed-help-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1001;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid var(--hud-primary);
+      color: var(--hud-primary);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .feed-instruction:not(.hidden) ~ .feed-help-btn { display: none; }
 
     .exit-btn {
       position: absolute;
@@ -331,10 +361,13 @@
       transition: all 0.3s ease;
     }
 
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .exit-btn:hover {
       background: var(--primary-neon);
       color: #000;
       box-shadow: 0 0 20px var(--primary-neon);
+    }
     }
 
     /* ============ HINT BOXES ============ */
@@ -362,7 +395,7 @@
     /* ============ INFO PANEL ============ */
     .info-panel {
       position: fixed;
-      top: 260px;
+      top: 80px;
       left: -450px;
       width: 380px;
       background: rgba(0, 0, 0, 0.95);
@@ -534,17 +567,19 @@
       width: 16px;
       left: 4px;
       bottom: 3px;
-      background-color: var(--hud-primary);
+      background-color: #777;
       transition: .4s;
-      box-shadow: 0 0 10px var(--hud-primary);
+      box-shadow: none;
     }
 
     input:checked+.slider {
-      background-color: rgba(57, 255, 20, 0.2);
+      background-color: rgba(57, 255, 20, 0.35);
     }
 
     input:checked+.slider:before {
       transform: translateX(24px);
+      background-color: #39ff14;
+      box-shadow: 0 0 10px #39ff14;
     }
 
     .slider.round {
@@ -554,10 +589,66 @@
     .slider.round:before {
       border-radius: 50%;
     }
+    /* Hide page content in portrait (overlay styles live in assets/orientation.css) */
+    @media screen and (max-width: 1024px) and (orientation: portrait) {
+      .top-bar, .game-container, .pause-overlay, .info-panel, .hint-box { display: none !important; }
+    }
+
+    /* Movement instructions: touch text on phones/tablets, keyboard text on laptops */
+    .touch-only { display: none; }
+    @media (pointer: coarse), (max-width: 1024px) and (max-height: 500px) {
+      .keys-only { display: none; }
+      .touch-only { display: inline; }
+    }
+
+    /* Landscape phones/tablets */
+    @media (max-width: 1024px) and (orientation: landscape) {
+      /* Top bar: one compact row; the PORTS bar must not be squeezed to nothing */
+      .top-bar { flex-wrap: nowrap; gap: 6px; padding: 3px 8px; }
+      .top-bar .logo { font-size: clamp(11px, 1.6vw, 15px); }
+      .progress-container { width: clamp(70px, 14vw, 160px); flex-shrink: 0; height: 18px; margin: 0 4px; }
+      .progress-step { font-size: clamp(8px, 1vw, 11px); }
+      .loader { width: 18px; }
+      .top-bar .lives-remaining { min-width: 0; font-size: clamp(9px, 1.2vw, 12px); }
+      .stage-indicator { font-size: clamp(9px, 1vw, 12px); letter-spacing: 1px; }
+      .control-buttons { gap: 4px; }
+      .control-buttons button { padding: 4px 6px; font-size: clamp(8px, 1vw, 11px); letter-spacing: 0.5px; }
+
+      /* Key-code box: compact; margin:auto keeps it centred but scrollable when the on-screen keyboard squeezes the page */
+      .game-container { overflow-y: auto; align-items: flex-start; }
+      .center-box { margin: auto; padding: 14px 20px; max-width: min(520px, 80vw); }
+      .center-box h1 { font-size: clamp(13px, 2.4vw, 20px); margin-bottom: 8px; }
+      .input { padding: 8px 16px; margin: 10px 0; font-size: 16px; } /* 16px+ stops iOS zooming on focus */
+      .cyber-btn { padding: 7px 22px; font-size: 13px; margin: 6px; }
+      #passwordResult { min-height: 18px; margin-top: 6px; font-size: 13px; }
+
+      /* INFO / HINT: sized from the short screen height */
+      .info-panel { width: min(260px, 42vw); top: 44px; left: -320px; padding: 10px 12px; border-width: 2px; font-size: clamp(10px, 2.8vh, 13px); line-height: 1.35; max-height: calc(100vh - 56px); overflow-y: auto; }
+      .info-panel.visible { left: 10px; }
+      .info-panel .info-title { font-size: clamp(11px, 3.2vh, 14px); margin-bottom: 5px; padding-bottom: 4px; padding-right: 22px; }
+      .info-panel .info-close { top: 6px; right: 10px; font-size: 1rem; }
+      .hint-box { width: min(240px, 40vw); top: 44px; right: -320px; padding: 10px 12px; font-size: clamp(10px, 2.8vh, 13px); line-height: 1.35; max-height: calc(100vh - 56px); overflow-y: auto; }
+      .hint-box.visible { right: 10px; }
+
+      /* Live feed: smaller corner controls so the game stays visible */
+      .exit-btn { top: 10px; right: 10px; padding: 6px 12px; font-size: 12px; }
+      .feed-instruction, .feed-help-btn { top: 10px; left: 10px; }
+
+      /* Pause menu */
+      .pause-menu { padding: 20px 30px; }
+      .pause-menu h1 { font-size: clamp(20px, 4vw, 32px); margin-bottom: 16px; }
+    }
+
   </style>
 </head>
 
 <body>
+
+  <div id="orientation-overlay">
+    <div class="icon">📱</div>
+    <h2>LANDSCAPE MODE REQUIRED</h2>
+    <p>Please rotate your device horizontally to play MASTERM1ND.</p>
+  </div>
 
   <div class="top-bar">
     <div class="logo">MASTERM1ND</div>
@@ -598,12 +689,17 @@
 
   <!-- Full-screen Live Feed Overlay -->
   <div id="livePanel">
-    <div class="feed-instruction">
+    <div class="feed-instruction" id="feedInstruction">
+      <button type="button" class="feed-instruction-close" onclick="hideFeedHelp()" aria-label="Close instructions">✕</button>
       [MOVEMENT INSTRUCTIONS]<br>
-      1. Click into the screen to start moving.<br>
+      <span class="feed-goal">GOAL: Search the area for the hidden key-code, then exit the feed and enter it.</span><br>
+      <span class="keys-only">1. Click into the screen to start moving.<br>
       2. Use WASD or ARROW KEYS to move.<br>
-      3. Press ESC or the EXIT button to leave the feed.
+      3. Press ESC or the EXIT button to leave the feed.</span>
+      <span class="touch-only">1. Use the on-screen arrows to move.<br>
+      2. Tap EXIT FEED to leave the feed.</span>
     </div>
+    <button type="button" class="feed-help-btn" onclick="showFeedHelp()" aria-label="Show movement instructions">?</button>
     <button class="exit-btn" onclick="exitScreen()">EXIT FEED</button>
     <iframe src="https://itch.io/embed-upload/20363036?color=000000" allowfullscreen allow="fullscreen;">
     </iframe>
@@ -620,7 +716,7 @@
   </div>
 
   <div class="hint-box" id="hintBox">
-    Access the live feed to find the keycode. Use WASD to navigate.
+    Access the live feed and explore the area to find the keycode.
   </div>
 
   <!-- Pause Menu Overlay -->
@@ -697,7 +793,7 @@
     /*****************************
      *  GAME STATE
      *****************************/
-    var livesRemaining = 2;
+    var livesRemaining = 3;
 
     /*****************************
      *  PASSWORD CHECK
@@ -782,7 +878,7 @@
       }, 100);
     }
 
-    window.onload = function () {
+    window.addEventListener("DOMContentLoaded", function () {
       startTimer();
       // Auto-open info panel on load
       const ip = document.getElementById("infoPanel");
@@ -791,7 +887,7 @@
         ip.classList.add("visible");
         setTimeout(() => ip.classList.remove("visible"), 10000);
       }
-    };
+    });
 
     /*****************************
      *  INFO PANEL
@@ -812,7 +908,21 @@
     function accessScreen() {
       playSFX(SFX.popup);
       document.getElementById("livePanel").style.display = "block";
+      document.getElementById("infoPanel").classList.remove("visible");
+      document.getElementById("hintBox").classList.remove("visible");
+      showFeedHelp();
       if (bgMusic) bgMusic.volume = 0;
+    }
+
+    var feedHelpTimer;
+    function showFeedHelp() {
+      document.getElementById("feedInstruction").classList.remove("hidden");
+      clearTimeout(feedHelpTimer);
+      feedHelpTimer = setTimeout(hideFeedHelp, 8000); // then shrink to the "?" button so it doesn't cover the game
+    }
+    function hideFeedHelp() {
+      clearTimeout(feedHelpTimer);
+      document.getElementById("feedInstruction").classList.add("hidden");
     }
 
     function exitScreen() {
