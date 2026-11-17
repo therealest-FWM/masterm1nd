@@ -9,6 +9,9 @@
     --border-red: rgba(255, 0, 60, 0.5);
 }
 
+/* iPhone: stop quick double taps from zooming the page. Pinch-zoom still works. */
+html { touch-action: manipulation; }
+
 body {
     margin: 0;
     padding: 0;

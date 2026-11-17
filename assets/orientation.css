@@ -56,3 +56,6 @@
        screen and (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
   #orientation-overlay.portrait-required { display: flex !important; }
 }
+
+/* iPhone: stop quick double taps (mall dots, pad keys, buttons) from zooming the page. Pinch-zoom still works. */
+html { touch-action: manipulation; }
