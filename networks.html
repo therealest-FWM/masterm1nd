@@ -2526,8 +2526,10 @@ function pressQteChar(ch, btn) {
     /*****************************
      *  INFO PANEL
      *****************************/
+    var infoAutoHide; // timer that closes the Objective pop-up shown when the level starts
     function toggleInfo() {
       playSFX(SFX.popup);
+      clearTimeout(infoAutoHide); // the player took over: don't auto-close on them
       document.getElementById("infoPanel").classList.toggle("visible");
     }
 
@@ -2541,6 +2543,11 @@ function pressQteChar(ch, btn) {
       } else if (!levelStarted) {
         levelStarted = true;
         startTimer10();
+        // Objective pops up for 15s when the level starts (same as every level; INFO reopens it)
+        var ip = document.getElementById('infoPanel');
+        playSFX(SFX.popup);
+        ip.classList.add('visible');
+        infoAutoHide = setTimeout(function () { ip.classList.remove('visible'); }, 15000);
       }
     }
     landscapeBlocked.addEventListener('change', onOrientation);
@@ -2556,7 +2563,13 @@ function pressQteChar(ch, btn) {
       const fill = document.getElementById('progress-fill');
       if (fill) fill.classList.add('red-active');
 
-      // Info panel is accessible via the INFO button
+      // Objective pops up for 15s when the level starts (same as every level; INFO reopens it)
+      var ip = document.getElementById("infoPanel");
+      if (ip) {
+        playSFX(SFX.popup);
+        ip.classList.add("visible");
+        infoAutoHide = setTimeout(() => ip.classList.remove("visible"), 15000);
+      }
     };
   </script>
 

@@ -99,10 +99,13 @@
       letter-spacing: 1px;
     }
 
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .top-bar .control-buttons button:hover {
       background: var(--hud-primary);
       color: #000;
       box-shadow: 0 0 15px var(--hud-primary);
+    }
     }
 
     /* Progress Bar */
@@ -307,9 +310,12 @@
     }
 
     /* Hover State */
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .sms-box:hover {
       border-color: var(--level-primary);
       box-shadow: 0 0 20px var(--level-glow);
+    }
     }
 
     /* Selected State */
@@ -429,6 +435,15 @@
     }
 
     /* Pink Confirm Button - TRANSPARENT DEFAULT */
+    /* Result glow on the chosen card, every device: green = right, red = wrong.
+       !important so it beats the "selected" style of the card that was picked. */
+    .picked-correct .phishing-label > *,
+    .audio-card.picked-correct { border-color: #39ff14 !important; box-shadow: 0 0 0 2px #39ff14, 0 0 18px #39ff14 !important; }
+    .picked-wrong .phishing-label > *,
+    .audio-card.picked-wrong { border-color: #ff4444 !important; box-shadow: 0 0 0 2px #ff4444, 0 0 18px #ff4444 !important; }
+
+    #confirmbutton { align-self: center; } /* compact like the password levels, not stretched full width */
+
     .cyber-btn {
       margin-top: 35px;
       background: rgba(0, 0, 0, 0.5);
@@ -449,6 +464,8 @@
       transition: all 0.3s;
     }
 
+    /* hover only on mouse devices: on touch screens :hover sticks after a tap */
+    @media (hover: hover) {
     .cyber-btn:hover {
       background: #c026d3;
       /* Filled Pink */
@@ -456,6 +473,7 @@
       box-shadow: 0 0 30px #d946ef;
       transform: scale(1.05);
       /* Slight grow */
+    }
     }
 
     /* Result Message */
@@ -706,17 +724,19 @@
       width: 16px;
       left: 4px;
       bottom: 3px;
-      background-color: var(--hud-primary);
+      background-color: #777;
       transition: .4s;
-      box-shadow: 0 0 10px var(--hud-primary);
+      box-shadow: none;
     }
 
     input:checked+.slider {
-      background-color: rgba(57, 255, 20, 0.2);
+      background-color: rgba(57, 255, 20, 0.35);
     }
 
     input:checked+.slider:before {
       transform: translateX(24px);
+      background-color: #39ff14;
+      box-shadow: 0 0 10px #39ff14;
     }
 
     .slider.round {
@@ -740,9 +760,9 @@
       .top-bar .lives-remaining { font-size: clamp(9px, 1.2vw, 12px); }
       .top-bar .control-buttons { gap: 4px; flex-wrap: nowrap; }
       .top-bar .control-buttons button { padding: 4px 6px; letter-spacing: 0.5px; font-size: clamp(8px, 1vw, 11px); }
-      .progress-container { height: 18px; width: auto; max-width: none; flex-shrink: 0; margin: 0 6px; }
+      .progress-container { height: 21px; width: auto; max-width: none; flex-shrink: 0; margin: 0 6px; }
       .top-bar .lives-remaining { min-width: 0; }
-      .progress-step { font-size: clamp(7px, 0.9vw, 10px); padding: 2px 6px; flex: 0 0 auto; min-width: max-content; }
+      .progress-step { font-size: clamp(8px, 1.15vw, 12px); padding: 2px 7px; flex: 0 0 auto; min-width: max-content; }
       .loader { width: 18px; }
       .stage-indicator { font-size: clamp(9px, 1vw, 12px); }
 
@@ -762,10 +782,23 @@
       .cyber-btn { margin-top: 12px; padding: 8px 30px; }
       .result-message { height: auto; margin-top: 6px; font-size: 15px; }
 
+      /* Confirm appears just under the messages while one is selected; if the messages are taller than the screen
+         it sticks to the bottom edge instead. The result then shows in the same spot. */
+      #confirmbutton,
+      #resultMessage { position: sticky; bottom: 10px; z-index: 60; align-self: center; margin: 12px 0 0; display: none; }
+      .has-choice:not(.showing-result) #confirmbutton,
+      .showing-result #resultMessage { display: block; animation: bar-in 0.2s ease; }
+      @keyframes bar-in { from { opacity: 0; transform: translateY(8px); } }
+      .cyber-btn:not(:hover) { background: rgba(0, 0, 0, 0.9); } /* readable over the messages; hover keeps the level colours */
+      #resultMessage { height: auto; padding: 8px 22px; border-radius: 24px; border: 2px solid currentColor; background: rgba(0, 0, 0, 0.92); white-space: nowrap; font-size: 14px; }
+
       /* Info panel + hint box: smaller, narrower, scrollable */
-      .info-panel { width: min(300px, 60vw); top: 56px; padding: 14px; font-size: 0.8rem; max-height: 80vh; overflow-y: auto; }
-      .info-panel .info-title { font-size: 0.95rem; margin-bottom: 6px; padding-bottom: 5px; }
-      .hint-box { width: min(280px, 55vw); top: 56px; padding: 14px; font-size: 0.85rem; max-height: 80vh; overflow-y: auto; }
+      .info-panel { width: min(260px, 42vw); top: 44px; left: -320px; padding: 10px 12px; border-width: 2px; font-size: clamp(10px, 2.8vh, 13px); line-height: 1.35; max-height: calc(100vh - 56px); overflow-y: auto; }
+      .info-panel.visible { left: 10px; }
+      .info-panel .info-title { font-size: clamp(11px, 3.2vh, 14px); margin-bottom: 5px; padding-bottom: 4px; padding-right: 22px; }
+      .info-panel .info-close { top: 6px; right: 10px; font-size: 1rem; }
+      .hint-box { width: min(240px, 40vw); top: 44px; right: -320px; padding: 10px 12px; font-size: clamp(10px, 2.8vh, 13px); line-height: 1.35; max-height: calc(100vh - 56px); overflow-y: auto; }
+      .hint-box.visible { right: 10px; }
 
       /* Pause menu */
       .pause-menu { padding: 20px 30px; }
@@ -790,7 +823,6 @@
       <div class="progress-step step-3">VISHING</div>
       <div class="progress-step step-4">EMAIL</div>
     </div>
-    <div class="loader"></div>
     <div class="lives-remaining">Lives Remaining: 2</div>
     <span class="stage-indicator" id="stageIndicator">1/3</span>
     <div class="control-buttons">
@@ -1070,15 +1102,23 @@
 
     window.addEventListener("DOMContentLoaded", function () {
       startTimer();
-      // Info panel is accessible via the INFO button
+      // Objective pops up for 15s when the level starts (same as every level; INFO reopens it)
+      var ip = document.getElementById("infoPanel");
+      if (ip) {
+        playSFX(SFX.popup);
+        ip.classList.add("visible");
+        infoAutoHide = setTimeout(() => ip.classList.remove("visible"), 15000);
+      }
       loadRound(0);
     });
 
     /*****************************
      *  INFO PANEL
      *****************************/
+    var infoAutoHide; // timer that closes the Objective pop-up shown when the level starts
     function toggleInfo() {
       playSFX(SFX.popup);
+      clearTimeout(infoAutoHide); // the player took over: don't auto-close on them
       document.getElementById("infoPanel").classList.toggle("visible");
     }
 
@@ -1248,6 +1288,44 @@
       document.querySelectorAll('input[name="phishing-choice"]').forEach(input => input.checked = false);
       document.getElementById("resultMessage").textContent = "";
       document.getElementById("resultMessage").className = "result-message";
+      resetConfirmBar();
+    }
+
+    // ---- Phones (landscape <= 1024px): Confirm floats up only while a message is selected, tapping the
+    //      selected message again unselects it, and the result shows where Confirm was. Laptops: unchanged. ----
+    var floatingConfirm = window.matchMedia('(max-width: 1024px) and (orientation: landscape)');
+    function updateConfirmBar() {
+      document.body.classList.toggle('has-choice', !!document.querySelector('input[name="phishing-choice"]:checked'));
+    }
+    function resetConfirmBar() {
+      document.querySelectorAll('.picked-correct, .picked-wrong').forEach(function (c) { c.classList.remove('picked-correct', 'picked-wrong'); });
+      document.body.classList.remove('showing-result');
+      updateConfirmBar();
+    }
+    document.querySelectorAll('.phishing-radio').forEach(function (radio) {
+      var wasChecked = false;
+      radio.closest('label').addEventListener('pointerdown', function () { wasChecked = radio.checked; });
+      radio.addEventListener('click', function () {
+        if (wasChecked && floatingConfirm.matches) radio.checked = false; // tap the selected message again to unselect it
+        wasChecked = false;
+        if (document.body.classList.contains('showing-result')) resetConfirmBar(); // new pick: drop the old result glow
+        updateConfirmBar();
+      });
+    });
+    function showResultBar(correct, selected) {
+      document.body.classList.add('showing-result');
+      selected.closest('label').classList.add(correct ? 'picked-correct' : 'picked-wrong');
+      if (!correct && floatingConfirm.matches) {
+        // wrong but lives left: clear the result after it has been read so the player can pick again
+        setTimeout(function () {
+          if (livesRemaining <= 0) return;
+          selected.checked = false;
+          var msg = document.getElementById('resultMessage');
+          msg.textContent = '';
+          msg.className = 'result-message';
+          resetConfirmBar();
+        }, 1500);
+      }
     }
 
     function confirm() {
@@ -1262,6 +1340,7 @@
         playSFX(SFX.correct);
         msg.className = "result-message correct";
         msg.textContent = "CORRECT. THREAT IDENTIFIED.";
+        showResultBar(true, selected);
 
         currentRound++;
         if (currentRound >= rounds.length) {
@@ -1278,6 +1357,7 @@
         document.querySelector(".lives-remaining").textContent = "Lives Remaining: " + livesRemaining;
         msg.className = "result-message incorrect";
         msg.textContent = "INCORRECT. THIS MESSAGE IS SAFE.";
+        showResultBar(false, selected);
 
         if (livesRemaining === 0) {
           playSFX(SFX.gameOver);
